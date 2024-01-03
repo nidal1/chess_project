@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dkq1kxyuy1xg8"]
+
+[ext_resource type="PackedScene" uid="uid://dbbhum5nbye00" path="res://fbx/white_pawn.fbx" id="1_ca2n5"]
+
+[node name="white_pawn" instance=ExtResource("1_ca2n5")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)

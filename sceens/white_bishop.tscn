@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhinuhhmetd84"]
+
+[ext_resource type="PackedScene" uid="uid://bbs8101showc7" path="res://fbx/white_bishop.fbx" id="1_51fpn"]
+
+[node name="white_bishop" instance=ExtResource("1_51fpn")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)

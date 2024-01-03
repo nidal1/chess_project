@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://cyv73r8i5ie2i"]
+
+[ext_resource type="PackedScene" uid="uid://8all3oogfcit" path="res://fbx/black_rook.fbx" id="1_aqknf"]
+[ext_resource type="PackedScene" uid="uid://d2yl3ek5frrqb" path="res://sceens/piece_spot_light_3d.tscn" id="2_iyufy"]
+
+[node name="black_rook" instance=ExtResource("1_aqknf")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
+
+[node name="SpotLight3D" parent="." index="0" instance=ExtResource("2_iyufy")]

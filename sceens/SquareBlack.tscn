@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://r8bm50gpqjdw"]
+
+[ext_resource type="Texture2D" uid="uid://cm72rx7t1apcs" path="res://images/down-arrow.png" id="1_v0djy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8hbmr"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6lo6h"]
+
+[node name="Square" type="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, 0.5, 0, 0.5)
+material_override = SubResource("StandardMaterial3D_8hbmr")
+
+[node name="ClickableArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ClickableArea"]
+shape = SubResource("BoxShape3D_6lo6h")
+
+[node name="DownArrow" type="Sprite3D" parent="."]
+transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0, 1, 0)
+visible = false
+texture = ExtResource("1_v0djy")

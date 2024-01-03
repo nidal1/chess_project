@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bel560aplchcc"]
+
+[ext_resource type="PackedScene" uid="uid://clmb318etwrrn" path="res://fbx/black_queen.fbx" id="1_by24a"]
+[ext_resource type="PackedScene" uid="uid://d2yl3ek5frrqb" path="res://sceens/piece_spot_light_3d.tscn" id="2_pres6"]
+
+[node name="black_queen" instance=ExtResource("1_by24a")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
+
+[node name="SpotLight3D" parent="." index="0" instance=ExtResource("2_pres6")]
+transform = Transform3D(0.05, 0, 0, 0, -2.18557e-09, 0.05, 0, -0.05, -2.18557e-09, 0, 0.0608898, 0)

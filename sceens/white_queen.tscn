@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bb2nnvnltrv0h"]
+
+[ext_resource type="PackedScene" uid="uid://b3037oi5sirua" path="res://fbx/white_queen.fbx" id="1_61irx"]
+
+[node name="white_queen" instance=ExtResource("1_61irx")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
