@@ -5,13 +5,13 @@ const COLS = 8
 const ROWS = 8
 
 #Array of ChessSquare.gd
-var GRID = Array()
-
+var GRID : Array[ChessSquare]
 var currentSquareType : String
 var prevSquareType : String
 
-#Array of visual chess squares instanciated in the scene
-var visualChessSquares = Array()
+var visibleDownArrows: Array[Sprite3D]
+
+signal observingClickingOnSquares(chessSquare)
 
 var visualBlackKing = preload("res://sceens/black_king.tscn")
 var visualBlackQueen = preload("res://sceens/black_queen.tscn")
@@ -29,8 +29,8 @@ var visualWhitePawn = preload("res://sceens/white_pawn.tscn")
 
 var blackKing = King.new(visualBlackKing, 3)
 var blackQueen = Queen.new(visualBlackQueen, 4)
-var blackKnight_1 = WhiteKnight.new(visualBlackKnight,1)
-var blackKnight_2 = BlackKnight.new(visualBlackKnight,6)
+var blackKnight_1 = WhiteKnight.new(visualBlackKnight,6)
+var blackKnight_2 = BlackKnight.new(visualBlackKnight,1)
 var blackBishop_1 = WhiteBishop.new(visualBlackBishop,2)
 var blackBishop_2 = BlackBishop.new(visualBlackBishop,5)
 var blackRook_1 = WhiteRook.new(visualBlackRook, 0)
@@ -52,20 +52,18 @@ var whiteBishop_1 = WhiteBishop.new(visualWhiteBishop, 61)
 var whiteBishop_2 = BlackBishop.new(visualWhiteBishop,58)
 var whiteRook_1 = WhiteRook.new(visualWhiteRook, 63)
 var whiteRook_2 = BlackRook.new(visualWhiteRook, 56)
-var whiteP0 = Pawn.new(visualWhitePawn, 48)
-var whiteP1 = Pawn.new(visualWhitePawn, 49)
-var whiteP2 = Pawn.new(visualWhitePawn, 50)
-var whiteP3 = Pawn.new(visualWhitePawn, 51)
-var whiteP4 = Pawn.new(visualWhitePawn, 52)
-var whiteP5 = Pawn.new(visualWhitePawn, 53)
-var whiteP6 = Pawn.new(visualWhitePawn, 54)
-var whiteP7 = Pawn.new(visualWhitePawn, 55)
+var whiteP0 = Pawn.new(visualWhitePawn, 48, false)
+var whiteP1 = Pawn.new(visualWhitePawn, 49, false)
+var whiteP2 = Pawn.new(visualWhitePawn, 50, false)
+var whiteP3 = Pawn.new(visualWhitePawn, 51, false)
+var whiteP4 = Pawn.new(visualWhitePawn, 52, false)
+var whiteP5 = Pawn.new(visualWhitePawn, 53, false)
+var whiteP6 = Pawn.new(visualWhitePawn, 54, false)
+var whiteP7 = Pawn.new(visualWhitePawn, 55, false)
 
-var visibleDownArrow: Sprite3D = null
 
-signal observingClickingOnSquares(chessSquare)
 
-func InitBoardSquares():
+func InitBoardSquares() -> void:
 	prevSquareType = "white"
 	currentSquareType = "white"
 	for row in range(ROWS):
@@ -78,14 +76,14 @@ func InitBoardSquares():
 				SwapeTheColorOfCurrentSquare()
 		SwapeTheColorOfTheFistSquareInTheRow()
 
-func SwapeTheColorOfCurrentSquare():
+func SwapeTheColorOfCurrentSquare() -> void:
 	if prevSquareType == "black":
 		currentSquareType = "white"
 	else:
 		currentSquareType = "black"
 	prevSquareType = currentSquareType
 
-func SwapeTheColorOfTheFistSquareInTheRow():
+func SwapeTheColorOfTheFistSquareInTheRow() -> void:
 	currentSquareType = prevSquareType
 
 func InitPieces():
@@ -124,17 +122,61 @@ func InitPieces():
 		GRID[whiteP6.pieceIdx].AsignPiece(whiteP6)
 		GRID[whiteP7.pieceIdx].AsignPiece(whiteP7)
 
-func OnObservingTheClickingOnSquares():
-	observingClickingOnSquares.connect(OnDrawThePaths)
+func OnObservingTheClickingOnSquares() -> void:
+	observingClickingOnSquares.connect(OnDrawTheLastPositions)
 
-func OnDrawThePaths(chessSquare: ChessSquare):
-	var selectedPiece = chessSquare.pieceType
-	if selectedPiece:
-		if visibleDownArrow:
-			visibleDownArrow.visible = false
-		var currentIdx = selectedPiece.pieceIdx
-		var movementAmount = selectedPiece.movementAmount
-		var currentSquare: ChessSquare = GRID[currentIdx + movementAmount]
-		currentSquare.get_child(0)
-		visibleDownArrow = currentSquare.visualSquare.get_node("DownArrow")
-		visibleDownArrow.visible = true
+func OnDrawTheLastPositions(chessSquare: ChessSquare):
+	# localize the current position by determinanting the row of the current selected piece
+	var piece: ChessPiece = chessSquare.pieceType
+	if piece.withSpicialMovement:
+		HandleTheLastPositonsOfASpecialPiece(piece)
+	else:
+		HandleTheLastPositonsOfNonASpecialPiece(piece)
+
+
+func LocalizationOfSelectedPiece(_pieceIdx) -> float:
+	return (_pieceIdx / ROWS) + 1
+
+func FixTheBoundariesOfASelectedRow(_row: int) ->Array[int]:
+	var firstIdx = (_row - 1) * ROWS
+	var lastIdx = (_row * ROWS) - 1
+	return [firstIdx, lastIdx]
+
+
+func ToggleShowDownArrows(_visible):
+	if visibleDownArrows.size() > 0:
+		for arrow in visibleDownArrows:
+			var arr: Sprite3D = arrow
+			arr.visible = _visible
+
+func HandleTheLastPositonsOfASpecialPiece(piece: ChessPiece):
+	var pieceIdx = piece.pieceIdx
+	var selectedRow = LocalizationOfSelectedPiece(pieceIdx)
+	
+	# calculate the incoming positions
+	var cordinations = piece.MoveToLastPosition()
+	ToggleShowDownArrows(false)
+	visibleDownArrows.clear()
+	if cordinations.size():
+		for cord in cordinations:
+			# determine if the current position is within the boudries of the current column.
+			var nextSelectedRow = selectedRow + cord.row 
+			if nextSelectedRow > 0 and nextSelectedRow <= ROWS :
+				var boundaries = FixTheBoundariesOfASelectedRow(nextSelectedRow)
+				# enable or disable the down arrows
+				var selectedCol = cord.col
+				var firstIdx = boundaries[0]
+				var lastIdx = boundaries[1]
+				for col in selectedCol:
+					if col >= firstIdx and col <= lastIdx:
+						var nextSquare: ChessSquare = GRID[col]
+						if piece.CanMove(nextSquare.pieceType) :
+							var arrow: Sprite3D = nextSquare.visualSquare.get_node("DownArrow")
+							visibleDownArrows.append(arrow)
+						
+		ToggleShowDownArrows(true)
+	else:
+		ToggleShowDownArrows(false)
+
+func HandleTheLastPositonsOfNonASpecialPiece(piece: ChessPiece):
+	piece.MoveToLastPosition(piece)

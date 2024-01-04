@@ -2,7 +2,6 @@ extends Node3D
 
 
 var chessBoard = ChessBoard.new()
-var chessGrid = Array()
 
 @onready var visualChessBoard = $ChessBord
 @onready var visualSpringArm3D = $ChessBord/SpringArm3D
@@ -28,7 +27,7 @@ func _ready():
 func _process(delta):
 	pass
 
-func RenderChessSqueres(grid):
+func RenderChessSqueres(grid) -> void:
 	var idx = 0
 	for row in chessBoard.ROWS:
 		for col in chessBoard.COLS:
@@ -48,7 +47,7 @@ func RenderChessSqueres(grid):
 			square.AssingVisualSquare(instance)
 			idx += 1
 
-func RenderPieces(grid):
+func RenderPieces(grid) -> void:
 	var idx = 0
 	for cell in grid:
 		var square: ChessSquare = cell
@@ -61,12 +60,12 @@ func RenderPieces(grid):
 #			await get_tree().create_timer(1.0).timeout
 
 
-func _unhandled_input(event):
+func _unhandled_input(event) -> void:
 	if event is InputEventMouseButton:
 		leftButtonPressed = event.is_pressed()
 	if leftButtonPressed and event is InputEventMouseMotion:
 		var xVelocity: float = clamp(event.get_relative().x,-CAMERA_ROTATION_SPEED,CAMERA_ROTATION_SPEED) 
-		var yVelocity: float = clamp(event.get_relative().y,-CAMERA_ROTATION_SPEED,CAMERA_ROTATION_SPEED) 
+		# var yVelocity: float = clamp(event.get_relative().y,-CAMERA_ROTATION_SPEED,CAMERA_ROTATION_SPEED) 
 		if xVelocity:
 			var yPosition = Vector3.MODEL_TOP
 			visualSpringArm3D.global_rotate(yPosition, xVelocity)

@@ -3,13 +3,19 @@ extends ChessPiece
 
 class_name Pawn
 
-func _init(visual, pieceIdx, isBlackPiece = false):
-	self.visual = visual.instantiate()
-	self.pieceIdx = pieceIdx
-	self.isBlackPiece = isBlackPiece
-	self.movementAmount = 8
+func _init(_visual, _pieceIdx, _isBlackPiece = true):
+	self.visual = _visual.instantiate()
+	self.pieceIdx = _pieceIdx
+	self.isBlackPiece = _isBlackPiece
 
 
-func MoveTo():
-	if movementAmount > 0:
-		self.pieceIdx += movementAmount
+func MoveToLastPosition():
+	return [{
+		"row" : 0,
+		"col": []
+	},
+	{
+		"row" : 1,
+		"col": [pieceIdx + 8]
+	},
+	]

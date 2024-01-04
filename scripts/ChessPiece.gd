@@ -5,8 +5,7 @@ class_name ChessPiece
 var pieceIdx: int
 var visual: Node3D
 var isBlackPiece: bool
-var canMove: bool = false
-var movementAmount
+var withSpicialMovement: bool = true
 
 #func SwitchColor():
 #	var material:Material = StandardMaterial3D.new()
@@ -17,13 +16,8 @@ var movementAmount
 #	visual.get_node("RootNode").get_child(0).set_surface_override_material(0, material)
 
 
-func MoveTo():
-	pass
-	
-
-func _ready():
-	pass
-
-
-func _process(delta):
-	pass
+func CanMove(other :ChessPiece) -> bool:
+	if other:
+		return int(self.isBlackPiece) + int(other.isBlackPiece) == 1
+	else:
+		return true

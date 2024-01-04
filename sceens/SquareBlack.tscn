@@ -19,4 +19,5 @@ shape = SubResource("BoxShape3D_6lo6h")
 [node name="DownArrow" type="Sprite3D" parent="."]
 transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0, 1, 0)
 visible = false
+billboard = 1
 texture = ExtResource("1_v0djy")
