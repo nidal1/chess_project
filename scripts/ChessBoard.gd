@@ -9,7 +9,7 @@ var GRID : Array[ChessSquare]
 var currentSquareType : String
 var prevSquareType : String
 
-var visibleDownArrows: Array[Sprite3D]
+var visibleHighlightCircles: Array[Sprite3D]
 
 signal observingClickingOnSquares(chessSquare)
 
@@ -44,14 +44,14 @@ var blackP5 = Pawn.new(visualBlackPawn, 13)
 var blackP6 = Pawn.new(visualBlackPawn, 14)
 var blackP7 = Pawn.new(visualBlackPawn, 15)
 
-var whiteKing = King.new(visualWhiteKing, 59)
-var whiteQueen = Queen.new(visualWhiteQueen, 60)
-var whiteKnight_1 = WhiteKnight.new(visualWhiteKnight, 57)
-var whiteKnight_2 = BlackKnight.new(visualWhiteKnight, 62)
-var whiteBishop_1 = WhiteBishop.new(visualWhiteBishop, 61)
-var whiteBishop_2 = BlackBishop.new(visualWhiteBishop,58)
-var whiteRook_1 = WhiteRook.new(visualWhiteRook, 63)
-var whiteRook_2 = BlackRook.new(visualWhiteRook, 56)
+var whiteKing = King.new(visualWhiteKing, 59, false)
+var whiteQueen = Queen.new(visualWhiteQueen, 60, false)
+var whiteKnight_1 = WhiteKnight.new(visualWhiteKnight, 57, false)
+var whiteKnight_2 = BlackKnight.new(visualWhiteKnight, 62, false)
+var whiteBishop_1 = WhiteBishop.new(visualWhiteBishop, 61, false)
+var whiteBishop_2 = BlackBishop.new(visualWhiteBishop,58, false)
+var whiteRook_1 = WhiteRook.new(visualWhiteRook, 63, false)
+var whiteRook_2 = BlackRook.new(visualWhiteRook, 56, false)
 var whiteP0 = Pawn.new(visualWhitePawn, 48, false)
 var whiteP1 = Pawn.new(visualWhitePawn, 49, false)
 var whiteP2 = Pawn.new(visualWhitePawn, 50, false)
@@ -128,10 +128,11 @@ func OnObservingTheClickingOnSquares() -> void:
 func OnDrawTheLastPositions(chessSquare: ChessSquare):
 	# localize the current position by determinanting the row of the current selected piece
 	var piece: ChessPiece = chessSquare.pieceType
-	if piece.withSpicialMovement:
-		HandleTheLastPositonsOfASpecialPiece(piece)
-	else:
-		HandleTheLastPositonsOfNonASpecialPiece(piece)
+	if piece:
+		if piece.withSpicialMovement:
+			HandleTheLastPositonsOfASpecialPiece(piece)
+		else:
+			HandleTheLastPositonsOfANonSpecialPiece(piece)
 
 
 func LocalizationOfSelectedPiece(_pieceIdx) -> float:
@@ -143,40 +144,74 @@ func FixTheBoundariesOfASelectedRow(_row: int) ->Array[int]:
 	return [firstIdx, lastIdx]
 
 
-func ToggleShowDownArrows(_visible):
-	if visibleDownArrows.size() > 0:
-		for arrow in visibleDownArrows:
+func ToggleShowHighlightCircles(_visible):
+	if visibleHighlightCircles.size() > 0:
+		for arrow in visibleHighlightCircles:
 			var arr: Sprite3D = arrow
 			arr.visible = _visible
 
 func HandleTheLastPositonsOfASpecialPiece(piece: ChessPiece):
 	var pieceIdx = piece.pieceIdx
-	var selectedRow = LocalizationOfSelectedPiece(pieceIdx)
-	
-	# calculate the incoming positions
-	var cordinations = piece.MoveToLastPosition()
-	ToggleShowDownArrows(false)
-	visibleDownArrows.clear()
-	if cordinations.size():
-		for cord in cordinations:
-			# determine if the current position is within the boudries of the current column.
-			var nextSelectedRow = selectedRow + cord.row 
-			if nextSelectedRow > 0 and nextSelectedRow <= ROWS :
-				var boundaries = FixTheBoundariesOfASelectedRow(nextSelectedRow)
-				# enable or disable the down arrows
-				var selectedCol = cord.col
-				var firstIdx = boundaries[0]
-				var lastIdx = boundaries[1]
-				for col in selectedCol:
-					if col >= firstIdx and col <= lastIdx:
-						var nextSquare: ChessSquare = GRID[col]
-						if piece.CanMove(nextSquare.pieceType) :
-							var arrow: Sprite3D = nextSquare.visualSquare.get_node("DownArrow")
-							visibleDownArrows.append(arrow)
-						
-		ToggleShowDownArrows(true)
-	else:
-		ToggleShowDownArrows(false)
+	if pieceIdx:
+		var selectedRow = LocalizationOfSelectedPiece(pieceIdx)
+		
+		# calculate the incoming positions
+		var cordinations = piece.MoveToLastPosition()
+		ToggleShowHighlightCircles(false)
+		visibleHighlightCircles.clear()
+		if cordinations.size():
+			for cord in cordinations:
+				# determine if the current position is within the boudries of the current column.
+				var nextSelectedRow = selectedRow + cord.row 
+				if nextSelectedRow > 0 and nextSelectedRow <= ROWS :
+					var boundaries = FixTheBoundariesOfASelectedRow(nextSelectedRow)
+					# enable or disable the down arrows
+					var selectedCol = cord.col
+					var firstIdx = boundaries[0]
+					var lastIdx = boundaries[1]
+					for col in selectedCol:
+						if col >= firstIdx and col <= lastIdx:
+							var nextSquare: ChessSquare = GRID[col]
+							if piece.CanMove(nextSquare.pieceType):
+								var circle: Sprite3D = nextSquare.visualSquare.get_node("Circle")
+								visibleHighlightCircles.append(circle)
+							
+			ToggleShowHighlightCircles(true)
+		else:
+			ToggleShowHighlightCircles(false)
 
-func HandleTheLastPositonsOfNonASpecialPiece(piece: ChessPiece):
-	piece.MoveToLastPosition(piece)
+
+func HandleTheLastPositonsOfANonSpecialPiece(piece: ChessPiece):
+	var pieceIdx = piece.pieceIdx
+	if pieceIdx != null:
+		var selectedRow = LocalizationOfSelectedPiece(pieceIdx)
+		# calculate the incoming positions
+		var blockedDirections: Array[String] = []
+		var coordinations = piece.MoveToLastPosition()
+		ToggleShowHighlightCircles(false)
+		visibleHighlightCircles.clear()
+		if coordinations.size():
+			for coor in coordinations:
+				var nextSelectedRow = selectedRow + coor.row 
+				if nextSelectedRow > 0 and nextSelectedRow <= ROWS  and not blockedDirections.has(coor.direction):
+					var boundaries = FixTheBoundariesOfASelectedRow(nextSelectedRow)
+					# enable or disable the down arrows
+					var selectedCol = coor.col
+					var firstIdx = boundaries[0]
+					var lastIdx = boundaries[1]
+					if selectedCol >= firstIdx and selectedCol <= lastIdx:
+						var nextSquare: ChessSquare = GRID[selectedCol]
+						if nextSquare.pieceType:
+							if piece.CanMove(nextSquare.pieceType) :
+								var circle: Sprite3D = nextSquare.visualSquare.get_node("Circle")
+								visibleHighlightCircles.append(circle)
+								blockedDirections.append(coor.direction)
+							else:
+								blockedDirections.append(coor.direction)
+						else:
+							var circle: Sprite3D = nextSquare.visualSquare.get_node("Circle")
+							visibleHighlightCircles.append(circle)
+			ToggleShowHighlightCircles(true)
+		else:
+			ToggleShowHighlightCircles(false)
+		

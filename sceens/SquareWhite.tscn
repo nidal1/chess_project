@@ -1,13 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://bpeolnatab76f"]
+[gd_scene load_steps=5 format=3 uid="uid://bpeolnatab76f"]
 
 [ext_resource type="Texture2D" uid="uid://cm72rx7t1apcs" path="res://images/down-arrow.png" id="1_2s1ha"]
+[ext_resource type="Texture2D" uid="uid://uuoas5ovj87f" path="res://images/highlight-circle.png" id="2_7r0xm"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8hbmr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hveve"]
 
 [node name="Square" type="CSGBox3D"]
-transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, 0.5, 0, 0.5)
+transform = Transform3D(1, 0, 0, 0, 0.51, 0, 0, 0, 1, 0.5, 0, 0.5)
 material_override = SubResource("StandardMaterial3D_8hbmr")
 
 [node name="ClickableArea" type="Area3D" parent="."]
@@ -20,3 +21,8 @@ transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0, 1, 0)
 visible = false
 billboard = 1
 texture = ExtResource("1_2s1ha")
+
+[node name="Circle" type="Sprite3D" parent="."]
+transform = Transform3D(0.7, 0, 0, 0, -3.0598e-08, -0.7, 0, 0.7, -3.0598e-08, 0, 0.51, 0)
+visible = false
+texture = ExtResource("2_7r0xm")

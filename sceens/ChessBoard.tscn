@@ -15,7 +15,7 @@ script = ExtResource("2_uokpg")
 transform = Transform3D(8, 0, 0, 0, 0.5, 0, 0, 0, 8, 4, 0, 4)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="ChessBord"]
-transform = Transform3D(1.145, 1.50149e-07, 8.66883e-08, 8.66883e-08, -0.991599, 0.5725, 1.50149e-07, -0.5725, -0.991599, 4, 0, 4)
+transform = Transform3D(1.145, -1.7088e-07, -7.07807e-08, -7.07807e-08, -0.809637, 0.809637, -1.7088e-07, -0.809637, -0.809637, 4, 0, 4)
 shape = SubResource("SeparationRayShape3D_mwfdj")
 spring_length = 8.0
 
