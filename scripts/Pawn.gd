@@ -10,12 +10,19 @@ func _init(_visual, _pieceIdx, _isBlackPiece = true):
 
 
 func GetTheNextPosition():
+
+	var row
+	if self.isBlackPiece:
+		row = 1
+	else:
+		row = -1
+
 	return [{
 		"row" : 0,
 		"col": []
 	},
 	{
-		"row" : 1,
-		"col": [pieceIdx + 8]
+		"row" : row,
+		"col": [pieceIdx + 8 * row]
 	},
 	]
