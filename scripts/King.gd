@@ -7,7 +7,7 @@ func _init(_visual, _pieceIdx, _isBlackPiece = true):
 	self.pieceIdx = _pieceIdx
 	self.isBlackPiece = _isBlackPiece
 
-func MoveToLastPosition():
+func GetTheNextPosition():
 	return [{
 		"row" : 0,
 		"col": [pieceIdx + 1, pieceIdx - 1]

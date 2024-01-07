@@ -9,7 +9,7 @@ func _init(visual, pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
 
 
-func MoveToLastPosition():
+func GetTheNextPosition():
 	return [{
 		"row" : 1,
 		"col": [pieceIdx + 8 -2, pieceIdx + 8 + 2]

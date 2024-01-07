@@ -126,6 +126,8 @@ func OnObservingTheClickingOnSquares() -> void:
 	observingClickingOnSquares.connect(OnDrawTheLastPositions)
 
 func OnDrawTheLastPositions(chessSquare: ChessSquare):
+	ToggleShowHighlightCircles(false)
+	visibleHighlightCircles.clear()
 	# localize the current position by determinanting the row of the current selected piece
 	var piece: ChessPiece = chessSquare.pieceType
 	if piece:
@@ -156,9 +158,7 @@ func HandleTheLastPositonsOfASpecialPiece(piece: ChessPiece):
 		var selectedRow = LocalizationOfSelectedPiece(pieceIdx)
 		
 		# calculate the incoming positions
-		var cordinations = piece.MoveToLastPosition()
-		ToggleShowHighlightCircles(false)
-		visibleHighlightCircles.clear()
+		var cordinations = piece.GetTheNextPosition()
 		if cordinations.size():
 			for cord in cordinations:
 				# determine if the current position is within the boudries of the current column.
@@ -187,9 +187,7 @@ func HandleTheLastPositonsOfANonSpecialPiece(piece: ChessPiece):
 		var selectedRow = LocalizationOfSelectedPiece(pieceIdx)
 		# calculate the incoming positions
 		var blockedDirections: Array[String] = []
-		var coordinations = piece.MoveToLastPosition()
-		ToggleShowHighlightCircles(false)
-		visibleHighlightCircles.clear()
+		var coordinations = piece.GetTheNextPosition()
 		if coordinations.size():
 			for coor in coordinations:
 				var nextSelectedRow = selectedRow + coor.row 

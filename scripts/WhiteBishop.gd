@@ -10,7 +10,7 @@ func _init(visual, pieceIdx, _isBlackPiece = true):
 	self.withSpicialMovement = false
 
 
-func MoveToLastPosition():
+func GetTheNextPosition():
 	var coordinates = []
 	for i in range(1, 8):
 		var topLeft = pieceIdx + (8 * i) + i

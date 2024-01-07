@@ -16,6 +16,9 @@ var withSpicialMovement: bool = true
 #	visual.get_node("RootNode").get_child(0).set_surface_override_material(0, material)
 
 
+func GetTheNextPosition() -> Array:
+	return []
+
 func CanMove(other :ChessPiece) -> bool:
 	if other:
 		return int(self.isBlackPiece) + int(other.isBlackPiece) == 1
