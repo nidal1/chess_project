@@ -13,6 +13,11 @@ var visibleHighlightCircles: Array[Sprite3D]
 
 signal observingClickingOnSquares(chessSquare)
 
+
+
+var visualBlackChessSquare = preload("res://sceens/SquareBlack.tscn")
+var visualWhiteChessSquare = preload("res://sceens/SquareWhite.tscn")
+
 var visualBlackKing = preload("res://sceens/black_king.tscn")
 var visualBlackQueen = preload("res://sceens/black_queen.tscn")
 var visualBlackBishop = preload("res://sceens/black_bishop.tscn")
@@ -61,81 +66,115 @@ var whiteP5 = Pawn.new(visualWhitePawn, 53, false)
 var whiteP6 = Pawn.new(visualWhitePawn, 54, false)
 var whiteP7 = Pawn.new(visualWhitePawn, 55, false)
 
-
+func InitTheBoard(visualChessBoard: Node3D):
+	self.OnObservingTheClickingOnSquares()
+	self.InitBoardSquares()
+	self.InitPieces()
+	self.RenderChessSquares(visualChessBoard)
+	self.RenderPieces()
 
 func InitBoardSquares() -> void:
 	prevSquareType = "white"
 	currentSquareType = "white"
+	var squareVisualInstance: Node3D
 	for row in range(ROWS):
 		for col in range(COLS):
 			var square = ChessSquare.new()
-			square.chessBoardObserver = observingClickingOnSquares
-			GRID.append(square)
 			square.squareType = currentSquareType
+			square.chessBoardObserver = observingClickingOnSquares
+			if square.squareType == "black":
+				squareVisualInstance = visualBlackChessSquare.instantiate()
+			else:
+				squareVisualInstance = visualWhiteChessSquare.instantiate()
+			square.AssignVisualSquare(squareVisualInstance)
+			GRID.append(square)
+			
 			if col != COLS - 1:
-				SwapeTheColorOfCurrentSquare()
-		SwapeTheColorOfTheFistSquareInTheRow()
+				SwipeTheColorOfCurrentSquare()
+		SwipeTheColorOfTheFistSquareInTheRow()
 
-func SwapeTheColorOfCurrentSquare() -> void:
+func RenderChessSquares(visualChessBoard: Node3D) -> void:
+	var idx = 0
+	for row in ROWS:
+		for col in COLS:
+			var square: ChessSquare = GRID[idx]
+			var instance: Node3D = square.visualSquare
+			instance.position.x += col
+			instance.position.z += row
+			visualChessBoard.add_child(instance)
+			square.AssignVisualSquare(instance)
+			idx += 1
+
+func SwipeTheColorOfCurrentSquare() -> void:
 	if prevSquareType == "black":
 		currentSquareType = "white"
 	else:
 		currentSquareType = "black"
 	prevSquareType = currentSquareType
 
-func SwapeTheColorOfTheFistSquareInTheRow() -> void:
+func SwipeTheColorOfTheFistSquareInTheRow() -> void:
 	currentSquareType = prevSquareType
 
-func InitPieces():
+func InitPieces() -> void:
 	if self.GRID.size() > 0:
-		GRID[blackKing.pieceIdx].AsignPiece(blackKing)
-		GRID[blackQueen.pieceIdx].AsignPiece(blackQueen)
-		GRID[blackKnight_1.pieceIdx].AsignPiece(blackKnight_1)
-		GRID[blackKnight_2.pieceIdx].AsignPiece(blackKnight_2)
-		GRID[blackBishop_1.pieceIdx].AsignPiece(blackBishop_1)
-		GRID[blackBishop_2.pieceIdx].AsignPiece(blackBishop_2)
-		GRID[blackRook_1.pieceIdx].AsignPiece(blackRook_1)
-		GRID[blackRook_2.pieceIdx].AsignPiece(blackRook_2)
-		GRID[blackP0.pieceIdx].AsignPiece(blackP0)
-		GRID[blackP1.pieceIdx].AsignPiece(blackP1)
-		GRID[blackP2.pieceIdx].AsignPiece(blackP2)
-		GRID[blackP3.pieceIdx].AsignPiece(blackP3)
-		GRID[blackP4.pieceIdx].AsignPiece(blackP4)
-		GRID[blackP5.pieceIdx].AsignPiece(blackP5)
-		GRID[blackP6.pieceIdx].AsignPiece(blackP6)
-		GRID[blackP7.pieceIdx].AsignPiece(blackP7)
+		GRID[blackKing.pieceIdx].AssignPiece(blackKing)
+		GRID[blackQueen.pieceIdx].AssignPiece(blackQueen)
+		GRID[blackKnight_1.pieceIdx].AssignPiece(blackKnight_1)
+		GRID[blackKnight_2.pieceIdx].AssignPiece(blackKnight_2)
+		GRID[blackBishop_1.pieceIdx].AssignPiece(blackBishop_1)
+		GRID[blackBishop_2.pieceIdx].AssignPiece(blackBishop_2)
+		GRID[blackRook_1.pieceIdx].AssignPiece(blackRook_1)
+		GRID[blackRook_2.pieceIdx].AssignPiece(blackRook_2)
+		GRID[blackP0.pieceIdx].AssignPiece(blackP0)
+		GRID[blackP1.pieceIdx].AssignPiece(blackP1)
+		GRID[blackP2.pieceIdx].AssignPiece(blackP2)
+		GRID[blackP3.pieceIdx].AssignPiece(blackP3)
+		GRID[blackP4.pieceIdx].AssignPiece(blackP4)
+		GRID[blackP5.pieceIdx].AssignPiece(blackP5)
+		GRID[blackP6.pieceIdx].AssignPiece(blackP6)
+		GRID[blackP7.pieceIdx].AssignPiece(blackP7)
 		
-		GRID[whiteKing.pieceIdx].AsignPiece(whiteKing)
-		GRID[whiteQueen.pieceIdx].AsignPiece(whiteQueen)
-		GRID[whiteKnight_1.pieceIdx].AsignPiece(whiteKnight_1)
-		GRID[whiteKnight_2.pieceIdx].AsignPiece(whiteKnight_2)
-		GRID[whiteBishop_1.pieceIdx].AsignPiece(whiteBishop_1)
-		GRID[whiteBishop_2.pieceIdx].AsignPiece(whiteBishop_2)
-		GRID[whiteRook_1.pieceIdx].AsignPiece(whiteRook_1)
-		GRID[whiteRook_2.pieceIdx].AsignPiece(whiteRook_2)
-		GRID[whiteP0.pieceIdx].AsignPiece(whiteP0)
-		GRID[whiteP1.pieceIdx].AsignPiece(whiteP1)
-		GRID[whiteP2.pieceIdx].AsignPiece(whiteP2)
-		GRID[whiteP3.pieceIdx].AsignPiece(whiteP3)
-		GRID[whiteP4.pieceIdx].AsignPiece(whiteP4)
-		GRID[whiteP5.pieceIdx].AsignPiece(whiteP5)
-		GRID[whiteP6.pieceIdx].AsignPiece(whiteP6)
-		GRID[whiteP7.pieceIdx].AsignPiece(whiteP7)
+		GRID[whiteKing.pieceIdx].AssignPiece(whiteKing)
+		GRID[whiteQueen.pieceIdx].AssignPiece(whiteQueen)
+		GRID[whiteKnight_1.pieceIdx].AssignPiece(whiteKnight_1)
+		GRID[whiteKnight_2.pieceIdx].AssignPiece(whiteKnight_2)
+		GRID[whiteBishop_1.pieceIdx].AssignPiece(whiteBishop_1)
+		GRID[whiteBishop_2.pieceIdx].AssignPiece(whiteBishop_2)
+		GRID[whiteRook_1.pieceIdx].AssignPiece(whiteRook_1)
+		GRID[whiteRook_2.pieceIdx].AssignPiece(whiteRook_2)
+		GRID[whiteP0.pieceIdx].AssignPiece(whiteP0)
+		GRID[whiteP1.pieceIdx].AssignPiece(whiteP1)
+		GRID[whiteP2.pieceIdx].AssignPiece(whiteP2)
+		GRID[whiteP3.pieceIdx].AssignPiece(whiteP3)
+		GRID[whiteP4.pieceIdx].AssignPiece(whiteP4)
+		GRID[whiteP5.pieceIdx].AssignPiece(whiteP5)
+		GRID[whiteP6.pieceIdx].AssignPiece(whiteP6)
+		GRID[whiteP7.pieceIdx].AssignPiece(whiteP7)
+
+func RenderPieces() -> void:
+	var idx = 0
+	for square in GRID:
+		if square.isEmpty == false:
+			var visualPieceInstance:Node3D = square.pieceType.visual
+			visualPieceInstance.position.y += 0.5
+			if square.visualSquare != null and idx == square.pieceType.pieceIdx:
+				square.visualSquare.add_child(visualPieceInstance)
+		idx += 1
+#			await get_tree().create_timer(1.0).timeout
 
 func OnObservingTheClickingOnSquares() -> void:
 	observingClickingOnSquares.connect(OnDrawTheLastPositions)
 
-func OnDrawTheLastPositions(chessSquare: ChessSquare):
+func OnDrawTheLastPositions(chessSquare: ChessSquare) -> void:
 	ToggleShowHighlightCircles(false)
 	visibleHighlightCircles.clear()
-	# localize the current position by determinanting the row of the current selected piece
+	# localize the current position by determinant the row of the current selected piece
 	var piece: ChessPiece = chessSquare.pieceType
 	if piece:
-		if piece.withSpicialMovement:
-			HandleTheLastPositonsOfASpecialPiece(piece)
+		if piece.withSpecialMovement:
+			HandleTheLastPositionsOfASpecialPiece(piece)
 		else:
-			HandleTheLastPositonsOfANonSpecialPiece(piece)
-
+			HandleTheLastPositionsOfANonSpecialPiece(piece)
 
 func LocalizationOfSelectedPiece(_pieceIdx) -> float:
 	return (_pieceIdx / ROWS) + 1
@@ -145,23 +184,22 @@ func FixTheBoundariesOfASelectedRow(_row: int) ->Array[int]:
 	var lastIdx = (_row * ROWS) - 1
 	return [firstIdx, lastIdx]
 
-
-func ToggleShowHighlightCircles(_visible):
+func ToggleShowHighlightCircles(_visible) -> void:
 	if visibleHighlightCircles.size() > 0:
 		for arrow in visibleHighlightCircles:
 			var arr: Sprite3D = arrow
 			arr.visible = _visible
 
-func HandleTheLastPositonsOfASpecialPiece(piece: ChessPiece):
+func HandleTheLastPositionsOfASpecialPiece(piece: ChessPiece) -> void:
 	var pieceIdx = piece.pieceIdx
 	if pieceIdx:
 		var selectedRow = LocalizationOfSelectedPiece(pieceIdx)
 		
 		# calculate the incoming positions
-		var cordinations = piece.GetTheNextPosition()
-		if cordinations.size():
-			for cord in cordinations:
-				# determine if the current position is within the boudries of the current column.
+		var coordinations = piece.GetTheNextPosition()
+		if coordinations.size():
+			for cord in coordinations:
+				# determine if the current position is within the boundaries of the current column.
 				var nextSelectedRow = selectedRow + cord.row 
 				if nextSelectedRow > 0 and nextSelectedRow <= ROWS :
 					var boundaries = FixTheBoundariesOfASelectedRow(nextSelectedRow)
@@ -180,8 +218,7 @@ func HandleTheLastPositonsOfASpecialPiece(piece: ChessPiece):
 		else:
 			ToggleShowHighlightCircles(false)
 
-
-func HandleTheLastPositonsOfANonSpecialPiece(piece: ChessPiece):
+func HandleTheLastPositionsOfANonSpecialPiece(piece: ChessPiece) -> void:
 	var pieceIdx = piece.pieceIdx
 	if pieceIdx != null:
 		var selectedRow = LocalizationOfSelectedPiece(pieceIdx)

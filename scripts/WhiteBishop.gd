@@ -3,11 +3,11 @@ extends ChessPiece
 
 class_name WhiteBishop
 
-func _init(visual, pieceIdx, _isBlackPiece = true):
-	self.visual = visual.instantiate()
-	self.pieceIdx = pieceIdx
+func _init(_visual, _pieceIdx, _isBlackPiece = true):
+	self.visual = _visual.instantiate()
+	self.pieceIdx = _pieceIdx
 	self.isBlackPiece = _isBlackPiece
-	self.withSpicialMovement = false
+	self.withSpecialMovement = false
 
 
 func GetTheNextPosition():

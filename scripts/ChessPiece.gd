@@ -5,7 +5,7 @@ class_name ChessPiece
 var pieceIdx: int
 var visual: Node3D
 var isBlackPiece: bool
-var withSpicialMovement: bool = true
+var withSpecialMovement: bool = true
 
 #func SwitchColor():
 #	var material:Material = StandardMaterial3D.new()
