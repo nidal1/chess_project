@@ -116,40 +116,43 @@ func SwipeTheColorOfTheFistSquareInTheRow() -> void:
 	currentSquareType = prevSquareType
 
 func InitPieces() -> void:
+	var pieces = [
+	blackKing,
+	blackQueen,
+	blackKnight_1,
+	blackKnight_2,
+	blackBishop_1,
+	blackBishop_2,
+	blackRook_1,
+	blackRook_2,
+	blackP0,
+	blackP1,
+	blackP2,
+	blackP3,
+	blackP4,
+	blackP5,
+	blackP6,
+	blackP7,
+	whiteKing,
+	whiteQueen,
+	whiteKnight_1,
+	whiteKnight_2,
+	whiteBishop_1,
+	whiteBishop_2,
+	whiteRook_1,
+	whiteRook_2,
+	whiteP0,
+	whiteP1,
+	whiteP2,
+	whiteP3,
+	whiteP4,
+	whiteP5,
+	whiteP6,
+	whiteP7,
+	]
 	if self.GRID.size() > 0:
-		GRID[blackKing.pieceIdx].AssignPiece(blackKing)
-		GRID[blackQueen.pieceIdx].AssignPiece(blackQueen)
-		GRID[blackKnight_1.pieceIdx].AssignPiece(blackKnight_1)
-		GRID[blackKnight_2.pieceIdx].AssignPiece(blackKnight_2)
-		GRID[blackBishop_1.pieceIdx].AssignPiece(blackBishop_1)
-		GRID[blackBishop_2.pieceIdx].AssignPiece(blackBishop_2)
-		GRID[blackRook_1.pieceIdx].AssignPiece(blackRook_1)
-		GRID[blackRook_2.pieceIdx].AssignPiece(blackRook_2)
-		GRID[blackP0.pieceIdx].AssignPiece(blackP0)
-		GRID[blackP1.pieceIdx].AssignPiece(blackP1)
-		GRID[blackP2.pieceIdx].AssignPiece(blackP2)
-		GRID[blackP3.pieceIdx].AssignPiece(blackP3)
-		GRID[blackP4.pieceIdx].AssignPiece(blackP4)
-		GRID[blackP5.pieceIdx].AssignPiece(blackP5)
-		GRID[blackP6.pieceIdx].AssignPiece(blackP6)
-		GRID[blackP7.pieceIdx].AssignPiece(blackP7)
-		
-		GRID[whiteKing.pieceIdx].AssignPiece(whiteKing)
-		GRID[whiteQueen.pieceIdx].AssignPiece(whiteQueen)
-		GRID[whiteKnight_1.pieceIdx].AssignPiece(whiteKnight_1)
-		GRID[whiteKnight_2.pieceIdx].AssignPiece(whiteKnight_2)
-		GRID[whiteBishop_1.pieceIdx].AssignPiece(whiteBishop_1)
-		GRID[whiteBishop_2.pieceIdx].AssignPiece(whiteBishop_2)
-		GRID[whiteRook_1.pieceIdx].AssignPiece(whiteRook_1)
-		GRID[whiteRook_2.pieceIdx].AssignPiece(whiteRook_2)
-		GRID[whiteP0.pieceIdx].AssignPiece(whiteP0)
-		GRID[whiteP1.pieceIdx].AssignPiece(whiteP1)
-		GRID[whiteP2.pieceIdx].AssignPiece(whiteP2)
-		GRID[whiteP3.pieceIdx].AssignPiece(whiteP3)
-		GRID[whiteP4.pieceIdx].AssignPiece(whiteP4)
-		GRID[whiteP5.pieceIdx].AssignPiece(whiteP5)
-		GRID[whiteP6.pieceIdx].AssignPiece(whiteP6)
-		GRID[whiteP7.pieceIdx].AssignPiece(whiteP7)
+		for i in range(pieces.size()):
+			GRID[pieces[i].pieceIdx].AssignPiece(pieces[i])
 
 func RenderPieces() -> void:
 	var idx = 0

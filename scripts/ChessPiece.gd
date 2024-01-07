@@ -7,6 +7,8 @@ var visual: Node3D
 var isBlackPiece: bool
 var withSpecialMovement: bool = true
 
+var directions = preload("res://scripts/DIrections.gd")
+
 #func SwitchColor():
 #	var material:Material = StandardMaterial3D.new()
 #	if isBlackPiece:
