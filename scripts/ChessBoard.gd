@@ -175,9 +175,9 @@ func OnDrawTheLastPositions(chessSquare: ChessSquare) -> void:
 	var piece: ChessPiece = chessSquare.pieceType
 	if piece:
 		if piece.withSpecialMovement:
-			HandleTheLastPositionsOfASpecialPiece(piece)
+			HandleSpecialPiece(piece)
 		else:
-			HandleTheLastPositionsOfANonSpecialPiece(piece)
+			HandleNonSpecialPiece(piece)
 
 func LocalizationOfSelectedPiece(_pieceIdx) -> float:
 	return (_pieceIdx / ROWS) + 1
@@ -193,7 +193,7 @@ func ToggleShowHighlightCircles(_visible) -> void:
 			var arr: Sprite3D = arrow
 			arr.visible = _visible
 
-func HandleTheLastPositionsOfASpecialPiece(piece: ChessPiece) -> void:
+func HandleSpecialPiece(piece: ChessPiece) -> void:
 	var pieceIdx = piece.pieceIdx
 	if pieceIdx:
 		var selectedRow = LocalizationOfSelectedPiece(pieceIdx)
@@ -221,12 +221,12 @@ func HandleTheLastPositionsOfASpecialPiece(piece: ChessPiece) -> void:
 		else:
 			ToggleShowHighlightCircles(false)
 
-func HandleTheLastPositionsOfANonSpecialPiece(piece: ChessPiece) -> void:
+func HandleNonSpecialPiece(piece: ChessPiece) -> void:
 	var pieceIdx = piece.pieceIdx
 	if pieceIdx != null:
 		var selectedRow = LocalizationOfSelectedPiece(pieceIdx)
 		# calculate the incoming positions
-		var blockedDirections: Array[String] = []
+		var blockedDirections: Array[int] = []
 		var coordinations = piece.GetTheNextPosition()
 		if coordinations.size():
 			for coor in coordinations:
@@ -252,4 +252,3 @@ func HandleTheLastPositionsOfANonSpecialPiece(piece: ChessPiece) -> void:
 			ToggleShowHighlightCircles(true)
 		else:
 			ToggleShowHighlightCircles(false)
-		
