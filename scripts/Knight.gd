@@ -1,7 +1,7 @@
 extends ChessPiece
 
 
-class_name BlackKnight
+class_name Knight
 
 func _init(_visual, _pieceIdx, _isBlackPiece = true):
 	self.visual = _visual.instantiate()
