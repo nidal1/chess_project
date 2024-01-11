@@ -21,8 +21,22 @@ func onSquareClicked(camera:Node, event:InputEvent, position:Vector3, normal:Vec
 func AssignPiece(chessPiece: ChessPiece) -> void:
 	self.pieceType = chessPiece
 	self.isEmpty = false
+	# display the moved piece
+	AddVisualPiece()
 
 
 func DetachPiece() -> void:
+	RemoveVisualPiece()
 	self.pieceType = null
 	self.isEmpty = true 
+	# remove the moved piece
+	
+
+func RemoveVisualPiece() -> void:
+	var visualPieceInstance:Node3D = self.pieceType.visual
+	self.visualSquare.remove_child(visualPieceInstance)
+
+func AddVisualPiece() -> void:
+	var visualPieceInstance:Node3D = self.pieceType.visual
+	# visualPieceInstance.position.y += 0.75
+	self.visualSquare.add_child(visualPieceInstance)

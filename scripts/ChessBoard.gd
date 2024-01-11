@@ -9,11 +9,14 @@ var GRID : Array[ChessSquare]
 var currentSquareType : String
 var prevSquareType : String
 
-var visibleHighlightCircles: Array[Sprite3D]
+var selectedSquare: ChessSquare = null
+var visibleHighlightCircles: Array[Sprite3D] = []
+
+
 
 signal observingClickingOnSquares(chessSquare)
 
-
+var visualChessBoard: Node3D = null
 
 var visualBlackChessSquare = preload("res://sceens/SquareBlack.tscn")
 var visualWhiteChessSquare = preload("res://sceens/SquareWhite.tscn")
@@ -66,12 +69,15 @@ var whiteP5 = Pawn.new(visualWhitePawn, 53, false)
 var whiteP6 = Pawn.new(visualWhitePawn, 54, false)
 var whiteP7 = Pawn.new(visualWhitePawn, 55, false)
 
-func InitTheBoard(visualChessBoard: Node3D):
+func InitTheBoard(_visualChessBoard: Node3D):
 	self.OnObservingTheClickingOnSquares()
+	self.SetVisualChessBoard(_visualChessBoard)
 	self.InitBoardSquares()
 	self.InitPieces()
-	self.RenderChessSquares(visualChessBoard)
-	self.RenderPieces()
+	self.RenderChessSquares()
+
+func SetVisualChessBoard(_visualChessBoard: Node3D):
+	self.visualChessBoard = _visualChessBoard
 
 func InitBoardSquares() -> void:
 	prevSquareType = "white"
@@ -93,7 +99,7 @@ func InitBoardSquares() -> void:
 				SwipeTheColorOfCurrentSquare()
 		SwipeTheColorOfTheFistSquareInTheRow()
 
-func RenderChessSquares(visualChessBoard: Node3D) -> void:
+func RenderChessSquares() -> void:
 	var idx = 0
 	for row in ROWS:
 		for col in COLS:
@@ -169,15 +175,25 @@ func OnObservingTheClickingOnSquares() -> void:
 	observingClickingOnSquares.connect(OnDrawTheLastPositions)
 
 func OnDrawTheLastPositions(chessSquare: ChessSquare) -> void:
-	ToggleShowHighlightCircles(false)
-	visibleHighlightCircles.clear()
 	# localize the current position by determinant the row of the current selected piece
 	var piece: ChessPiece = chessSquare.pieceType
 	if piece:
+		ToggleShowHighlightCircles(false)
+		ClearHighlightCircles()
+		selectedSquare = chessSquare
 		if piece.withSpecialMovement:
 			HandleSpecialPiece(piece)
 		else:
 			HandleNonSpecialPiece(piece)
+	else:
+		if selectedSquare:
+			var circle = chessSquare.visualSquare.get_node("Circle")
+			if visibleHighlightCircles.has(circle):
+				var selectedPiece = selectedSquare.pieceType
+				selectedSquare.DetachPiece()
+				chessSquare.AssignPiece(selectedPiece)
+				ToggleShowHighlightCircles(false)
+				ClearHighlightCircles()
 
 func LocalizationOfSelectedPiece(_pieceIdx) -> float:
 	return (_pieceIdx / ROWS) + 1
@@ -192,6 +208,10 @@ func ToggleShowHighlightCircles(_visible) -> void:
 		for arrow in visibleHighlightCircles:
 			var arr: Sprite3D = arrow
 			arr.visible = _visible
+
+func ClearHighlightCircles() -> void:
+	visibleHighlightCircles.clear()
+	selectedSquare = null
 
 func HandleSpecialPiece(piece: ChessPiece) -> void:
 	var pieceIdx = piece.pieceIdx

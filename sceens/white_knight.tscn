@@ -3,4 +3,4 @@
 [ext_resource type="PackedScene" uid="uid://cqp5mxm306thu" path="res://fbx/white_knight.fbx" id="1_w35bx"]
 
 [node name="white_knight" instance=ExtResource("1_w35bx")]
-transform = Transform3D(-20, 0, -1.74846e-06, 0, 20, 0, 1.74846e-06, 0, -20, 0, 0, 0)
+transform = Transform3D(-20, 0, -1.74846e-06, 0, 20, 0, 1.74846e-06, 0, -20, 0, 0.75, 0)
