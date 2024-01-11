@@ -3,4 +3,4 @@
 [ext_resource type="PackedScene" uid="uid://dbbhum5nbye00" path="res://fbx/white_pawn.fbx" id="1_ca2n5"]
 
 [node name="white_pawn" instance=ExtResource("1_ca2n5")]
-transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0.75, 0)
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0.5, 0)

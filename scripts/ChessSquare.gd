@@ -3,6 +3,7 @@ extends Node
 class_name ChessSquare
 
 var squareType: String
+var squareIdx: int
 var isEmpty: bool = true
 var pieceType: ChessPiece = null
 var visualSquare: Node3D = null
@@ -38,5 +39,4 @@ func RemoveVisualPiece() -> void:
 
 func AddVisualPiece() -> void:
 	var visualPieceInstance:Node3D = self.pieceType.visual
-	# visualPieceInstance.position.y += 0.75
 	self.visualSquare.add_child(visualPieceInstance)

@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://d2yl3ek5frrqb" path="res://sceens/piece_spot_light_3d.tscn" id="2_r6vol"]
 
 [node name="black_king" instance=ExtResource("1_8hgm5")]
-transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0.75, 0)
+transform = Transform3D(20, 0, 0, 0, 30, 0, 0, 0, 20, 0, 0.5, 0)
 
 [node name="SpotLight3D" parent="." index="0" instance=ExtResource("2_r6vol")]
-transform = Transform3D(0.05, 0, 0, 0, -2.18557e-09, 0.05, 0, -0.05, -2.18557e-09, 0, 0.0667402, 0)
+transform = Transform3D(0.05, 0, 0, 0, -2.18557e-09, 0.05, 0, -0.05, -2.18557e-09, 0, 0.059375, 0)

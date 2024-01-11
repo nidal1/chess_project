@@ -13,7 +13,7 @@ script = ExtResource("1_lhpmm")
 transform = Transform3D(8, 0, 0, 0, 0.5, 0, 0, 0, 8, 4, 0, 4)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="ChessBoard"]
-transform = Transform3D(1.145, -1.7088e-07, -7.07807e-08, -7.07807e-08, -0.809637, 0.809637, -1.7088e-07, -0.809637, -0.809637, 4, 0, 4)
+transform = Transform3D(1.145, 1.00099e-07, 1.00099e-07, 3.66388e-08, -0.991599, 0.5725, 1.36738e-07, -0.5725, -0.991599, 4, 0, 4)
 shape = SubResource("SeparationRayShape3D_mwfdj")
 spring_length = 8.0
 
@@ -24,3 +24,31 @@ current = true
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 4, 7.739, 4)
+
+[node name="6" type="SpotLight3D" parent="."]
+transform = Transform3D(-7.10543e-15, -1, -2.39008e-21, 0.866025, -6.15348e-15, 0.5, -0.5, 3.55271e-15, 0.866025, 4, 4, 4)
+light_energy = 3.78
+light_specular = 4.759
+spot_range = 6.0
+spot_angle = 58.3241
+
+[node name="9" type="SpotLight3D" parent="."]
+transform = Transform3D(4.37114e-08, 1, -7.57103e-08, 0.866025, -6.15348e-15, 0.5, 0.5, -8.74228e-08, -0.866025, 4, 4, 4)
+light_energy = 3.78
+light_specular = 4.759
+spot_range = 6.0
+spot_angle = 58.3241
+
+[node name="7" type="SpotLight3D" parent="."]
+transform = Transform3D(4.37114e-08, 1, -7.57103e-08, 1, -4.37114e-08, 1.78814e-07, 1.78814e-07, -7.57103e-08, -1, 4, 1.5, -3)
+light_energy = 2.897
+light_specular = 4.759
+spot_range = 6.0
+spot_angle = 58.3241
+
+[node name="8" type="SpotLight3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 2.98023e-08, 1, -4.37114e-08, 1.78814e-07, -1.78814e-07, 2.98023e-08, 1, 4, 1.5, 10.5)
+light_energy = 2.897
+light_specular = 4.759
+spot_range = 6.0
+spot_angle = 58.3241

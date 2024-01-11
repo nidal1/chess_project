@@ -83,10 +83,12 @@ func InitBoardSquares() -> void:
 	prevSquareType = "white"
 	currentSquareType = "white"
 	var squareVisualInstance: Node3D
+	var idx = 0
 	for row in range(ROWS):
 		for col in range(COLS):
 			var square = ChessSquare.new()
 			square.squareType = currentSquareType
+			square.squareIdx = idx
 			square.chessBoardObserver = observingClickingOnSquares
 			if square.squareType == "black":
 				squareVisualInstance = visualBlackChessSquare.instantiate()
@@ -94,7 +96,7 @@ func InitBoardSquares() -> void:
 				squareVisualInstance = visualWhiteChessSquare.instantiate()
 			square.AssignVisualSquare(squareVisualInstance)
 			GRID.append(square)
-			
+			idx += 1
 			if col != COLS - 1:
 				SwipeTheColorOfCurrentSquare()
 		SwipeTheColorOfTheFistSquareInTheRow()
@@ -174,26 +176,69 @@ func RenderPieces() -> void:
 func OnObservingTheClickingOnSquares() -> void:
 	observingClickingOnSquares.connect(OnDrawTheLastPositions)
 
+# func OnDrawTheLastPositions(chessSquare: ChessSquare) -> void:
+# 	# Check if a piece is selected
+# 	if not selectedSquare:
+# 		ToggleShowHighlightCircles(false)
+# 		ClearHighlightCircles()
+
+# 		# If the clicked square has a piece
+# 		if chessSquare.pieceType:
+# 			var piece: ChessPiece = chessSquare.pieceType
+
+# 			# If the piece has special movement, handle it
+# 			if piece.withSpecialMovement:
+# 				HandleSpecialPiece(piece)
+# 			else:
+# 				HandleNonSpecialPiece(piece)
+
+# 		selectedSquare = chessSquare
+# 	else:
+# 		# If no piece is selected, check if the clicked square has a piece
+# 		var circle = chessSquare.visualSquare.get_node("Circle")
+# 		if visibleHighlightCircles.has(circle):
+# 			var selectedPiece = selectedSquare.pieceType
+# 			selectedPiece.pieceIdx = chessSquare.squareIdx
+# 			selectedSquare.DetachPiece()
+# 			chessSquare.AssignPiece(selectedPiece)
+
+# 			ToggleShowHighlightCircles(false)
+# 			ClearHighlightCircles()
+
 func OnDrawTheLastPositions(chessSquare: ChessSquare) -> void:
-	# localize the current position by determinant the row of the current selected piece
-	var piece: ChessPiece = chessSquare.pieceType
-	if piece:
-		ToggleShowHighlightCircles(false)
-		ClearHighlightCircles()
-		selectedSquare = chessSquare
-		if piece.withSpecialMovement:
-			HandleSpecialPiece(piece)
-		else:
-			HandleNonSpecialPiece(piece)
+	if not selectedSquare or chessSquare.pieceType:
+		print("1")
+		HandleSquareSelection(chessSquare)
 	else:
-		if selectedSquare:
-			var circle = chessSquare.visualSquare.get_node("Circle")
-			if visibleHighlightCircles.has(circle):
-				var selectedPiece = selectedSquare.pieceType
-				selectedSquare.DetachPiece()
-				chessSquare.AssignPiece(selectedPiece)
-				ToggleShowHighlightCircles(false)
-				ClearHighlightCircles()
+		print("2")
+		HandleSquareMove(chessSquare)
+
+func HandleSquareSelection(chessSquare: ChessSquare) -> void:
+	ClearHighlightCircles()
+
+	if chessSquare.pieceType:
+		var piece: ChessPiece = chessSquare.pieceType
+		if piece :
+			ClearHighlightCircles()
+			selectedSquare = chessSquare
+			if piece.withSpecialMovement:
+				HandleSpecialPiece(piece)
+			else:
+				HandleNonSpecialPiece(piece)
+
+func HandleSquareMove(chessSquare: ChessSquare) -> void:
+	var circle = chessSquare.visualSquare.get_node("Circle")
+	if visibleHighlightCircles.has(circle):
+		HandleMovePiece(chessSquare)
+
+func HandleMovePiece(chessSquare: ChessSquare) -> void:
+	var selectedPiece = selectedSquare.pieceType
+	selectedPiece.pieceIdx = chessSquare.squareIdx
+	selectedSquare.DetachPiece()
+	chessSquare.AssignPiece(selectedPiece)
+	ClearHighlightCircles()
+
+
 
 func LocalizationOfSelectedPiece(_pieceIdx) -> float:
 	return (_pieceIdx / ROWS) + 1
@@ -210,6 +255,7 @@ func ToggleShowHighlightCircles(_visible) -> void:
 			arr.visible = _visible
 
 func ClearHighlightCircles() -> void:
+	ToggleShowHighlightCircles(false)
 	visibleHighlightCircles.clear()
 	selectedSquare = null
 
