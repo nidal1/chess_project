@@ -40,3 +40,7 @@ func RemoveVisualPiece() -> void:
 func AddVisualPiece() -> void:
 	var visualPieceInstance:Node3D = self.pieceType.visual
 	self.visualSquare.add_child(visualPieceInstance)
+
+func ToggleVisualCircleVisibility(_visible) -> void:
+	var circle: Sprite3D = self.visualSquare.get_node("Circle") as Sprite3D
+	circle.visible = _visible

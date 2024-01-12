@@ -10,7 +10,7 @@ var currentSquareType : String
 var prevSquareType : String
 
 var selectedSquare: ChessSquare = null
-var visibleHighlightCircles: Array[Sprite3D] = []
+var visibleHighlightCircles: Array[ChessSquare] = []
 
 
 
@@ -196,8 +196,7 @@ func HandleSquareSelection(chessSquare: ChessSquare) -> void:
 				HandleNonSpecialPiece(piece)
 
 func HandleSquareMove(chessSquare: ChessSquare) -> void:
-	var circle = chessSquare.visualSquare.get_node("Circle")
-	if visibleHighlightCircles.has(circle):
+	if visibleHighlightCircles.has(chessSquare):
 		HandleMovePiece(chessSquare)
 
 func HandleMovePiece(chessSquare: ChessSquare) -> void:
@@ -217,9 +216,8 @@ func FixTheBoundariesOfASelectedRow(_row: int) ->Array[int]:
 
 func ToggleShowHighlightCircles(_visible) -> void:
 	if visibleHighlightCircles.size() > 0:
-		for arrow in visibleHighlightCircles:
-			var arr: Sprite3D = arrow
-			arr.visible = _visible
+		for square in visibleHighlightCircles:
+			square.ToggleVisualCircleVisibility(_visible)
 
 func ClearHighlightCircles() -> void:
 	ToggleShowHighlightCircles(false)
@@ -247,8 +245,7 @@ func HandleSpecialPiece(piece: ChessPiece) -> void:
 						if col >= firstIdx and col <= lastIdx:
 							var nextSquare: ChessSquare = GRID[col]
 							if piece.CanMove(nextSquare.pieceType):
-								var circle: Sprite3D = nextSquare.visualSquare.get_node("Circle")
-								visibleHighlightCircles.append(circle)
+								visibleHighlightCircles.append(nextSquare)
 							
 			ToggleShowHighlightCircles(true)
 		else:
@@ -274,14 +271,12 @@ func HandleNonSpecialPiece(piece: ChessPiece) -> void:
 						var nextSquare: ChessSquare = GRID[selectedCol]
 						if nextSquare.pieceType:
 							if piece.CanMove(nextSquare.pieceType) :
-								var circle: Sprite3D = nextSquare.visualSquare.get_node("Circle")
-								visibleHighlightCircles.append(circle)
+								visibleHighlightCircles.append(nextSquare)
 								blockedDirections.append(coor.direction)
 							else:
 								blockedDirections.append(coor.direction)
 						else:
-							var circle: Sprite3D = nextSquare.visualSquare.get_node("Circle")
-							visibleHighlightCircles.append(circle)
+							visibleHighlightCircles.append(nextSquare)
 			ToggleShowHighlightCircles(true)
 		else:
 			ToggleShowHighlightCircles(false)
