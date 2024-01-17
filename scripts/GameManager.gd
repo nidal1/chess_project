@@ -5,6 +5,8 @@ var chessBoard = ChessBoard.new()
 
 @onready var visualChessBoard = $ChessBoard
 @onready var visualSpringArm3D = $ChessBoard/SpringArm3D
+@onready var visualWhiteScoreLabel: Label = $UI/HBoxContainer/WhiteScore
+@onready var visualBlackScoreLabel: Label = $UI/HBoxContainer2/BlackScore
 @onready var leftButtonPressed: bool = false
 @export var CAMERA_ROTATION_SPEED: float = 0.02
 
@@ -12,6 +14,9 @@ var chessBoard = ChessBoard.new()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	chessBoard.InitTheBoard(visualChessBoard)
+	
+	visualWhiteScoreLabel.text = str(chessBoard.InitWhitePiecesScore())
+	visualBlackScoreLabel.text = str(chessBoard.InitBlackPiecesScore())
 
 
 func _unhandled_input(event) -> void:

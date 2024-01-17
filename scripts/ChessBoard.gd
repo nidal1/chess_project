@@ -70,6 +70,42 @@ var whiteP5 = Pawn.new(visualWhitePawn, 53, false)
 var whiteP6 = Pawn.new(visualWhitePawn, 54, false)
 var whiteP7 = Pawn.new(visualWhitePawn, 55, false)
 
+var pieces = [
+	blackKing,
+	blackQueen,
+	blackKnight_1,
+	blackKnight_2,
+	blackBishop_1,
+	blackBishop_2,
+	blackRook_1,
+	blackRook_2,
+	blackP0,
+	blackP1,
+	blackP2,
+	blackP3,
+	blackP4,
+	blackP5,
+	blackP6,
+	blackP7,
+	whiteKing,
+	whiteQueen,
+	whiteKnight_1,
+	whiteKnight_2,
+	whiteBishop_1,
+	whiteBishop_2,
+	whiteRook_1,
+	whiteRook_2,
+	whiteP0,
+	whiteP1,
+	whiteP2,
+	whiteP3,
+	whiteP4,
+	whiteP5,
+	whiteP6,
+	whiteP7,
+	]
+
+
 func InitTheBoard(_visualChessBoard: Node3D):
 	self.OnObservingTheClickingOnSquares()
 	self.SetVisualChessBoard(_visualChessBoard)
@@ -125,40 +161,6 @@ func SwipeTheColorOfTheFistSquareInTheRow() -> void:
 	currentSquareType = prevSquareType
 
 func InitPieces() -> void:
-	var pieces = [
-	blackKing,
-	blackQueen,
-	blackKnight_1,
-	blackKnight_2,
-	blackBishop_1,
-	blackBishop_2,
-	blackRook_1,
-	blackRook_2,
-	blackP0,
-	blackP1,
-	blackP2,
-	blackP3,
-	blackP4,
-	blackP5,
-	blackP6,
-	blackP7,
-	whiteKing,
-	whiteQueen,
-	whiteKnight_1,
-	whiteKnight_2,
-	whiteBishop_1,
-	whiteBishop_2,
-	whiteRook_1,
-	whiteRook_2,
-	whiteP0,
-	whiteP1,
-	whiteP2,
-	whiteP3,
-	whiteP4,
-	whiteP5,
-	whiteP6,
-	whiteP7,
-	]
 	if self.GRID.size() > 0:
 		for i in range(pieces.size()):
 			GRID[pieces[i].pieceIdx].AssignPiece(pieces[i])
@@ -173,6 +175,22 @@ func RenderPieces() -> void:
 				square.visualSquare.add_child(visualPieceInstance)
 		idx += 1
 #			await get_tree().create_timer(1.0).timeout
+
+func InitBlackPiecesScore() -> int :
+	var blackPieces = pieces.slice(0, pieces.size()/2)
+	var blackPiecesScore = 0
+	for piece in blackPieces:
+		var p: ChessPiece = piece
+		blackPiecesScore += p.pieceCost
+	return blackPiecesScore
+
+func InitWhitePiecesScore() -> int :
+	var whitePieces = pieces.slice(pieces.size()/2 , pieces.size())
+	var whitePiecesScore = 0
+	for piece in whitePieces:
+		var p: ChessPiece = piece
+		whitePiecesScore += p.pieceCost
+	return whitePiecesScore
 
 func OnObservingTheClickingOnSquares() -> void:
 	observingClickingOnSquares.connect(OnDrawTheLastPositions)

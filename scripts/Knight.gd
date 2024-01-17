@@ -7,6 +7,7 @@ func _init(_visual, _pieceIdx, _isBlackPiece = true):
 	self.visual = _visual.instantiate()
 	self.pieceIdx = _pieceIdx
 	self.isBlackPiece = _isBlackPiece
+	self.pieceCost = 3
 
 
 func GetTheNextPosition():

@@ -57,3 +57,43 @@ transform = Transform3D(-4.37114e-08, -1, 2.98023e-08, 1, -4.37114e-08, 1.78814e
 light_specular = 4.759
 spot_range = 6.0
 spot_angle = 58.3241
+
+[node name="UI" type="Node3D" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI"]
+offset_right = 114.0
+offset_bottom = 26.0
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="score" type="Label" parent="UI/HBoxContainer"]
+layout_mode = 2
+text = "white score:"
+
+[node name="WhiteScore" type="Label" parent="UI/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 64
+text = "0
+"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -138.0
+offset_bottom = 91.0
+grow_horizontal = 0
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="score" type="Label" parent="UI/HBoxContainer2"]
+layout_mode = 2
+text = "black score:"
+
+[node name="BlackScore" type="Label" parent="UI/HBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 64
+text = "0
+"

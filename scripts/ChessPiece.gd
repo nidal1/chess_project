@@ -6,6 +6,7 @@ var pieceIdx: int
 var visual: Node3D
 var isBlackPiece: bool
 var withSpecialMovement: bool = true
+var pieceCost: int
 
 var directions = preload("res://scripts/Directions.gd")
 
