@@ -11,6 +11,7 @@ var prevSquareType : String
 
 var selectedSquare: ChessSquare = null
 var visibleHighlightCircles: Array[ChessSquare] = []
+var visibleHighlightArrows: Array[ChessSquare] = []
 
 
 
@@ -181,19 +182,36 @@ func OnDrawTheLastPositions(chessSquare: ChessSquare) -> void:
 		HandleSquareSelection(chessSquare)
 	else:
 		HandleSquareMove(chessSquare)
+		ClearHighlightCircles()
+		ClearHighlightArrows()
 
 func HandleSquareSelection(chessSquare: ChessSquare) -> void:
-	ClearHighlightCircles()
+	if not visibleHighlightArrows.has(chessSquare):
+		HandleNewSquareSelection(chessSquare)
+	else:
+		TakePlaceOfOpponentPiece(chessSquare)
 
+func HandleNewSquareSelection(chessSquare: ChessSquare) -> void:
+	ClearHighlightCircles()
 	if chessSquare.pieceType:
 		var piece: ChessPiece = chessSquare.pieceType
-		if piece :
-			ClearHighlightCircles()
+		if piece:
+			ClearHighlightArrows()
 			selectedSquare = chessSquare
 			if piece.withSpecialMovement:
 				HandleSpecialPiece(piece)
 			else:
 				HandleNonSpecialPiece(piece)
+			GetAllOppositePieces()
+
+func TakePlaceOfOpponentPiece(chessSquare: ChessSquare):
+	ClearHighlightArrows()
+	var selectedPiece = selectedSquare.GetPiece()
+	selectedSquare.DetachPiece()
+	chessSquare.DetachPiece()
+	chessSquare.AssignPiece(selectedPiece)
+	selectedPiece.pieceIdx = chessSquare.squareIdx
+	ClearHighlightCircles()
 
 func HandleSquareMove(chessSquare: ChessSquare) -> void:
 	if visibleHighlightCircles.has(chessSquare):
@@ -204,7 +222,6 @@ func HandleMovePiece(chessSquare: ChessSquare) -> void:
 	selectedPiece.pieceIdx = chessSquare.squareIdx
 	selectedSquare.DetachPiece()
 	chessSquare.AssignPiece(selectedPiece)
-	ClearHighlightCircles()
 
 func LocalizationOfSelectedPiece(_pieceIdx) -> float:
 	return (_pieceIdx / ROWS) + 1
@@ -219,10 +236,19 @@ func ToggleShowHighlightCircles(_visible) -> void:
 		for square in visibleHighlightCircles:
 			square.ToggleVisualCircleVisibility(_visible)
 
+func ToggleShowHighlightArrows(_visible) -> void:
+	if visibleHighlightArrows.size() > 0:
+		for square in visibleHighlightArrows:
+			square.ToggleVisualDownArrowVisibility(_visible)
+
 func ClearHighlightCircles() -> void:
 	ToggleShowHighlightCircles(false)
 	visibleHighlightCircles.clear()
 	selectedSquare = null
+
+func ClearHighlightArrows() -> void:
+	ToggleShowHighlightArrows(false)
+	visibleHighlightArrows.clear()
 
 func HandleSpecialPiece(piece: ChessPiece) -> void:
 	var pieceIdx = piece.pieceIdx
@@ -280,3 +306,14 @@ func HandleNonSpecialPiece(piece: ChessPiece) -> void:
 			ToggleShowHighlightCircles(true)
 		else:
 			ToggleShowHighlightCircles(false)
+
+func GetAllOppositePieces():
+	if selectedSquare and visibleHighlightCircles.size():
+		var selectedPiece: ChessPiece = selectedSquare.pieceType
+		for nextSquare in visibleHighlightCircles:
+			if not nextSquare.isEmpty and not AreThePiecesTheSameColor(nextSquare.pieceType, selectedPiece):
+				visibleHighlightArrows.append(nextSquare)
+	ToggleShowHighlightArrows(true)
+
+func AreThePiecesTheSameColor(p1: ChessPiece, p2: ChessPiece) -> bool:
+	return int(p1.isBlackPiece) + int(p2.isBlackPiece) != 1

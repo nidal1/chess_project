@@ -44,3 +44,10 @@ func AddVisualPiece() -> void:
 func ToggleVisualCircleVisibility(_visible) -> void:
 	var circle: Sprite3D = self.visualSquare.get_node("Circle") as Sprite3D
 	circle.visible = _visible
+
+func ToggleVisualDownArrowVisibility(_visible) -> void:
+	var downArr: Sprite3D = self.visualSquare.get_node("DownArrow") as Sprite3D
+	downArr.visible = _visible
+
+func GetPiece() -> ChessPiece:
+	return self.pieceType
