@@ -121,7 +121,6 @@ func SetScoreObservers(_whiteScoreObserver: Signal, _blackScoreObserver: Signal)
 	self.blackScoreObserver = _blackScoreObserver
 	self.whiteScoreObserver = _whiteScoreObserver
 
-
 func SetVisualChessBoard(_visualChessBoard: Node3D):
 	self.visualChessBoard = _visualChessBoard
 
@@ -231,7 +230,7 @@ func HandleNewSquareSelection(chessSquare: ChessSquare) -> void:
 				HandleNonSpecialPiece(piece)
 			GetAllOppositePieces()
 
-func TakePlaceOfOpponentPiece(chessSquare: ChessSquare):
+func TakePlaceOfOpponentPiece(chessSquare: ChessSquare) -> void:
 	ClearHighlightArrows()
 	var selectedPiece = selectedSquare.GetPiece()
 	var removedPiece = chessSquare.GetPiece()
@@ -341,13 +340,29 @@ func HandleNonSpecialPiece(piece: ChessPiece) -> void:
 		else:
 			ToggleShowHighlightCircles(false)
 
-func GetAllOppositePieces():
+func GetAllOppositePieces() -> void:
 	if selectedSquare and visibleHighlightCircles.size():
 		var selectedPiece: ChessPiece = selectedSquare.pieceType
-		for nextSquare in visibleHighlightCircles:
-			if not nextSquare.isEmpty and not AreThePiecesTheSameColor(nextSquare.pieceType, selectedPiece):
-				visibleHighlightArrows.append(nextSquare)
-	ToggleShowHighlightArrows(true)
+		if selectedPiece is Pawn:
+			var oppositePositions = selectedPiece.GetAllOppositePiecePositions()
+			var selectedRow = LocalizationOfSelectedPiece(selectedPiece.pieceIdx)
+			var nextSelectedRow = selectedRow + oppositePositions.row 
+			var boundaries = FixTheBoundariesOfASelectedRow(nextSelectedRow)
+			var selectedCol = oppositePositions.col
+			var firstIdx = boundaries[0]
+			var lastIdx = boundaries[1]
+			for col in selectedCol:
+				if col >= firstIdx and col <= lastIdx:
+					var nextSquare: ChessSquare = GRID[col]
+					if not nextSquare.isEmpty and not AreThePiecesTheSameColor(nextSquare.pieceType, selectedPiece):
+						visibleHighlightArrows.append(nextSquare)
+		else:
+			for nextSquare in visibleHighlightCircles:
+				if not nextSquare.isEmpty and not AreThePiecesTheSameColor(nextSquare.pieceType, selectedPiece):
+					visibleHighlightArrows.append(nextSquare)
+		ToggleShowHighlightArrows(true)
+
+		
 
 func AreThePiecesTheSameColor(p1: ChessPiece, p2: ChessPiece) -> bool:
 	return int(p1.isBlackPiece) + int(p2.isBlackPiece) != 1
