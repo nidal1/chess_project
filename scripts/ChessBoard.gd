@@ -9,6 +9,8 @@ var GRID : Array[ChessSquare]
 var currentSquareType : String
 var prevSquareType : String
 
+
+
 var selectedSquare: ChessSquare = null
 var visibleHighlightCircles: Array[ChessSquare] = []
 var visibleHighlightArrows: Array[ChessSquare] = []
@@ -306,6 +308,8 @@ func HandleSpecialPiece(piece: ChessPiece) -> void:
 			ToggleShowHighlightCircles(true)
 		else:
 			ToggleShowHighlightCircles(false)
+		if piece is Pawn:
+			piece.isTheFirstMove = false
 
 func HandleNonSpecialPiece(piece: ChessPiece) -> void:
 	var pieceIdx = piece.pieceIdx

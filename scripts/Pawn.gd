@@ -3,6 +3,8 @@ extends ChessPiece
 
 class_name Pawn
 
+var isTheFirstMove : bool = true
+
 func _init(_visual, _pieceIdx, _isBlackPiece = true):
 	self.visual = _visual.instantiate()
 	self.pieceIdx = _pieceIdx
@@ -12,18 +14,33 @@ func _init(_visual, _pieceIdx, _isBlackPiece = true):
 
 func GetTheNextPosition():
 
-	var row
+	var direction
 	if self.isBlackPiece:
-		row = 1
+		direction = 1
 	else:
-		row = -1
+		direction = -1
 
-	return [{
-		"row" : 0,
-		"col": []
-	},
-	{
-		"row" : row,
-		"col": [pieceIdx + 8 * row]
-	},
-	]
+	if isTheFirstMove:
+		return [{
+			"row" : 0,
+			"col": []
+		},
+		{
+			"row" : 1 * direction,
+			"col": [pieceIdx + 8 * direction]
+		},
+		{
+			"row" : 2 * direction,
+			"col": [pieceIdx + 8 * 2 * direction]
+		},
+		]
+	else:
+		return [{
+			"row" : 0,
+			"col": []
+		},
+		{
+			"row" : 1 * direction,
+			"col": [pieceIdx + 8 * direction]
+		}
+		]
