@@ -11,12 +11,27 @@ var chessBoard = ChessBoard.new()
 @export var CAMERA_ROTATION_SPEED: float = 0.02
 
 
+signal whiteScoreChanged(value)
+signal blackScoreChanged(value)
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	chessBoard.InitTheBoard(visualChessBoard)
+	chessBoard.InitTheBoard(visualChessBoard, whiteScoreChanged, blackScoreChanged)
 	
 	visualWhiteScoreLabel.text = str(chessBoard.InitWhitePiecesScore())
 	visualBlackScoreLabel.text = str(chessBoard.InitBlackPiecesScore())
+
+	whiteScoreChanged.connect(onWhiteScoreChanged)
+	blackScoreChanged.connect(onBlackScoreChanged)
+
+func onWhiteScoreChanged(value: int):
+	var prevScore = int(visualWhiteScoreLabel.text)
+	visualWhiteScoreLabel.text = str(prevScore - value)
+
+func onBlackScoreChanged(value: int):
+	var prevScore = int(visualBlackScoreLabel.text)
+	visualBlackScoreLabel.text = str(prevScore - value)
 
 
 func _unhandled_input(event) -> void:

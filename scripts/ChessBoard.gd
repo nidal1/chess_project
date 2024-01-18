@@ -16,7 +16,8 @@ var visibleHighlightArrows: Array[ChessSquare] = []
 
 
 signal observingClickingOnSquares(chessSquare)
-
+var whiteScoreObserver: Signal
+var blackScoreObserver: Signal
 var visualChessBoard: Node3D = null
 
 var visualBlackChessSquare = preload("res://sceens/SquareBlack.tscn")
@@ -106,12 +107,18 @@ var pieces = [
 	]
 
 
-func InitTheBoard(_visualChessBoard: Node3D):
+func InitTheBoard(_visualChessBoard: Node3D, _whiteScoreObserver: Signal, _blackScoreObserver: Signal ):
 	self.OnObservingTheClickingOnSquares()
 	self.SetVisualChessBoard(_visualChessBoard)
+	self.SetScoreObservers(_whiteScoreObserver, _blackScoreObserver)
 	self.InitBoardSquares()
 	self.InitPieces()
 	self.RenderChessSquares()
+
+func SetScoreObservers(_whiteScoreObserver: Signal, _blackScoreObserver: Signal):
+	self.blackScoreObserver = _blackScoreObserver
+	self.whiteScoreObserver = _whiteScoreObserver
+
 
 func SetVisualChessBoard(_visualChessBoard: Node3D):
 	self.visualChessBoard = _visualChessBoard
@@ -225,11 +232,16 @@ func HandleNewSquareSelection(chessSquare: ChessSquare) -> void:
 func TakePlaceOfOpponentPiece(chessSquare: ChessSquare):
 	ClearHighlightArrows()
 	var selectedPiece = selectedSquare.GetPiece()
+	var removedPiece = chessSquare.GetPiece()
 	selectedSquare.DetachPiece()
 	chessSquare.DetachPiece()
 	chessSquare.AssignPiece(selectedPiece)
 	selectedPiece.pieceIdx = chessSquare.squareIdx
 	ClearHighlightCircles()
+	if removedPiece.isBlackPiece:
+		blackScoreObserver.emit(removedPiece.pieceCost)
+	else:
+		whiteScoreObserver.emit(removedPiece.pieceCost)
 
 func HandleSquareMove(chessSquare: ChessSquare) -> void:
 	if visibleHighlightCircles.has(chessSquare):
