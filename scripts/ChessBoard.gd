@@ -253,6 +253,8 @@ func HandleMovePiece(chessSquare: ChessSquare) -> void:
 	selectedPiece.pieceIdx = chessSquare.squareIdx
 	selectedSquare.DetachPiece()
 	chessSquare.AssignPiece(selectedPiece)
+	if selectedPiece is Pawn:
+			selectedPiece.isTheFirstMove = false
 
 func LocalizationOfSelectedPiece(_pieceIdx) -> float:
 	return (_pieceIdx / ROWS) + 1
@@ -301,14 +303,15 @@ func HandleSpecialPiece(piece: ChessPiece) -> void:
 					for col in selectedCol:
 						if col >= firstIdx and col <= lastIdx:
 							var nextSquare: ChessSquare = GRID[col]
-							if piece.CanMove(nextSquare.pieceType):
+							if nextSquare.pieceType:
+								if piece.CanMove(nextSquare.pieceType) and not piece is Pawn:
+									visibleHighlightCircles.append(nextSquare)
+							else:
 								visibleHighlightCircles.append(nextSquare)
 							
 			ToggleShowHighlightCircles(true)
 		else:
 			ToggleShowHighlightCircles(false)
-		if piece is Pawn:
-			piece.isTheFirstMove = false
 
 func HandleNonSpecialPiece(piece: ChessPiece) -> void:
 	var pieceIdx = piece.pieceIdx
