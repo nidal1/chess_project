@@ -344,7 +344,7 @@ func HandleNonSpecialPiece(piece: ChessPiece) -> void:
 			ToggleShowHighlightCircles(false)
 
 func GetAllOppositePieces() -> void:
-	if selectedSquare and visibleHighlightCircles.size():
+	if selectedSquare :
 		var selectedPiece: ChessPiece = selectedSquare.pieceType
 		if selectedPiece is Pawn:
 			var oppositePositions = selectedPiece.GetAllOppositePiecePositions()
@@ -359,13 +359,13 @@ func GetAllOppositePieces() -> void:
 					var nextSquare: ChessSquare = GRID[col]
 					if not nextSquare.isEmpty and not AreThePiecesTheSameColor(nextSquare.pieceType, selectedPiece):
 						visibleHighlightArrows.append(nextSquare)
+			ToggleShowHighlightArrows(true)
 		else:
-			for nextSquare in visibleHighlightCircles:
-				if not nextSquare.isEmpty and not AreThePiecesTheSameColor(nextSquare.pieceType, selectedPiece):
-					visibleHighlightArrows.append(nextSquare)
-		ToggleShowHighlightArrows(true)
-
-		
+			if visibleHighlightCircles.size():
+				for nextSquare in visibleHighlightCircles:
+					if not nextSquare.isEmpty and not AreThePiecesTheSameColor(nextSquare.pieceType, selectedPiece):
+						visibleHighlightArrows.append(nextSquare)
+			ToggleShowHighlightArrows(true)
 
 func AreThePiecesTheSameColor(p1: ChessPiece, p2: ChessPiece) -> bool:
 	return int(p1.isBlackPiece) + int(p2.isBlackPiece) != 1
