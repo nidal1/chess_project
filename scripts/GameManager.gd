@@ -46,7 +46,7 @@ func onBlackScoreChanged(value: int):
 func _unhandled_input(event) -> void:
 	if event is InputEventMouseButton:
 		leftButtonPressed = event.is_pressed()
-	if leftButtonPressed and event is InputEventMouseMotion:
+	elif leftButtonPressed and event is InputEventMouseMotion:
 		var xVelocity: float = clamp(event.get_relative().x,-CAMERA_ROTATION_SPEED,CAMERA_ROTATION_SPEED) 
 		# var yVelocity: float = clamp(event.get_relative().y,-CAMERA_ROTATION_SPEED,CAMERA_ROTATION_SPEED) 
 		if xVelocity:

@@ -325,11 +325,13 @@ func HandleSpecialPiece(piece: ChessPiece) -> void:
 						if col >= firstIdx and col <= lastIdx:
 							var nextSquare: ChessSquare = GRID[col]
 							if nextSquare.pieceType:
-								if piece.CanMove(nextSquare.pieceType) and not piece is Pawn:
+								if piece is Pawn:
+									return
+								elif piece.CanMove(nextSquare.pieceType):
 									visibleHighlightCircles.append(nextSquare)
 							else:
 								visibleHighlightCircles.append(nextSquare)
-							
+								
 			ToggleShowHighlightCircles(true)
 		else:
 			ToggleShowHighlightCircles(false)
