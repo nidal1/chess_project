@@ -69,6 +69,7 @@ alignment = 1
 [node name="score" type="Label" parent="UI/HBoxContainer"]
 layout_mode = 2
 text = "white score:"
+vertical_alignment = 2
 
 [node name="WhiteScore" type="Label" parent="UI/HBoxContainer"]
 layout_mode = 2
@@ -90,6 +91,7 @@ alignment = 1
 [node name="score" type="Label" parent="UI/HBoxContainer2"]
 layout_mode = 2
 text = "black score:"
+vertical_alignment = 2
 
 [node name="BlackScore" type="Label" parent="UI/HBoxContainer2"]
 layout_mode = 2
@@ -97,3 +99,16 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 64
 text = "0
 "
+
+[node name="PlayerRole" type="Label" parent="UI"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 25.0
+offset_right = 20.0
+offset_bottom = 48.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 58
+horizontal_alignment = 1
+vertical_alignment = 1

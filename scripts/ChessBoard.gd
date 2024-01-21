@@ -4,11 +4,10 @@ class_name ChessBoard
 const COLS = 8
 const ROWS = 8
 
-#Array of ChessSquare.gd
+
 var GRID : Array[ChessSquare]
 var currentSquareType : String
 var prevSquareType : String
-
 
 
 var selectedSquare: ChessSquare = null
@@ -16,10 +15,12 @@ var visibleHighlightCircles: Array[ChessSquare] = []
 var visibleHighlightArrows: Array[ChessSquare] = []
 
 
-
 signal observingClickingOnSquares(chessSquare)
 var whiteScoreObserver: Signal
 var blackScoreObserver: Signal
+var playersRoleObserver: Signal
+
+
 var visualChessBoard: Node3D = null
 
 var visualBlackChessSquare = preload("res://sceens/SquareBlack.tscn")
@@ -108,11 +109,25 @@ var pieces = [
 	whiteP7,
 	]
 
+var players = {
+	"blackPieces": {
+		"label": "Black Player",
+		"pieces": pieces.slice(0, pieces.size()/2)
+	},
+	"whitePieces": {
+		"label":"White Player",
+		"pieces":pieces.slice(pieces.size()/2 , pieces.size())
+	}
+}
 
-func InitTheBoard(_visualChessBoard: Node3D, _whiteScoreObserver: Signal, _blackScoreObserver: Signal ):
+var currentPlayer = players.blackPieces.label
+
+
+func InitTheBoard(_visualChessBoard: Node3D, _whiteScoreObserver: Signal, _blackScoreObserver: Signal, _playersRoleObserver: Signal ):
 	self.OnObservingTheClickingOnSquares()
 	self.SetVisualChessBoard(_visualChessBoard)
 	self.SetScoreObservers(_whiteScoreObserver, _blackScoreObserver)
+	self.SetPlayersRole(_playersRoleObserver)
 	self.InitBoardSquares()
 	self.InitPieces()
 	self.RenderChessSquares()
@@ -120,6 +135,9 @@ func InitTheBoard(_visualChessBoard: Node3D, _whiteScoreObserver: Signal, _black
 func SetScoreObservers(_whiteScoreObserver: Signal, _blackScoreObserver: Signal):
 	self.blackScoreObserver = _blackScoreObserver
 	self.whiteScoreObserver = _whiteScoreObserver
+
+func SetPlayersRole(_playersRoleObserver: Signal):
+	playersRoleObserver = _playersRoleObserver
 
 func SetVisualChessBoard(_visualChessBoard: Node3D):
 	self.visualChessBoard = _visualChessBoard
@@ -185,20 +203,21 @@ func RenderPieces() -> void:
 #			await get_tree().create_timer(1.0).timeout
 
 func InitBlackPiecesScore() -> int :
-	var blackPieces = pieces.slice(0, pieces.size()/2)
 	var blackPiecesScore = 0
-	for piece in blackPieces:
+	for piece in players.blackPieces.pieces:
 		var p: ChessPiece = piece
 		blackPiecesScore += p.pieceCost
 	return blackPiecesScore
 
 func InitWhitePiecesScore() -> int :
-	var whitePieces = pieces.slice(pieces.size()/2 , pieces.size())
 	var whitePiecesScore = 0
-	for piece in whitePieces:
+	for piece in players.whitePieces.pieces:
 		var p: ChessPiece = piece
 		whitePiecesScore += p.pieceCost
 	return whitePiecesScore
+
+func InitPlayerRole() -> String:
+	return currentPlayer
 
 func OnObservingTheClickingOnSquares() -> void:
 	observingClickingOnSquares.connect(OnDrawTheLastPositions)
@@ -207,21 +226,23 @@ func OnDrawTheLastPositions(chessSquare: ChessSquare) -> void:
 	if not selectedSquare or chessSquare.pieceType:
 		HandleSquareSelection(chessSquare)
 	else:
-		HandleSquareMove(chessSquare)
+		if HandleMovePiece(chessSquare):
+			playersRoleObserver.emit(SwitchPlayers())
 		ClearHighlightCircles()
 		ClearHighlightArrows()
 
 func HandleSquareSelection(chessSquare: ChessSquare) -> void:
 	if not visibleHighlightArrows.has(chessSquare):
-		HandleNewSquareSelection(chessSquare)
+		SelectNewSquare(chessSquare)
 	else:
 		TakePlaceOfOpponentPiece(chessSquare)
+		playersRoleObserver.emit(SwitchPlayers())
 
-func HandleNewSquareSelection(chessSquare: ChessSquare) -> void:
+func SelectNewSquare(chessSquare: ChessSquare) -> void:
 	ClearHighlightCircles()
 	if chessSquare.pieceType:
 		var piece: ChessPiece = chessSquare.pieceType
-		if piece:
+		if piece and CheckRole(piece):
 			ClearHighlightArrows()
 			selectedSquare = chessSquare
 			if piece.withSpecialMovement:
@@ -244,17 +265,17 @@ func TakePlaceOfOpponentPiece(chessSquare: ChessSquare) -> void:
 	else:
 		whiteScoreObserver.emit(removedPiece.pieceCost)
 
-func HandleSquareMove(chessSquare: ChessSquare) -> void:
+func HandleMovePiece(chessSquare: ChessSquare) -> bool:
+	var moved = false
 	if visibleHighlightCircles.has(chessSquare):
-		HandleMovePiece(chessSquare)
-
-func HandleMovePiece(chessSquare: ChessSquare) -> void:
-	var selectedPiece = selectedSquare.pieceType
-	selectedPiece.pieceIdx = chessSquare.squareIdx
-	selectedSquare.DetachPiece()
-	chessSquare.AssignPiece(selectedPiece)
-	if selectedPiece is Pawn:
-			selectedPiece.isTheFirstMove = false
+		var selectedPiece = selectedSquare.pieceType
+		selectedPiece.pieceIdx = chessSquare.squareIdx
+		selectedSquare.DetachPiece()
+		chessSquare.AssignPiece(selectedPiece)
+		if selectedPiece is Pawn:
+				selectedPiece.isTheFirstMove = false
+		moved = true
+	return moved
 
 func LocalizationOfSelectedPiece(_pieceIdx) -> float:
 	return (_pieceIdx / ROWS) + 1
@@ -369,3 +390,16 @@ func GetAllOppositePieces() -> void:
 
 func AreThePiecesTheSameColor(p1: ChessPiece, p2: ChessPiece) -> bool:
 	return int(p1.isBlackPiece) + int(p2.isBlackPiece) != 1
+
+func SwitchPlayers() -> String:
+	if currentPlayer == players.blackPieces.label:
+		currentPlayer = players.whitePieces.label
+	else: currentPlayer = players.blackPieces.label
+	return currentPlayer
+
+func CheckRole(_chessPiece: ChessPiece) -> bool:
+	if currentPlayer == players.blackPieces.label and _chessPiece.isBlackPiece:
+		return true
+	if currentPlayer == players.whitePieces.label and not _chessPiece.isBlackPiece:
+		return true
+	return false

@@ -7,23 +7,32 @@ var chessBoard = ChessBoard.new()
 @onready var visualSpringArm3D = $ChessBoard/SpringArm3D
 @onready var visualWhiteScoreLabel: Label = $UI/HBoxContainer/WhiteScore
 @onready var visualBlackScoreLabel: Label = $UI/HBoxContainer2/BlackScore
+@onready var visualPlayerRoleLabel: Label = $UI/PlayerRole
+
 @onready var leftButtonPressed: bool = false
 @export var CAMERA_ROTATION_SPEED: float = 0.02
 
 
+signal playerRoleChanged(value)
 signal whiteScoreChanged(value)
 signal blackScoreChanged(value)
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	chessBoard.InitTheBoard(visualChessBoard, whiteScoreChanged, blackScoreChanged)
+	chessBoard.InitTheBoard(visualChessBoard, whiteScoreChanged, blackScoreChanged, playerRoleChanged)
+
 	
+	visualPlayerRoleLabel.text = str(chessBoard.InitPlayerRole() + "'s role" )
 	visualWhiteScoreLabel.text = str(chessBoard.InitWhitePiecesScore())
 	visualBlackScoreLabel.text = str(chessBoard.InitBlackPiecesScore())
 
+	playerRoleChanged.connect(onPlayerRoleChanged)
 	whiteScoreChanged.connect(onWhiteScoreChanged)
 	blackScoreChanged.connect(onBlackScoreChanged)
+
+func onPlayerRoleChanged(value: String):
+	visualPlayerRoleLabel.text = value + "'s role" 
 
 func onWhiteScoreChanged(value: int):
 	var prevScore = int(visualWhiteScoreLabel.text)
