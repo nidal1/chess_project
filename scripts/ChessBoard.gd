@@ -223,7 +223,7 @@ func OnObservingTheClickingOnSquares() -> void:
 	observingClickingOnSquares.connect(OnDrawTheLastPositions)
 
 func OnDrawTheLastPositions(chessSquare: ChessSquare) -> void:
-	if not selectedSquare or chessSquare.pieceType:
+	if not selectedSquare or (chessSquare.pieceType and CheckRole(chessSquare.pieceType)) :
 		HandleSquareSelection(chessSquare)
 	else:
 		if HandleMovePiece(chessSquare):
