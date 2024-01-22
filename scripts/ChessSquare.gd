@@ -1,5 +1,3 @@
-extends Node
-
 class_name ChessSquare
 
 var squareType: String

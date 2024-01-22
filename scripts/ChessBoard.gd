@@ -1,4 +1,3 @@
-extends Node3D
 class_name ChessBoard
 
 const COLS = 8
@@ -223,7 +222,8 @@ func OnObservingTheClickingOnSquares() -> void:
 	observingClickingOnSquares.connect(OnDrawTheLastPositions)
 
 func OnDrawTheLastPositions(chessSquare: ChessSquare) -> void:
-	if not selectedSquare or (chessSquare.pieceType and CheckRole(chessSquare.pieceType)) :
+
+	if not selectedSquare or (chessSquare.pieceType) :
 		HandleSquareSelection(chessSquare)
 	else:
 		if HandleMovePiece(chessSquare):
@@ -233,13 +233,16 @@ func OnDrawTheLastPositions(chessSquare: ChessSquare) -> void:
 
 func HandleSquareSelection(chessSquare: ChessSquare) -> void:
 	if not visibleHighlightArrows.has(chessSquare):
+		ClearHighlightArrows()
+		ClearHighlightCircles()
 		SelectNewSquare(chessSquare)
 	else:
 		TakePlaceOfOpponentPiece(chessSquare)
 		playersRoleObserver.emit(SwitchPlayers())
+		ClearHighlightArrows()
+		ClearHighlightCircles()
 
 func SelectNewSquare(chessSquare: ChessSquare) -> void:
-	ClearHighlightCircles()
 	if chessSquare.pieceType:
 		var piece: ChessPiece = chessSquare.pieceType
 		if piece and CheckRole(piece):
@@ -252,14 +255,13 @@ func SelectNewSquare(chessSquare: ChessSquare) -> void:
 			GetAllOppositePieces()
 
 func TakePlaceOfOpponentPiece(chessSquare: ChessSquare) -> void:
-	ClearHighlightArrows()
 	var selectedPiece = selectedSquare.GetPiece()
 	var removedPiece = chessSquare.GetPiece()
 	selectedSquare.DetachPiece()
 	chessSquare.DetachPiece()
 	chessSquare.AssignPiece(selectedPiece)
 	selectedPiece.pieceIdx = chessSquare.squareIdx
-	ClearHighlightCircles()
+	
 	if removedPiece.isBlackPiece:
 		blackScoreObserver.emit(removedPiece.pieceCost)
 	else:
@@ -326,7 +328,7 @@ func HandleSpecialPiece(piece: ChessPiece) -> void:
 							var nextSquare: ChessSquare = GRID[col]
 							if nextSquare.pieceType:
 								if piece is Pawn:
-									return
+									break
 								elif piece.CanMove(nextSquare.pieceType):
 									visibleHighlightCircles.append(nextSquare)
 							else:

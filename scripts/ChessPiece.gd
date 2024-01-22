@@ -1,5 +1,3 @@
-extends Node
-
 class_name ChessPiece
 
 var pieceIdx: int
