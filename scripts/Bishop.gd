@@ -3,10 +3,16 @@ extends ChessPiece
 
 class_name Bishop
 
-func _init(_visual, _pieceIdx, _isBlackPiece = true):
-	self.visual = _visual.instantiate()
-	self.pieceIdx = _pieceIdx
+var visualBlackBishop = preload("res://sceens/black_bishop.tscn")
+var visualWhiteBishop = preload("res://sceens/white_bishop.tscn")
+
+func _init(_pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
+	if self.isBlackPiece:
+		self.visual = visualBlackBishop.instantiate()
+	else:
+		self.visual = visualWhiteBishop.instantiate()
+	self.pieceIdx = _pieceIdx
 	self.withSpecialMovement = false
 	self.pieceCost = 3
 

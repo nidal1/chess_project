@@ -1,6 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://brolde3v3g742"]
+[gd_scene load_steps=17 format=3 uid="uid://brolde3v3g742"]
 
-[ext_resource type="Script" path="res://scripts/GameManager.gd" id="1_lhpmm"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_3m62s"]
+[ext_resource type="Script" path="res://scripts/ChessBoard.gd" id="2_brd2w"]
+[ext_resource type="Script" path="res://scripts/GameUI.gd" id="3_12gjm"]
+[ext_resource type="Texture2D" uid="uid://c7kcplmfvjgld" path="res://images/black-queen.png" id="3_21snu"]
+[ext_resource type="Texture2D" uid="uid://dsu7k8hpftam" path="res://images/white-queen.png" id="3_qfq7r"]
+[ext_resource type="PackedScene" uid="uid://b15viqubwqd0f" path="res://fbx/black_bishop.fbx" id="4_hlx0i"]
+[ext_resource type="Texture2D" uid="uid://cgbiyb5eqkuot" path="res://images/black-knight.png" id="4_ne2dm"]
+[ext_resource type="Texture2D" uid="uid://tm3k4cnro0fc" path="res://images/white-knight.png" id="4_p0js5"]
+[ext_resource type="Texture2D" uid="uid://dwvapl0inp65c" path="res://images/white-bishop.png" id="5_bx32t"]
+[ext_resource type="Texture2D" uid="uid://b16cs0qjd3mwf" path="res://images/black-bishop.png" id="5_gbexc"]
+[ext_resource type="Texture2D" uid="uid://bq35dvu6j1am5" path="res://images/black-rock.png" id="6_gcdru"]
+[ext_resource type="Texture2D" uid="uid://cor2lofa800cl" path="res://images/white-rool.png" id="6_ij8f5"]
+[ext_resource type="Script" path="res://scripts/GameRule.gd" id="11_88m4m"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0gl53"]
 
 [sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_mwfdj"]
 
@@ -10,55 +24,10 @@ background_energy_multiplier = 2.19
 volumetric_fog_density = 0.5167
 
 [node name="Node3D" type="Node3D"]
-script = ExtResource("1_lhpmm")
-
-[node name="ChessBoard" type="Node3D" parent="."]
-
-[node name="board" type="CSGBox3D" parent="ChessBoard"]
-transform = Transform3D(8, 0, 0, 0, 0.5, 0, 0, 0, 8, 4, 0, 4)
-
-[node name="SpringArm3D" type="SpringArm3D" parent="ChessBoard"]
-transform = Transform3D(1.145, 1.00099e-07, 1.00099e-07, 3.66388e-08, -0.991599, 0.5725, 1.36738e-07, -0.5725, -0.991599, 4, 0, 4)
-shape = SubResource("SeparationRayShape3D_mwfdj")
-spring_length = 8.0
-
-[node name="Camera3D" type="Camera3D" parent="ChessBoard/SpringArm3D"]
-transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, -4, 2.82843, 2.82843)
-keep_aspect = 0
-environment = SubResource("Environment_ukcna")
-current = true
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 4, 7.739, 4)
-
-[node name="6" type="SpotLight3D" parent="."]
-transform = Transform3D(-7.10543e-15, -1, -2.39008e-21, 0.866025, -6.15348e-15, 0.5, -0.5, 3.55271e-15, 0.866025, 4, 4, 4)
-light_energy = 3.78
-light_specular = 4.759
-spot_range = 6.0
-spot_angle = 58.3241
-
-[node name="9" type="SpotLight3D" parent="."]
-transform = Transform3D(4.37114e-08, 1, -7.57103e-08, 0.866025, -6.15348e-15, 0.5, 0.5, -8.74228e-08, -0.866025, 4, 4, 4)
-light_energy = 3.78
-light_specular = 4.759
-spot_range = 6.0
-spot_angle = 58.3241
-
-[node name="7" type="SpotLight3D" parent="."]
-transform = Transform3D(4.37114e-08, 1, -7.57103e-08, 1, -4.37114e-08, 1.78814e-07, 1.78814e-07, -7.57103e-08, -1, 4, 1.5, -3)
-light_energy = 2.897
-light_specular = 4.759
-spot_range = 6.0
-spot_angle = 58.3241
-
-[node name="8" type="SpotLight3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 2.98023e-08, 1, -4.37114e-08, 1.78814e-07, -1.78814e-07, 2.98023e-08, 1, 4, 1.5, 10.5)
-light_specular = 4.759
-spot_range = 6.0
-spot_angle = 58.3241
+script = ExtResource("1_3m62s")
 
 [node name="UI" type="Node3D" parent="."]
+script = ExtResource("3_12gjm")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI"]
 offset_right = 114.0
@@ -112,3 +81,160 @@ grow_horizontal = 2
 theme_override_font_sizes/font_size = 58
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="PassantPanel" type="Panel" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -267.0
+offset_top = -85.0
+offset_right = 273.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WhiteHBoxContainer" type="HBoxContainer" parent="UI/PassantPanel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 45
+alignment = 1
+
+[node name="WhiteQueenPassantButton" type="TextureButton" parent="UI/PassantPanel/WhiteHBoxContainer"]
+custom_minimum_size = Vector2(57, 100)
+layout_mode = 2
+texture_normal = ExtResource("3_qfq7r")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="WhiteBishopPassantButton" type="TextureButton" parent="UI/PassantPanel/WhiteHBoxContainer"]
+custom_minimum_size = Vector2(57, 100)
+layout_mode = 2
+texture_normal = ExtResource("5_bx32t")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="WhiteKnightPassantButton" type="TextureButton" parent="UI/PassantPanel/WhiteHBoxContainer"]
+custom_minimum_size = Vector2(57, 100)
+layout_mode = 2
+texture_normal = ExtResource("4_p0js5")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="WhiteRookPassantButton" type="TextureButton" parent="UI/PassantPanel/WhiteHBoxContainer"]
+custom_minimum_size = Vector2(74, 100)
+layout_mode = 2
+texture_normal = ExtResource("6_ij8f5")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="BlackHBoxContainer" type="HBoxContainer" parent="UI/PassantPanel"]
+visible = false
+material = SubResource("CanvasItemMaterial_0gl53")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 45
+alignment = 1
+
+[node name="BlackQueenPassantButton" type="TextureButton" parent="UI/PassantPanel/BlackHBoxContainer"]
+custom_minimum_size = Vector2(57, 100)
+layout_mode = 2
+texture_normal = ExtResource("3_21snu")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="BlackBishopPassantButton" type="TextureButton" parent="UI/PassantPanel/BlackHBoxContainer"]
+custom_minimum_size = Vector2(57, 100)
+layout_mode = 2
+texture_normal = ExtResource("5_gbexc")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="BlackKnightPassantButton" type="TextureButton" parent="UI/PassantPanel/BlackHBoxContainer"]
+custom_minimum_size = Vector2(57, 100)
+layout_mode = 2
+texture_normal = ExtResource("4_ne2dm")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="BlackRookPassantButton" type="TextureButton" parent="UI/PassantPanel/BlackHBoxContainer"]
+custom_minimum_size = Vector2(74, 100)
+layout_mode = 2
+texture_normal = ExtResource("6_gcdru")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="GameRules" type="Node3D" parent="." node_paths=PackedStringArray("gameUI")]
+script = ExtResource("11_88m4m")
+gameUI = NodePath("../UI")
+
+[node name="ChessBoard" type="Node3D" parent="." node_paths=PackedStringArray("gameUI", "gameRules")]
+script = ExtResource("2_brd2w")
+gameUI = NodePath("../UI")
+gameRules = NodePath("../GameRules")
+
+[node name="board" type="CSGBox3D" parent="ChessBoard"]
+transform = Transform3D(8, 0, 0, 0, 0.5, 0, 0, 0, 8, 4, 0, 4)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="ChessBoard"]
+transform = Transform3D(1.145, 1.00099e-07, 1.00099e-07, 3.66388e-08, -0.991599, 0.5725, 1.36738e-07, -0.5725, -0.991599, 4, 0, 4)
+shape = SubResource("SeparationRayShape3D_mwfdj")
+spring_length = 8.0
+
+[node name="Camera3D" type="Camera3D" parent="ChessBoard/SpringArm3D"]
+transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, -4, 2.82843, 2.82843)
+keep_aspect = 0
+environment = SubResource("Environment_ukcna")
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 4, 7.739, 4)
+
+[node name="6" type="SpotLight3D" parent="."]
+transform = Transform3D(-7.10543e-15, -1, -2.39008e-21, 0.866025, -6.15348e-15, 0.5, -0.5, 3.55271e-15, 0.866025, 4, 4, 4)
+light_energy = 3.78
+light_specular = 4.759
+spot_range = 6.0
+spot_angle = 58.3241
+
+[node name="9" type="SpotLight3D" parent="."]
+transform = Transform3D(4.37114e-08, 1, -7.57103e-08, 0.866025, -6.15348e-15, 0.5, 0.5, -8.74228e-08, -0.866025, 4, 4, 4)
+light_energy = 3.78
+light_specular = 4.759
+spot_range = 6.0
+spot_angle = 58.3241
+
+[node name="7" type="SpotLight3D" parent="."]
+transform = Transform3D(4.37114e-08, 1, -7.57103e-08, 1, -4.37114e-08, 1.78814e-07, 1.78814e-07, -7.57103e-08, -1, 4, 1.5, -3)
+light_energy = 2.897
+light_specular = 4.759
+spot_range = 6.0
+spot_angle = 58.3241
+
+[node name="8" type="SpotLight3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 2.98023e-08, 1, -4.37114e-08, 1.78814e-07, -1.78814e-07, 2.98023e-08, 1, 4, 1.5, 10.5)
+light_specular = 4.759
+spot_range = 6.0
+spot_angle = 58.3241
+
+[node name="black_bishop" parent="." instance=ExtResource("4_hlx0i")]
+
+[connection signal="pressed" from="UI/PassantPanel/WhiteHBoxContainer/WhiteQueenPassantButton" to="GameRules" method="_on_white_queen_passant_button_pressed"]
+[connection signal="pressed" from="UI/PassantPanel/WhiteHBoxContainer/WhiteBishopPassantButton" to="GameRules" method="_on_white_bishop_passant_button_pressed"]
+[connection signal="pressed" from="UI/PassantPanel/WhiteHBoxContainer/WhiteKnightPassantButton" to="GameRules" method="_on_white_knight_passant_button_pressed"]
+[connection signal="pressed" from="UI/PassantPanel/WhiteHBoxContainer/WhiteRookPassantButton" to="GameRules" method="_on_white_rook_passant_button_pressed"]
+[connection signal="pressed" from="UI/PassantPanel/BlackHBoxContainer/BlackQueenPassantButton" to="GameRules" method="_on_black_queen_passant_button_pressed"]
+[connection signal="pressed" from="UI/PassantPanel/BlackHBoxContainer/BlackBishopPassantButton" to="GameRules" method="_on_black_bishop_passant_button_pressed"]
+[connection signal="pressed" from="UI/PassantPanel/BlackHBoxContainer/BlackKnightPassantButton" to="GameRules" method="_on_black_knight_passant_button_pressed"]
+[connection signal="pressed" from="UI/PassantPanel/BlackHBoxContainer/BlackRookPassantButton" to="GameRules" method="_on_black_rook_passant_button_pressed"]

@@ -3,12 +3,19 @@ extends ChessPiece
 
 class_name Pawn
 
+var visualBlackPawn = preload("res://sceens/black_pawn.tscn")
+var visualWhitePawn = preload("res://sceens/white_pawn.tscn")
+
+
 var isTheFirstMove : bool = true
 
-func _init(_visual, _pieceIdx, _isBlackPiece = true):
-	self.visual = _visual.instantiate()
-	self.pieceIdx = _pieceIdx
+func _init(_pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
+	if self.isBlackPiece:
+		self.visual = visualBlackPawn.instantiate()
+	else:
+		self.visual = visualWhitePawn.instantiate()
+	self.pieceIdx = _pieceIdx
 	self.pieceCost = 1
 
 func GetAllOppositePiecePositions():

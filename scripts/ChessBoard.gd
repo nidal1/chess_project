@@ -1,4 +1,8 @@
-class_name ChessBoard
+class_name ChessBoard extends Node3D
+
+
+@export var gameUI: GameUI
+@export var gameRules: GameRule
 
 const COLS = 8
 const ROWS = 8
@@ -10,6 +14,8 @@ var prevSquareType : String
 
 
 var selectedSquare: ChessSquare = null
+var selectedPiece : ChessPiece = null
+var removedPiece: ChessPiece = null
 var visibleHighlightCircles: Array[ChessSquare] = []
 var visibleHighlightArrows: Array[ChessSquare] = []
 
@@ -20,58 +26,47 @@ var blackScoreObserver: Signal
 var playersRoleObserver: Signal
 
 
-var visualChessBoard: Node3D = null
+@onready var visualChessBoard: Node3D = $"."
 
 var visualBlackChessSquare = preload("res://sceens/SquareBlack.tscn")
 var visualWhiteChessSquare = preload("res://sceens/SquareWhite.tscn")
 
-var visualBlackKing = preload("res://sceens/black_king.tscn")
-var visualBlackQueen = preload("res://sceens/black_queen.tscn")
-var visualBlackBishop = preload("res://sceens/black_bishop.tscn")
-var visualBlackKnight = preload("res://sceens/black_knight.tscn")
-var visualBlackRook = preload("res://sceens/black_rook.tscn")
-var visualBlackPawn = preload("res://sceens/black_pawn.tscn")
 
-var visualWhiteKing = preload("res://sceens/white_king.tscn")
-var visualWhiteQueen = preload("res://sceens/white_queen.tscn")
-var visualWhiteBishop = preload("res://sceens/white_bishop.tscn")
-var visualWhiteKnight = preload("res://sceens/white_knight.tscn")
-var visualWhiteRook = preload("res://sceens/white_rook.tscn")
-var visualWhitePawn = preload("res://sceens/white_pawn.tscn")
 
-var blackKing = King.new(visualBlackKing, 3)
-var blackQueen = Queen.new(visualBlackQueen, 4)
-var blackKnight_1 = Knight.new(visualBlackKnight,6)
-var blackKnight_2 = Knight.new(visualBlackKnight,1)
-var blackBishop_1 = Bishop.new(visualBlackBishop,2)
-var blackBishop_2 = Bishop.new(visualBlackBishop,5)
-var blackRook_1 = Rook.new(visualBlackRook, 0)
-var blackRook_2 = Rook.new(visualBlackRook, 7)
-var blackP0 = Pawn.new(visualBlackPawn, 8)
-var blackP1 = Pawn.new(visualBlackPawn, 9)
-var blackP2 = Pawn.new(visualBlackPawn, 10)
-var blackP3 = Pawn.new(visualBlackPawn, 11)
-var blackP4 = Pawn.new(visualBlackPawn, 12)
-var blackP5 = Pawn.new(visualBlackPawn, 13)
-var blackP6 = Pawn.new(visualBlackPawn, 14)
-var blackP7 = Pawn.new(visualBlackPawn, 15)
 
-var whiteKing = King.new(visualWhiteKing, 59, false)
-var whiteQueen = Queen.new(visualWhiteQueen, 60, false)
-var whiteKnight_1 = Knight.new(visualWhiteKnight, 57, false)
-var whiteKnight_2 = Knight.new(visualWhiteKnight, 62, false)
-var whiteBishop_1 = Bishop.new(visualWhiteBishop, 61, false)
-var whiteBishop_2 = Bishop.new(visualWhiteBishop,58, false)
-var whiteRook_1 = Rook.new(visualWhiteRook, 63, false)
-var whiteRook_2 = Rook.new(visualWhiteRook, 56, false)
-var whiteP0 = Pawn.new(visualWhitePawn, 48, false)
-var whiteP1 = Pawn.new(visualWhitePawn, 49, false)
-var whiteP2 = Pawn.new(visualWhitePawn, 50, false)
-var whiteP3 = Pawn.new(visualWhitePawn, 51, false)
-var whiteP4 = Pawn.new(visualWhitePawn, 52, false)
-var whiteP5 = Pawn.new(visualWhitePawn, 53, false)
-var whiteP6 = Pawn.new(visualWhitePawn, 54, false)
-var whiteP7 = Pawn.new(visualWhitePawn, 55, false)
+var blackKing = King.new(3)
+var blackQueen = Queen.new(4)
+var blackKnight_1 = Knight.new(6)
+var blackKnight_2 = Knight.new(1)
+var blackBishop_1 = Bishop.new(2)
+var blackBishop_2 = Bishop.new(5)
+var blackRook_1 = Rook.new(0)
+var blackRook_2 = Rook.new(7)
+var blackP0 = Pawn.new(8)
+var blackP1 = Pawn.new(9)
+var blackP2 = Pawn.new(10)
+var blackP3 = Pawn.new(11)
+var blackP4 = Pawn.new(12)
+var blackP5 = Pawn.new(13)
+var blackP6 = Pawn.new(44)
+var blackP7 = Pawn.new(15)
+
+var whiteKing = King.new(59, false)
+# var whiteQueen = Queen.new(60, false)
+var whiteKnight_1 = Knight.new( 57, false)
+var whiteKnight_2 = Knight.new( 62, false)
+var whiteBishop_1 = Bishop.new( 61, false)
+var whiteBishop_2 = Bishop.new(58, false)
+var whiteRook_1 = Rook.new(63, false)
+var whiteRook_2 = Rook.new(56, false)
+var whiteP0 = Pawn.new(48, false)
+var whiteP1 = Pawn.new(49, false)
+var whiteP2 = Pawn.new(50, false)
+var whiteP3 = Pawn.new(51, false)
+# var whiteP4 = Pawn.new(52, false)
+var whiteP5 = Pawn.new(53, false)
+var whiteP6 = Pawn.new(54, false)
+var whiteP7 = Pawn.new(55, false)
 
 var pieces = [
 	blackKing,
@@ -91,7 +86,7 @@ var pieces = [
 	blackP6,
 	blackP7,
 	whiteKing,
-	whiteQueen,
+	# whiteQueen,
 	whiteKnight_1,
 	whiteKnight_2,
 	whiteBishop_1,
@@ -102,7 +97,7 @@ var pieces = [
 	whiteP1,
 	whiteP2,
 	whiteP3,
-	whiteP4,
+	# whiteP4,
 	whiteP5,
 	whiteP6,
 	whiteP7,
@@ -121,25 +116,18 @@ var players = {
 
 var currentPlayer = players.blackPieces.label
 
+func _ready():
+	gameUI.UpdatePlayerRole(currentPlayer)
+	gameUI.InitScoreLabels(InitBlackPiecesScore(), InitWhitePiecesScore())
 
-func InitTheBoard(_visualChessBoard: Node3D, _whiteScoreObserver: Signal, _blackScoreObserver: Signal, _playersRoleObserver: Signal ):
+	InitTheBoard()
+
+
+func InitTheBoard():
 	self.OnObservingTheClickingOnSquares()
-	self.SetVisualChessBoard(_visualChessBoard)
-	self.SetScoreObservers(_whiteScoreObserver, _blackScoreObserver)
-	self.SetPlayersRole(_playersRoleObserver)
 	self.InitBoardSquares()
 	self.InitPieces()
 	self.RenderChessSquares()
-
-func SetScoreObservers(_whiteScoreObserver: Signal, _blackScoreObserver: Signal):
-	self.blackScoreObserver = _blackScoreObserver
-	self.whiteScoreObserver = _whiteScoreObserver
-
-func SetPlayersRole(_playersRoleObserver: Signal):
-	playersRoleObserver = _playersRoleObserver
-
-func SetVisualChessBoard(_visualChessBoard: Node3D):
-	self.visualChessBoard = _visualChessBoard
 
 func InitBoardSquares() -> void:
 	prevSquareType = "white"
@@ -215,9 +203,6 @@ func InitWhitePiecesScore() -> int :
 		whitePiecesScore += p.pieceCost
 	return whitePiecesScore
 
-func InitPlayerRole() -> String:
-	return currentPlayer
-
 func OnObservingTheClickingOnSquares() -> void:
 	observingClickingOnSquares.connect(OnDrawTheLastPositions)
 
@@ -237,10 +222,20 @@ func HandleSquareSelection(chessSquare: ChessSquare) -> void:
 		ClearHighlightCircles()
 		SelectNewSquare(chessSquare)
 	else:
-		TakePlaceOfOpponentPiece(chessSquare)
-		playersRoleObserver.emit(SwitchPlayers())
-		ClearHighlightArrows()
-		ClearHighlightCircles()
+		if TakePlaceOfOpponentPiece(chessSquare):
+			playersRoleObserver.emit(SwitchPlayers())
+			if removedPiece and removedPiece.isBlackPiece:
+				gameUI.UpdateBlackScore(removedPiece.pieceCost)
+			else:
+				gameUI.UpdateWhiteScore(removedPiece.pieceCost)
+				
+			if selectedPiece is Pawn and IsThePieceReachesTheSides(selectedPiece):
+				gameRules.PromoteAPawn(selectedPiece, selectedSquare)
+
+			removedPiece = null
+			ClearHighlightArrows()
+			ClearHighlightCircles()
+
 
 func SelectNewSquare(chessSquare: ChessSquare) -> void:
 	if chessSquare.pieceType:
@@ -254,28 +249,29 @@ func SelectNewSquare(chessSquare: ChessSquare) -> void:
 				HandleNonSpecialPiece(piece)
 			GetAllOppositePieces()
 
-func TakePlaceOfOpponentPiece(chessSquare: ChessSquare) -> void:
-	var selectedPiece = selectedSquare.GetPiece()
-	var removedPiece = chessSquare.GetPiece()
+func TakePlaceOfOpponentPiece(chessSquare: ChessSquare) -> bool:
+	var taken = false
+	selectedPiece = selectedSquare.GetPiece()
+	removedPiece = chessSquare.GetPiece()
 	selectedSquare.DetachPiece()
 	chessSquare.DetachPiece()
 	chessSquare.AssignPiece(selectedPiece)
 	selectedPiece.pieceIdx = chessSquare.squareIdx
-	
-	if removedPiece.isBlackPiece:
-		blackScoreObserver.emit(removedPiece.pieceCost)
-	else:
-		whiteScoreObserver.emit(removedPiece.pieceCost)
+	selectedSquare = chessSquare
+	taken = true
+	return taken
 
 func HandleMovePiece(chessSquare: ChessSquare) -> bool:
 	var moved = false
 	if visibleHighlightCircles.has(chessSquare):
-		var selectedPiece = selectedSquare.pieceType
+		selectedPiece = selectedSquare.pieceType
 		selectedPiece.pieceIdx = chessSquare.squareIdx
 		selectedSquare.DetachPiece()
 		chessSquare.AssignPiece(selectedPiece)
 		if selectedPiece is Pawn:
-				selectedPiece.isTheFirstMove = false
+			selectedPiece.isTheFirstMove = false
+			if IsThePieceReachesTheSides(selectedPiece):
+				gameRules.PromoteAPawn(selectedPiece, chessSquare)
 		moved = true
 	return moved
 
@@ -407,3 +403,11 @@ func CheckRole(_chessPiece: ChessPiece) -> bool:
 	if currentPlayer == players.whitePieces.label and not _chessPiece.isBlackPiece:
 		return true
 	return false
+
+func IsThePieceReachesTheSides(piece: ChessPiece) -> bool :
+	var row
+	if piece.isBlackPiece:
+		row = ROWS
+	else:
+		row = 1
+	return row == LocalizationOfSelectedPiece(piece.pieceIdx)

@@ -3,10 +3,17 @@ extends ChessPiece
 
 class_name Queen
 
-func _init(_visual, _pieceIdx, _isBlackPiece = true):
-	self.visual = _visual.instantiate()
-	self.pieceIdx = _pieceIdx
+var visualBlackQueen = preload("res://sceens/black_queen.tscn")
+var visualWhiteQueen = preload("res://sceens/white_queen.tscn")
+
+
+func _init(_pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
+	if self.isBlackPiece:
+		self.visual = visualBlackQueen.instantiate()
+	else:
+		self.visual = visualWhiteQueen.instantiate()
+	self.pieceIdx = _pieceIdx
 	self.withSpecialMovement = false
 	self.pieceCost = 9
 

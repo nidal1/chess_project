@@ -2,11 +2,16 @@ extends ChessPiece
 
 
 class_name Knight
+var visualBlackKnight = preload("res://sceens/black_knight.tscn")
+var visualWhiteKnight = preload("res://sceens/white_knight.tscn")
 
-func _init(_visual, _pieceIdx, _isBlackPiece = true):
-	self.visual = _visual.instantiate()
-	self.pieceIdx = _pieceIdx
+func _init(_pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
+	if self.isBlackPiece:
+		self.visual = visualBlackKnight.instantiate()
+	else:
+		self.visual = visualWhiteKnight.instantiate()
+	self.pieceIdx = _pieceIdx
 	self.pieceCost = 3
 
 

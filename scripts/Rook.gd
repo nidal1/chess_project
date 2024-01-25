@@ -3,10 +3,16 @@ extends ChessPiece
 
 class_name Rook
 
-func _init(_visual, _pieceIdx, _isBlackPiece = true):
-	self.visual = _visual.instantiate()
-	self.pieceIdx = _pieceIdx
+var visualBlackRook = preload("res://sceens/black_rook.tscn")
+var visualWhiteRook = preload("res://sceens/white_rook.tscn")
+
+func _init(_pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
+	if self.isBlackPiece:
+		self.visual = visualBlackRook.instantiate()
+	else:
+		self.visual = visualWhiteRook.instantiate()
+	self.pieceIdx = _pieceIdx
 	self.withSpecialMovement = false
 	self.pieceCost = 5
 

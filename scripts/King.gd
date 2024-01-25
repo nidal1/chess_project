@@ -2,10 +2,17 @@ extends ChessPiece
 
 class_name King
 
-func _init(_visual, _pieceIdx, _isBlackPiece = true):
-	self.visual = _visual.instantiate()
-	self.pieceIdx = _pieceIdx
+var visualBlackKing = preload("res://sceens/black_king.tscn")
+var visualWhiteKing = preload("res://sceens/white_king.tscn")
+
+
+func _init(_pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
+	if self.isBlackPiece:
+		self.visual = visualBlackKing.instantiate()
+	else:
+		self.visual = visualWhiteKing.instantiate()
+	self.pieceIdx = _pieceIdx
 	self.pieceCost = 1
 
 func GetTheNextPosition():
