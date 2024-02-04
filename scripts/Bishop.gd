@@ -13,7 +13,6 @@ func _init(_pieceIdx, _isBlackPiece = true):
 	else:
 		self.visual = visualWhiteBishop.instantiate()
 	self.pieceIdx = _pieceIdx
-	self.withSpecialMovement = false
 	self.pieceCost = 3
 
 

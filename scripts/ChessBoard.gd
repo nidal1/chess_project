@@ -302,7 +302,7 @@ func ClearHighlightArrows() -> void:
 	ToggleShowHighlightArrows(false)
 	visibleHighlightArrows.clear()
 
-func HandleSpecialPiece(piece: ChessPiece) -> void:
+func HandleNonSpecialPiece(piece: ChessPiece) -> void:
 	var pieceIdx = piece.pieceIdx
 	if pieceIdx:
 		var selectedRow = LocalizationOfSelectedPiece(pieceIdx)
@@ -334,7 +334,7 @@ func HandleSpecialPiece(piece: ChessPiece) -> void:
 		else:
 			ToggleShowHighlightCircles(false)
 
-func HandleNonSpecialPiece(piece: ChessPiece) -> void:
+func HandleSpecialPiece(piece: ChessPiece) -> void:
 	var pieceIdx = piece.pieceIdx
 	if pieceIdx != null:
 		var selectedRow = LocalizationOfSelectedPiece(pieceIdx)

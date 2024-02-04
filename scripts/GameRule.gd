@@ -66,3 +66,6 @@ func _on_black_knight_passant_button_pressed():
 func _on_black_rook_passant_button_pressed():
 	var rook = Rook.new(promoteAPawnIdx)
 	SelectPromotedPiece(rook)
+
+func VerifyCheck():
+	print("Check")

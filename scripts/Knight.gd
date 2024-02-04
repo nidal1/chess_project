@@ -13,6 +13,7 @@ func _init(_pieceIdx, _isBlackPiece = true):
 		self.visual = visualWhiteKnight.instantiate()
 	self.pieceIdx = _pieceIdx
 	self.pieceCost = 3
+	self.withSpecialMovement = false
 
 
 func GetTheNextPosition():

@@ -17,6 +17,7 @@ func _init(_pieceIdx, _isBlackPiece = true):
 		self.visual = visualWhitePawn.instantiate()
 	self.pieceIdx = _pieceIdx
 	self.pieceCost = 1
+	self.withSpecialMovement = false
 
 func GetAllOppositePiecePositions():
 	var direction

@@ -14,7 +14,6 @@ func _init(_pieceIdx, _isBlackPiece = true):
 	else:
 		self.visual = visualWhiteQueen.instantiate()
 	self.pieceIdx = _pieceIdx
-	self.withSpecialMovement = false
 	self.pieceCost = 9
 
 
