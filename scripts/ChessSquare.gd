@@ -9,10 +9,11 @@ var chessBoardObserver: Signal
 
 func AssignVisualSquare(square: Node3D) -> void:
 	self.visualSquare = square
-	var clickableArea: CollisionObject3D =  self.visualSquare.get_child(0)
-	clickableArea.connect("input_event", onSquareClicked)
+	var clickableArea: CollisionObject3D = self.visualSquare.get_child(0)
+	if not clickableArea.is_connected("input_event", onSquareClicked):
+		clickableArea.connect("input_event", onSquareClicked)
 
-func onSquareClicked(camera:Node, event:InputEvent, position:Vector3, normal:Vector3, shape_idx:int) -> void:
+func onSquareClicked(camera: Node, event: InputEvent, position: Vector3, normal: Vector3, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			chessBoardObserver.emit(self)
@@ -23,20 +24,18 @@ func AssignPiece(chessPiece: ChessPiece) -> void:
 	# display the moved piece
 	AddVisualPiece()
 
-
 func DetachPiece() -> void:
 	RemoveVisualPiece()
 	self.pieceType = null
-	self.isEmpty = true 
+	self.isEmpty = true
 	# remove the moved piece
-	
 
 func RemoveVisualPiece() -> void:
-	var visualPieceInstance:Node3D = self.pieceType.visual
+	var visualPieceInstance: Node3D = self.pieceType.visual
 	self.visualSquare.remove_child(visualPieceInstance)
 
 func AddVisualPiece() -> void:
-	var visualPieceInstance:Node3D = self.pieceType.visual
+	var visualPieceInstance: Node3D = self.pieceType.visual
 	self.visualSquare.add_child(visualPieceInstance)
 
 func ToggleVisualCircleVisibility(_visible) -> void:

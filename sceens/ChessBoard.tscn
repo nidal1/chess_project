@@ -1,18 +1,24 @@
-[gd_scene load_steps=17 format=3 uid="uid://brolde3v3g742"]
+[gd_scene load_steps=23 format=3 uid="uid://brolde3v3g742"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3m62s"]
 [ext_resource type="Script" path="res://scripts/ChessBoard.gd" id="2_brd2w"]
 [ext_resource type="Script" path="res://scripts/GameUI.gd" id="3_12gjm"]
 [ext_resource type="Texture2D" uid="uid://c7kcplmfvjgld" path="res://images/black-queen.png" id="3_21snu"]
 [ext_resource type="Texture2D" uid="uid://dsu7k8hpftam" path="res://images/white-queen.png" id="3_qfq7r"]
-[ext_resource type="PackedScene" uid="uid://b15viqubwqd0f" path="res://fbx/black_bishop.fbx" id="4_hlx0i"]
 [ext_resource type="Texture2D" uid="uid://cgbiyb5eqkuot" path="res://images/black-knight.png" id="4_ne2dm"]
 [ext_resource type="Texture2D" uid="uid://tm3k4cnro0fc" path="res://images/white-knight.png" id="4_p0js5"]
 [ext_resource type="Texture2D" uid="uid://dwvapl0inp65c" path="res://images/white-bishop.png" id="5_bx32t"]
 [ext_resource type="Texture2D" uid="uid://b16cs0qjd3mwf" path="res://images/black-bishop.png" id="5_gbexc"]
 [ext_resource type="Texture2D" uid="uid://bq35dvu6j1am5" path="res://images/black-rock.png" id="6_gcdru"]
 [ext_resource type="Texture2D" uid="uid://cor2lofa800cl" path="res://images/white-rool.png" id="6_ij8f5"]
+[ext_resource type="Texture2D" uid="uid://bu3562l0bkky5" path="res://images/warning.png" id="11_21fbv"]
 [ext_resource type="Script" path="res://scripts/GameRule.gd" id="11_88m4m"]
+[ext_resource type="Script" path="res://scripts/StateMachine.gd" id="14_di3ur"]
+[ext_resource type="Script" path="res://scripts/InitState.gd" id="15_c0ub7"]
+[ext_resource type="Script" path="res://scripts/SelectSquareState.gd" id="16_qsh7f"]
+[ext_resource type="Script" path="res://scripts/WaitingState.gd" id="17_85gmk"]
+[ext_resource type="Script" path="res://scripts/TakeOppositePlaceState.gd" id="18_ss5k1"]
+[ext_resource type="Script" path="res://scripts/SwithPlacesState.gd" id="19_7ogu8"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0gl53"]
 
@@ -23,7 +29,7 @@ background_color = Color(0.137255, 0.0156863, 0.301961, 1)
 background_energy_multiplier = 2.19
 volumetric_fog_density = 0.5167
 
-[node name="Node3D" type="Node3D"]
+[node name="Main" type="Node3D"]
 script = ExtResource("1_3m62s")
 
 [node name="UI" type="Node3D" parent="."]
@@ -175,6 +181,31 @@ texture_normal = ExtResource("6_gcdru")
 ignore_texture_size = true
 stretch_mode = 4
 
+[node name="HBoxContainer3" type="HBoxContainer" parent="UI"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -114.5
+offset_right = 114.5
+offset_bottom = 199.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="UI/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = ExtResource("11_21fbv")
+stretch_mode = 4
+
+[node name="RemoveCheck" type="Label" parent="UI/HBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Remove check"
+uppercase = true
+
 [node name="GameRules" type="Node3D" parent="." node_paths=PackedStringArray("gameUI")]
 script = ExtResource("11_88m4m")
 gameUI = NodePath("../UI")
@@ -198,37 +229,59 @@ keep_aspect = 0
 environment = SubResource("Environment_ukcna")
 current = true
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="Envirenement" type="Node" parent="ChessBoard"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="ChessBoard/Envirenement"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 4, 7.739, 4)
 
-[node name="6" type="SpotLight3D" parent="."]
-transform = Transform3D(-7.10543e-15, -1, -2.39008e-21, 0.866025, -6.15348e-15, 0.5, -0.5, 3.55271e-15, 0.866025, 4, 4, 4)
+[node name="6" type="SpotLight3D" parent="ChessBoard/Envirenement"]
+transform = Transform3D(-7.10543e-15, -1, -4.50766e-21, 0.866025, -6.15349e-15, 0.5, -0.5, 3.55271e-15, 0.866025, 4, 4, 4)
 light_energy = 3.78
 light_specular = 4.759
 spot_range = 6.0
 spot_angle = 58.3241
 
-[node name="9" type="SpotLight3D" parent="."]
-transform = Transform3D(4.37114e-08, 1, -7.57103e-08, 0.866025, -6.15348e-15, 0.5, 0.5, -8.74228e-08, -0.866025, 4, 4, 4)
+[node name="9" type="SpotLight3D" parent="ChessBoard/Envirenement"]
+transform = Transform3D(4.37114e-08, 1, -7.57103e-08, 0.866025, 0, 0.5, 0.5, -8.74228e-08, -0.866025, 4, 4, 4)
 light_energy = 3.78
 light_specular = 4.759
 spot_range = 6.0
 spot_angle = 58.3241
 
-[node name="7" type="SpotLight3D" parent="."]
+[node name="7" type="SpotLight3D" parent="ChessBoard/Envirenement"]
 transform = Transform3D(4.37114e-08, 1, -7.57103e-08, 1, -4.37114e-08, 1.78814e-07, 1.78814e-07, -7.57103e-08, -1, 4, 1.5, -3)
 light_energy = 2.897
 light_specular = 4.759
 spot_range = 6.0
 spot_angle = 58.3241
 
-[node name="8" type="SpotLight3D" parent="."]
+[node name="8" type="SpotLight3D" parent="ChessBoard/Envirenement"]
 transform = Transform3D(-4.37114e-08, -1, 2.98023e-08, 1, -4.37114e-08, 1.78814e-07, -1.78814e-07, 2.98023e-08, 1, 4, 1.5, 10.5)
 light_specular = 4.759
 spot_range = 6.0
 spot_angle = 58.3241
 
-[node name="black_bishop" parent="." instance=ExtResource("4_hlx0i")]
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("gameUI", "gameRules")]
+script = ExtResource("14_di3ur")
+initialState = NodePath("InitState")
+gameUI = NodePath("../UI")
+gameRules = NodePath("../GameRules")
+
+[node name="InitState" type="Node" parent="StateMachine" node_paths=PackedStringArray("visualChessBoard")]
+script = ExtResource("15_c0ub7")
+visualChessBoard = NodePath("../../ChessBoard")
+
+[node name="SelectSquareState" type="Node" parent="StateMachine"]
+script = ExtResource("16_qsh7f")
+
+[node name="WaitingState" type="Node" parent="StateMachine"]
+script = ExtResource("17_85gmk")
+
+[node name="TakeOppositePlaceState" type="Node" parent="StateMachine"]
+script = ExtResource("18_ss5k1")
+
+[node name="SwithPlacesState" type="Node" parent="StateMachine"]
+script = ExtResource("19_7ogu8")
 
 [connection signal="pressed" from="UI/PassantPanel/WhiteHBoxContainer/WhiteQueenPassantButton" to="GameRules" method="_on_white_queen_passant_button_pressed"]
 [connection signal="pressed" from="UI/PassantPanel/WhiteHBoxContainer/WhiteBishopPassantButton" to="GameRules" method="_on_white_bishop_passant_button_pressed"]

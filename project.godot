@@ -15,6 +15,10 @@ run/main_scene="res://sceens/ChessBoard.tscn"
 config/features=PackedStringArray("4.1", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Constants="*res://scripts/Constants.gd"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

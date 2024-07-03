@@ -8,6 +8,10 @@ class_name GameUI
 @onready var passantPanel: Panel = $PassantPanel
 @onready var blackHPassantContainer: HBoxContainer = $PassantPanel/BlackHBoxContainer
 @onready var whiteHPassantContainer: HBoxContainer = $PassantPanel/WhiteHBoxContainer
+@onready var checkContainer: HBoxContainer = %HBoxContainer3
+
+var visibleHighlightCircles: Array[ChessSquare] = []
+var visibleHighlightArrows: Array[ChessSquare] = []
 
 func InitScoreLabels(_blackScore, _whiteScore):
 	blackScoreLabel.text = str(_blackScore)
@@ -16,18 +20,23 @@ func InitScoreLabels(_blackScore, _whiteScore):
 func UpdateWhiteScore(score: int) -> void:
 	# Update the white score label
 	var prevScore = int(whiteScoreLabel.text)
-	whiteScoreLabel.text = str(prevScore - score)
+	whiteScoreLabel.text = str(score)
 
 func UpdateBlackScore(score: int) -> void:
 	# Update the black score label
 	var prevScore = int(blackScoreLabel.text)
-	blackScoreLabel.text = str(prevScore - score)
+	blackScoreLabel.text = str(score)
 
 func UpdatePlayerRole(role: String) -> void:
 	# Update the player role label
 	playerRoleLabel.text = role + "'s role"
 	pass
 
+func ToggleCheckContainer() -> void:
+	if checkContainer.visible == true:
+		checkContainer.visible = false
+		return
+	checkContainer.visible = true
 
 func ToggleBlackHPassantContainer():
 	if blackHPassantContainer.visible == true:
@@ -45,10 +54,21 @@ func ToggleWhiteHPassantContainer():
 	passantPanel.visible = true
 	whiteHPassantContainer.visible = true
 
-	# Connect signals or perform other setup if needed
+func ToggleShowHighlightCircles(_visible) -> void:
+	if visibleHighlightCircles.size() > 0:
+		for square in visibleHighlightCircles:
+			square.ToggleVisualCircleVisibility(_visible)
 
+func ClearHighlightCircles(selectedSquare) -> void:
+	ToggleShowHighlightCircles(false)
+	visibleHighlightCircles.clear()
+	selectedSquare = null
 
-func _ready():
-	print("from game ui")
+func ToggleShowHighlightArrows(_visible) -> void:
+	if visibleHighlightArrows.size() > 0:
+		for square in visibleHighlightArrows:
+			square.ToggleVisualDownArrowVisibility(_visible)
 
-
+func ClearHighlightArrows() -> void:
+	ToggleShowHighlightArrows(false)
+	visibleHighlightArrows.clear()

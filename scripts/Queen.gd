@@ -22,50 +22,50 @@ func GetTheNextPosition():
 	for i in range(1, 8):
 		var top = pieceIdx + (8 * i)
 		coordinates.append({
-			"direction":directions.Direction.TOP,
+			"direction":constants.Direction.TOP,
 			"row": i,
 			"col": top
 		})
 		var left = pieceIdx + i
 		coordinates.append({
-			"direction":directions.Direction.LEFT,
+			"direction":constants.Direction.LEFT,
 			"row": 0,
 			"col": left
 		})
 		var topLeft = pieceIdx + (8 * i) + i
 		coordinates.append({
-			"direction":directions.Direction.TOP_LEFT,
+			"direction":constants.Direction.TOP_LEFT,
 			"row": i,
 			"col": topLeft
 		})
 		var topRight = pieceIdx + (8 * i) - i
 		coordinates.append({
-			"direction":directions.Direction.TOP_RIGHT,
+			"direction":constants.Direction.TOP_RIGHT,
 			"row": i,
 			"col": topRight
 		})
 		i *= -1 
 		var down = pieceIdx + (8 * i)
 		coordinates.append({
-			"direction":directions.Direction.DOWN,
+			"direction":constants.Direction.DOWN,
 			"row": i,
 			"col": down
 		})
 		var right = pieceIdx + i
 		coordinates.append({
-			"direction":directions.Direction.RIGHT,
+			"direction":constants.Direction.RIGHT,
 			"row": 0,
 			"col": right
 		})
 		var downLeft = pieceIdx + (8 * i) + i
 		coordinates.append({
-			"direction":directions.Direction.DOWN_LEFT,
+			"direction":constants.Direction.DOWN_LEFT,
 			"row": i,
 			"col": downLeft
 		})
 		var downRight = pieceIdx + (8 * i) - i
 		coordinates.append({
-			"direction":directions.Direction.DOWN_RIGHT,
+			"direction":constants.Direction.DOWN_RIGHT,
 			"row": i,
 			"col": downRight
 		})

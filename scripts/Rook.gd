@@ -20,26 +20,26 @@ func GetTheNextPosition():
 	for i in range(1, 8):
 		var top = pieceIdx + (8 * i)
 		coordinates.append({
-			"direction":directions.Direction.TOP,
+			"direction":constants.Direction.TOP,
 			"row": i,
 			"col": top
 		})
 		var left = pieceIdx + i
 		coordinates.append({
-			"direction":directions.Direction.LEFT,
+			"direction":constants.Direction.LEFT,
 			"row": 0,
 			"col": left
 		})
 		i *= -1 
 		var down = pieceIdx + (8 * i)
 		coordinates.append({
-			"direction":directions.Direction.DOWN,
+			"direction":constants.Direction.DOWN,
 			"row": i,
 			"col": down
 		})
 		var right = pieceIdx + i
 		coordinates.append({
-			"direction":directions.Direction.RIGHT,
+			"direction":constants.Direction.RIGHT,
 			"row": 0,
 			"col": right
 		})

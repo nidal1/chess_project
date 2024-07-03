@@ -1,66 +1,54 @@
 extends ChessPiece
 
-
 class_name Pawn
 
-var visualBlackPawn = preload("res://sceens/black_pawn.tscn")
-var visualWhitePawn = preload("res://sceens/white_pawn.tscn")
+var visualBlackPawn = preload ("res://sceens/black_pawn.tscn")
+var visualWhitePawn = preload ("res://sceens/white_pawn.tscn")
 
+var isTheFirstMove: bool = true
+var direction: int
 
-var isTheFirstMove : bool = true
-
-func _init(_pieceIdx, _isBlackPiece = true):
+func _init(_pieceIdx, _isBlackPiece=true):
 	self.isBlackPiece = _isBlackPiece
 	if self.isBlackPiece:
 		self.visual = visualBlackPawn.instantiate()
+		direction = 1
 	else:
 		self.visual = visualWhitePawn.instantiate()
+		direction = -1
 	self.pieceIdx = _pieceIdx
 	self.pieceCost = 1
 	self.withSpecialMovement = false
 
 func GetAllOppositePiecePositions():
-	var direction
-	if self.isBlackPiece:
-		direction = 1
-	else:
-		direction = -1
 	
-	return {
+	return [{
 		"row": 1 * direction,
-		"col": [pieceIdx + 8 * direction + 1 , pieceIdx + 8 * direction - 1]
+		"col": pieceIdx + 8 * direction + 1
+	},
+	{
+		"row": 1 * direction,
+		"col": pieceIdx + 8 * direction - 1
 	}
-	
+	]
 
 func GetTheNextPosition():
 
-	var direction
-	if self.isBlackPiece:
-		direction = 1
-	else:
-		direction = -1
-
 	if isTheFirstMove:
-		return [{
-			"row" : 0,
-			"col": []
+		return [
+		{
+			"row": 1 * direction,
+			"col": pieceIdx + 8 * direction
 		},
 		{
-			"row" : 1 * direction,
-			"col": [pieceIdx + 8 * direction]
-		},
-		{
-			"row" : 2 * direction,
-			"col": [pieceIdx + 8 * 2 * direction]
+			"row": 2 * direction,
+			"col": pieceIdx + 8 * 2 * direction
 		},
 		]
 	else:
-		return [{
-			"row" : 0,
-			"col": []
-		},
+		return [
 		{
-			"row" : 1 * direction,
-			"col": [pieceIdx + 8 * direction]
+			"row": 1 * direction,
+			"col": pieceIdx + 8 * direction
 		}
 		]
