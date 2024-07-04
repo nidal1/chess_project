@@ -4,13 +4,12 @@ func enter(data=null):
     var nextSquare = data.nextSquare as ChessSquare
     var currentSquare = data.currentSquare as ChessSquare
     var removedPiece = TakePlaceOfOpponentPiece(nextSquare, currentSquare)
-    if Player.NextPlayer.playerLabel == Constants.blackPlayerLabel:
-        var score = Player.NextPlayer.playerScore - removedPiece.pieceCost
-        Player.NextPlayer.playerScoreObserver.emit(score, stateMachine.gameUI.UpdateBlackScore)
-    else:
-        var score = Player.NextPlayer.playerScore - removedPiece.pieceCost
-        Player.NextPlayer.playerScoreObserver.emit(score, stateMachine.gameUI.UpdateWhiteScore)
-    stateMachine.switchTo("WaitingState")
+    Player.NextPlayer.RemovePiece(removedPiece)
+    Constants.UpdatePlayerScore(
+        stateMachine.gameUI.UpdateBlackScore,
+        stateMachine.gameUI.UpdateWhiteScore
+    )
+    stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
 func exit():
     Constants.SwitchPlayers()

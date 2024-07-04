@@ -29,29 +29,30 @@ func enter(data=null):
 		if playerRole:
 			Constants.selectedSquare = square
 			HandleSquareSelection()
-			stateMachine.switchTo("WaitingState")
+			stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 			return
-		else:
-			CheckForExistingSquare(square)
+		elif CheckForExistingSquare(square):
+			return
 	
 	# for else we have two cases
 	if Constants.selectedSquare != null:
 
-		CheckForExistingSquare(square)
+		if CheckForExistingSquare(square):
+			return
 
-		stateMachine.switchTo("WaitingState")
+		stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 		
 	pass
 
-func CheckForExistingSquare(chessSquare: ChessSquare):
+func CheckForExistingSquare(chessSquare: ChessSquare) -> bool:
 	if Constants.targetSquares.has(chessSquare):
-			# switch to take the place of the opposite piece state
-			var takeOppositePlaceData = {
-				"currentSquare": Constants.selectedSquare,
-				"nextSquare": chessSquare
-			}
-			stateMachine.switchTo("TakeOppositePlaceState", takeOppositePlaceData)
-			return
+		# switch to take the place of the opposite piece state
+		var takeOppositePlaceData = {
+			"currentSquare": Constants.selectedSquare,
+			"nextSquare": chessSquare
+		}
+		stateMachine.switchTo(Constants.STATES.GAME.TakeOppositePlaceState, takeOppositePlaceData)
+		return true
 		
 	if Constants.nextSquares.has(chessSquare):
 		# switch places state
@@ -59,8 +60,9 @@ func CheckForExistingSquare(chessSquare: ChessSquare):
 			"currentSquare": Constants.selectedSquare,
 			"nextSquare": chessSquare
 		}
-		stateMachine.switchTo("SwithPlacesState", switchPlacesData)
-		return
+		stateMachine.switchTo(Constants.STATES.GAME.SwitchPlacesState, switchPlacesData)
+		return true
+	return false
 
 func HandleSquareSelection():
 	if not stateMachine.gameUI.visibleHighlightArrows.has(Constants.selectedSquare):

@@ -19,9 +19,6 @@ func HandleSquareSelection(chessSquare: ChessSquare) -> void:
 			gameUI.UpdateBlackScore(removedPiece.pieceCost)
 		else:
 			gameUI.UpdateWhiteScore(removedPiece.pieceCost)
-			
-		if selectedPiece is Pawn and gameRules.IsThePieceReachesTheSides(selectedPiece):
-			gameRules.PromoteAPawn(selectedPiece, selectedSquare)
 
 		removedPiece = null
 		gameUI.ClearHighlightArrows()

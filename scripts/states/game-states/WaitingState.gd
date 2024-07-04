@@ -8,4 +8,4 @@ func OnObservingTheClickingOnSquares() -> void:
 		Constants.observingClickingOnSquares.connect(HandleClickingSquare)
 
 func HandleClickingSquare(chessSquare):
-	stateMachine.switchTo("SelectSquareState", chessSquare)
+	stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, chessSquare)

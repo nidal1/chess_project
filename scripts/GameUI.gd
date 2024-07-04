@@ -5,9 +5,9 @@ class_name GameUI
 @onready var whiteScoreLabel: Label = $HBoxContainer/WhiteScore
 @onready var blackScoreLabel: Label = $HBoxContainer2/BlackScore
 @onready var playerRoleLabel: Label = $PlayerRole
-@onready var passantPanel: Panel = $PassantPanel
-@onready var blackHPassantContainer: HBoxContainer = $PassantPanel/BlackHBoxContainer
-@onready var whiteHPassantContainer: HBoxContainer = $PassantPanel/WhiteHBoxContainer
+@onready var promotePawnPanel: Panel = $PromotePawnPanel
+@onready var blackHPassantContainer: HBoxContainer = $PromotePawnPanel/BlackHBoxContainer
+@onready var whiteHPassantContainer: HBoxContainer = $PromotePawnPanel/WhiteHBoxContainer
 @onready var checkContainer: HBoxContainer = %HBoxContainer3
 
 var visibleHighlightCircles: Array[ChessSquare] = []
@@ -40,18 +40,18 @@ func ToggleCheckContainer() -> void:
 
 func ToggleBlackHPassantContainer():
 	if blackHPassantContainer.visible == true:
-		passantPanel.visible = false
+		promotePawnPanel.visible = false
 		blackHPassantContainer.visible = false
 		return
-	passantPanel.visible = true
+	promotePawnPanel.visible = true
 	blackHPassantContainer.visible = true
 
 func ToggleWhiteHPassantContainer():
 	if whiteHPassantContainer.visible == true:
-		passantPanel.visible = false
+		promotePawnPanel.visible = false
 		whiteHPassantContainer.visible = false
 		return
-	passantPanel.visible = true
+	promotePawnPanel.visible = true
 	whiteHPassantContainer.visible = true
 
 func ToggleShowHighlightCircles(_visible) -> void:

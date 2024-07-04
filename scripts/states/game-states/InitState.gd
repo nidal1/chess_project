@@ -84,7 +84,7 @@ func enter(data=null):
 
 	self.InitPlayers()
 
-	stateMachine.switchTo("WaitingState")
+	stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
 func InitBoardSquares() -> void:
 	prevSquareType = "white"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://brolde3v3g742"]
+[gd_scene load_steps=24 format=3 uid="uid://brolde3v3g742"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3m62s"]
 [ext_resource type="Script" path="res://scripts/ChessBoard.gd" id="2_brd2w"]
@@ -13,12 +13,13 @@
 [ext_resource type="Texture2D" uid="uid://cor2lofa800cl" path="res://images/white-rool.png" id="6_ij8f5"]
 [ext_resource type="Texture2D" uid="uid://bu3562l0bkky5" path="res://images/warning.png" id="11_21fbv"]
 [ext_resource type="Script" path="res://scripts/GameRule.gd" id="11_88m4m"]
-[ext_resource type="Script" path="res://scripts/StateMachine.gd" id="14_di3ur"]
-[ext_resource type="Script" path="res://scripts/InitState.gd" id="15_c0ub7"]
-[ext_resource type="Script" path="res://scripts/SelectSquareState.gd" id="16_qsh7f"]
-[ext_resource type="Script" path="res://scripts/WaitingState.gd" id="17_85gmk"]
-[ext_resource type="Script" path="res://scripts/TakeOppositePlaceState.gd" id="18_ss5k1"]
-[ext_resource type="Script" path="res://scripts/SwithPlacesState.gd" id="19_7ogu8"]
+[ext_resource type="Script" path="res://scripts/states/StateMachine.gd" id="14_g8b2h"]
+[ext_resource type="Script" path="res://scripts/states/game-states/InitState.gd" id="15_rb6ew"]
+[ext_resource type="Script" path="res://scripts/states/game-states/SelectSquareState.gd" id="16_atdd6"]
+[ext_resource type="Script" path="res://scripts/states/game-states/WaitingState.gd" id="17_ln8mt"]
+[ext_resource type="Script" path="res://scripts/states/game-states/TakeOppositePlaceState.gd" id="18_wr23j"]
+[ext_resource type="Script" path="res://scripts/states/game-states/SwitchPlacesState.gd" id="19_6ypwv"]
+[ext_resource type="Script" path="res://scripts/states/rules-states/PromoteAPawnState.gd" id="20_pe3rg"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0gl53"]
 
@@ -88,7 +89,7 @@ theme_override_font_sizes/font_size = 58
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PassantPanel" type="Panel" parent="UI"]
+[node name="PromotePawnPanel" type="Panel" parent="UI"]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -102,7 +103,7 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="WhiteHBoxContainer" type="HBoxContainer" parent="UI/PassantPanel"]
+[node name="WhiteHBoxContainer" type="HBoxContainer" parent="UI/PromotePawnPanel"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -113,35 +114,35 @@ grow_vertical = 2
 theme_override_constants/separation = 45
 alignment = 1
 
-[node name="WhiteQueenPassantButton" type="TextureButton" parent="UI/PassantPanel/WhiteHBoxContainer"]
+[node name="WhiteQueenPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/WhiteHBoxContainer"]
 custom_minimum_size = Vector2(57, 100)
 layout_mode = 2
 texture_normal = ExtResource("3_qfq7r")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="WhiteBishopPassantButton" type="TextureButton" parent="UI/PassantPanel/WhiteHBoxContainer"]
+[node name="WhiteBishopPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/WhiteHBoxContainer"]
 custom_minimum_size = Vector2(57, 100)
 layout_mode = 2
 texture_normal = ExtResource("5_bx32t")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="WhiteKnightPassantButton" type="TextureButton" parent="UI/PassantPanel/WhiteHBoxContainer"]
+[node name="WhiteKnightPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/WhiteHBoxContainer"]
 custom_minimum_size = Vector2(57, 100)
 layout_mode = 2
 texture_normal = ExtResource("4_p0js5")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="WhiteRookPassantButton" type="TextureButton" parent="UI/PassantPanel/WhiteHBoxContainer"]
+[node name="WhiteRookPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/WhiteHBoxContainer"]
 custom_minimum_size = Vector2(74, 100)
 layout_mode = 2
 texture_normal = ExtResource("6_ij8f5")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="BlackHBoxContainer" type="HBoxContainer" parent="UI/PassantPanel"]
+[node name="BlackHBoxContainer" type="HBoxContainer" parent="UI/PromotePawnPanel"]
 visible = false
 material = SubResource("CanvasItemMaterial_0gl53")
 layout_mode = 1
@@ -153,28 +154,28 @@ grow_vertical = 2
 theme_override_constants/separation = 45
 alignment = 1
 
-[node name="BlackQueenPassantButton" type="TextureButton" parent="UI/PassantPanel/BlackHBoxContainer"]
+[node name="BlackQueenPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/BlackHBoxContainer"]
 custom_minimum_size = Vector2(57, 100)
 layout_mode = 2
 texture_normal = ExtResource("3_21snu")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="BlackBishopPassantButton" type="TextureButton" parent="UI/PassantPanel/BlackHBoxContainer"]
+[node name="BlackBishopPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/BlackHBoxContainer"]
 custom_minimum_size = Vector2(57, 100)
 layout_mode = 2
 texture_normal = ExtResource("5_gbexc")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="BlackKnightPassantButton" type="TextureButton" parent="UI/PassantPanel/BlackHBoxContainer"]
+[node name="BlackKnightPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/BlackHBoxContainer"]
 custom_minimum_size = Vector2(57, 100)
 layout_mode = 2
 texture_normal = ExtResource("4_ne2dm")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="BlackRookPassantButton" type="TextureButton" parent="UI/PassantPanel/BlackHBoxContainer"]
+[node name="BlackRookPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/BlackHBoxContainer"]
 custom_minimum_size = Vector2(74, 100)
 layout_mode = 2
 texture_normal = ExtResource("6_gcdru")
@@ -262,32 +263,35 @@ spot_range = 6.0
 spot_angle = 58.3241
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("gameUI", "gameRules")]
-script = ExtResource("14_di3ur")
+script = ExtResource("14_g8b2h")
 initialState = NodePath("InitState")
 gameUI = NodePath("../UI")
 gameRules = NodePath("../GameRules")
 
 [node name="InitState" type="Node" parent="StateMachine" node_paths=PackedStringArray("visualChessBoard")]
-script = ExtResource("15_c0ub7")
+script = ExtResource("15_rb6ew")
 visualChessBoard = NodePath("../../ChessBoard")
 
 [node name="SelectSquareState" type="Node" parent="StateMachine"]
-script = ExtResource("16_qsh7f")
+script = ExtResource("16_atdd6")
 
 [node name="WaitingState" type="Node" parent="StateMachine"]
-script = ExtResource("17_85gmk")
+script = ExtResource("17_ln8mt")
 
 [node name="TakeOppositePlaceState" type="Node" parent="StateMachine"]
-script = ExtResource("18_ss5k1")
+script = ExtResource("18_wr23j")
 
-[node name="SwithPlacesState" type="Node" parent="StateMachine"]
-script = ExtResource("19_7ogu8")
+[node name="SwitchPlacesState" type="Node" parent="StateMachine"]
+script = ExtResource("19_6ypwv")
 
-[connection signal="pressed" from="UI/PassantPanel/WhiteHBoxContainer/WhiteQueenPassantButton" to="GameRules" method="_on_white_queen_passant_button_pressed"]
-[connection signal="pressed" from="UI/PassantPanel/WhiteHBoxContainer/WhiteBishopPassantButton" to="GameRules" method="_on_white_bishop_passant_button_pressed"]
-[connection signal="pressed" from="UI/PassantPanel/WhiteHBoxContainer/WhiteKnightPassantButton" to="GameRules" method="_on_white_knight_passant_button_pressed"]
-[connection signal="pressed" from="UI/PassantPanel/WhiteHBoxContainer/WhiteRookPassantButton" to="GameRules" method="_on_white_rook_passant_button_pressed"]
-[connection signal="pressed" from="UI/PassantPanel/BlackHBoxContainer/BlackQueenPassantButton" to="GameRules" method="_on_black_queen_passant_button_pressed"]
-[connection signal="pressed" from="UI/PassantPanel/BlackHBoxContainer/BlackBishopPassantButton" to="GameRules" method="_on_black_bishop_passant_button_pressed"]
-[connection signal="pressed" from="UI/PassantPanel/BlackHBoxContainer/BlackKnightPassantButton" to="GameRules" method="_on_black_knight_passant_button_pressed"]
-[connection signal="pressed" from="UI/PassantPanel/BlackHBoxContainer/BlackRookPassantButton" to="GameRules" method="_on_black_rook_passant_button_pressed"]
+[node name="PromoteAPawnState" type="Node" parent="StateMachine"]
+script = ExtResource("20_pe3rg")
+
+[connection signal="pressed" from="UI/PromotePawnPanel/WhiteHBoxContainer/WhiteQueenPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_white_queen_promoted_button_pressed"]
+[connection signal="pressed" from="UI/PromotePawnPanel/WhiteHBoxContainer/WhiteBishopPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_white_bishop_promoted_button_pressed"]
+[connection signal="pressed" from="UI/PromotePawnPanel/WhiteHBoxContainer/WhiteKnightPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_white_knight_promoted_button_pressed"]
+[connection signal="pressed" from="UI/PromotePawnPanel/WhiteHBoxContainer/WhiteRookPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_white_rook_promoted_button_pressed"]
+[connection signal="pressed" from="UI/PromotePawnPanel/BlackHBoxContainer/BlackQueenPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_black_queen_promoted_button_pressed"]
+[connection signal="pressed" from="UI/PromotePawnPanel/BlackHBoxContainer/BlackBishopPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_black_bishop_promoted_button_pressed"]
+[connection signal="pressed" from="UI/PromotePawnPanel/BlackHBoxContainer/BlackKnightPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_black_knight_promoted_button_pressed"]
+[connection signal="pressed" from="UI/PromotePawnPanel/BlackHBoxContainer/BlackRookPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_black_rook_promoted_button_pressed"]

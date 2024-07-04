@@ -12,7 +12,6 @@ static var CurrentPlayer: Player = null
 static var NextPlayer: Player = null
 
 func _init():
-	print("ready")
 	playerScoreObserver.connect(SetPlayerScore)
 
 func SetPlayerScore(score: int, callable=null) -> void:
@@ -27,6 +26,14 @@ func GetTotalPiecesCost() -> int:
 		p = p as ChessPiece
 		total += p.pieceCost
 	return total
+
+func RemovePiece(piece: ChessPiece):
+	print(self.playerPieces)
+	var pieceIdx = self.playerPieces.find(piece)
+	self.playerPieces.remove_at(pieceIdx)
+
+func AppendPiece(piece: ChessPiece):
+	self.playerPieces.append(piece)
 
 static func CheckRole(_playerLabel: String) -> bool:
 	return _playerLabel == Player.CurrentPlayer.playerLabel

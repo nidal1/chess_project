@@ -1,28 +1,28 @@
 extends Node3D
 
 enum Direction {
-    TOP,
-    LEFT,
-    DOWN,
-    RIGHT,
-    TOP_LEFT,
-    TOP_RIGHT,
-    DOWN_LEFT,
-    DOWN_RIGHT
+	TOP,
+	LEFT,
+	DOWN,
+	RIGHT,
+	TOP_LEFT,
+	TOP_RIGHT,
+	DOWN_LEFT,
+	DOWN_RIGHT
 }
 
-enum GameStates {
-	INITIAL_STATE,
-	CHECK_STATE,
-	CHECKMATE_STATE,
-	STALEMATE_STATE,
-	CASTLING_STATE,
-	EN_PASSANT_STATE,
-	PAWN_PROMOTION_STATE,
-	DRAW_STATE,
-	SQUARE_SELECTION_STATE,
-	SWITCH_PLAYER_ROLE_STATE,
-	ENEMY_SQUARE_SELECTION_STATE,
+const STATES = {
+	"GAME": {
+		"InitState": "InitState",
+		"SelectSquareState": "SelectSquareState",
+		"SwitchPlacesState": "SwitchPlacesState",
+		"TakeOppositePlaceState": "TakeOppositePlaceState",
+		"WaitingState": "WaitingState",
+	},
+	"RULES": {
+		"PromoteAPawnState": "PromoteAPawnState"
+	}
+	
 }
 
 const blackPlayerLabel = "Black Player"
@@ -49,6 +49,14 @@ func SwitchPlayers():
 		return
 	Player.CurrentPlayer = blackPlayer
 	Player.NextPlayer = whitePlayer
+
+func UpdatePlayerScore(UpdateBlackScore: Callable, UpdateWhiteScore: Callable):
+	if Player.NextPlayer.playerLabel == blackPlayerLabel:
+		var score = Player.NextPlayer.GetTotalPiecesCost()
+		Player.NextPlayer.playerScoreObserver.emit(score, UpdateBlackScore)
+	else:
+		var score = Player.NextPlayer.GetTotalPiecesCost()
+		Player.NextPlayer.playerScoreObserver.emit(score, UpdateWhiteScore)
 
 func CreateTimer(timer: float=1.0):
 	await get_tree().create_timer(timer).timeout

@@ -3,15 +3,28 @@ extends StateBase
 func enter(data=null):
 	var nextSquare = data.nextSquare as ChessSquare
 	var currentSquare = data.currentSquare as ChessSquare
+	
 	HandleMovePiece(nextSquare, currentSquare)
-	stateMachine.switchTo("WaitingState")
+
+	var piece = nextSquare.GetPiece()
+	if piece is Pawn and stateMachine.gameRules.IsThePieceReachesTheSides(piece):
+		var promotedPawnData = {
+			"pawn": piece,
+			"targetSquare": nextSquare,
+		}
+		stateMachine.switchTo(Constants.STATES.RULES.PromoteAPawnState, promotedPawnData)
+		return
+		
+	else:
+		Constants.SwitchPlayers()
+		Constants.selectedSquare = null
+		stateMachine.gameUI.UpdatePlayerRole(Player.CurrentPlayer.playerLabel)
+		stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
 func exit():
-	Constants.SwitchPlayers()
-	Constants.selectedSquare = null
+	
 	Constants.nextSquares = []
 	Constants.targetSquares = []
-	stateMachine.gameUI.UpdatePlayerRole(Player.CurrentPlayer.playerLabel)
 
 func HandleMovePiece(nextSquare: ChessSquare, _selectedSquare: ChessSquare) -> void:
 	stateMachine.gameUI.ToggleShowHighlightCircles(false)
