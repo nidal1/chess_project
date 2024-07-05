@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://brolde3v3g742"]
+[gd_scene load_steps=26 format=3 uid="uid://brolde3v3g742"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3m62s"]
 [ext_resource type="Script" path="res://scripts/ChessBoard.gd" id="2_brd2w"]
@@ -20,6 +20,8 @@
 [ext_resource type="Script" path="res://scripts/states/game-states/TakeOppositePlaceState.gd" id="18_wr23j"]
 [ext_resource type="Script" path="res://scripts/states/game-states/SwitchPlacesState.gd" id="19_6ypwv"]
 [ext_resource type="Script" path="res://scripts/states/rules-states/PromoteAPawnState.gd" id="20_pe3rg"]
+[ext_resource type="Script" path="res://scripts/states/rules-states/SwitchTheQueenAndRook.gd" id="21_1qnvh"]
+[ext_resource type="Script" path="res://scripts/states/game-states/SelectKingSquareState.gd" id="22_d8tah"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0gl53"]
 
@@ -286,6 +288,12 @@ script = ExtResource("19_6ypwv")
 
 [node name="PromoteAPawnState" type="Node" parent="StateMachine"]
 script = ExtResource("20_pe3rg")
+
+[node name="SwitchTheQueenAndRook" type="Node" parent="StateMachine"]
+script = ExtResource("21_1qnvh")
+
+[node name="SelectKingSquareState" type="Node" parent="StateMachine"]
+script = ExtResource("22_d8tah")
 
 [connection signal="pressed" from="UI/PromotePawnPanel/WhiteHBoxContainer/WhiteQueenPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_white_queen_promoted_button_pressed"]
 [connection signal="pressed" from="UI/PromotePawnPanel/WhiteHBoxContainer/WhiteBishopPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_white_bishop_promoted_button_pressed"]

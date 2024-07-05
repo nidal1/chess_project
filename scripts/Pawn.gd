@@ -13,8 +13,11 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	if self.isBlackPiece:
 		self.visual = visualBlackPawn.instantiate()
 		direction = 1
+		self.isFor = Constants.blackPlayerLabel
+
 	else:
 		self.visual = visualWhitePawn.instantiate()
+		self.isFor = Constants.whitePlayerLabel
 		direction = -1
 	self.pieceIdx = _pieceIdx
 	self.pieceCost = 1

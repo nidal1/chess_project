@@ -18,8 +18,8 @@ var blackRook_1 = Rook.new(0)
 var blackRook_2 = Rook.new(7)
 var blackP0 = Pawn.new(8)
 var blackP1 = Pawn.new(9)
-var blackP2 = Pawn.new(10)
-var blackP3 = Pawn.new(11)
+var blackP2 = Pawn.new(20)
+var blackP3 = Pawn.new(21)
 var blackP4 = Pawn.new(12)
 var blackP5 = Pawn.new(13)
 var blackP6 = Pawn.new(14)
@@ -129,6 +129,7 @@ func InitPlayers():
 	var score
 	Constants.blackPlayer.playerLabel = Constants.blackPlayerLabel
 	Constants.blackPlayer.playerPieces = pieces.slice(0, pieces.size() / 2)
+	
 	score = Constants.blackPlayer.GetTotalPiecesCost()
 	Constants.blackPlayer.playerScoreObserver.emit(score)
 

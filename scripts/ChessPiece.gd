@@ -5,6 +5,7 @@ var visual: Node3D
 var isBlackPiece: bool
 var withSpecialMovement: bool = true
 var pieceCost: int
+var isFor: String
 
 var constants = preload ("res://scripts/Constants.gd")
 

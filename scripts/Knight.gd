@@ -7,8 +7,10 @@ var visualWhiteKnight = preload ("res://sceens/white_knight.tscn")
 func _init(_pieceIdx, _isBlackPiece=true):
 	self.isBlackPiece = _isBlackPiece
 	if self.isBlackPiece:
+		self.isFor = Constants.blackPlayerLabel
 		self.visual = visualBlackKnight.instantiate()
 	else:
+		self.isFor = Constants.whitePlayerLabel
 		self.visual = visualWhiteKnight.instantiate()
 	self.pieceIdx = _pieceIdx
 	self.pieceCost = 3

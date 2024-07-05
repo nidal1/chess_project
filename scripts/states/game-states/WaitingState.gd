@@ -8,4 +8,10 @@ func OnObservingTheClickingOnSquares() -> void:
 		Constants.observingClickingOnSquares.connect(HandleClickingSquare)
 
 func HandleClickingSquare(chessSquare):
+	if not chessSquare.isEmpty:
+		var piece = chessSquare.GetPiece()
+		if piece is King:
+			stateMachine.switchTo(Constants.STATES.GAME.SelectKingSquareState, chessSquare)
+			return
+
 	stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, chessSquare)

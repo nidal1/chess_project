@@ -1,71 +1,72 @@
 extends ChessPiece
 
-
 class_name Queen
 
-var visualBlackQueen = preload("res://sceens/black_queen.tscn")
-var visualWhiteQueen = preload("res://sceens/white_queen.tscn")
+var visualBlackQueen = preload ("res://sceens/black_queen.tscn")
+var visualWhiteQueen = preload ("res://sceens/white_queen.tscn")
 
-
-func _init(_pieceIdx, _isBlackPiece = true):
+func _init(_pieceIdx, _isBlackPiece=true):
 	self.isBlackPiece = _isBlackPiece
 	if self.isBlackPiece:
 		self.visual = visualBlackQueen.instantiate()
+		self.isFor = Constants.blackPlayerLabel
+
 	else:
 		self.visual = visualWhiteQueen.instantiate()
+		self.isFor = Constants.whitePlayerLabel
+
 	self.pieceIdx = _pieceIdx
 	self.pieceCost = 9
-
 
 func GetTheNextPosition():
 	var coordinates = []
 	for i in range(1, 8):
 		var top = pieceIdx + (8 * i)
 		coordinates.append({
-			"direction":constants.Direction.TOP,
+			"direction": constants.Direction.TOP,
 			"row": i,
 			"col": top
 		})
 		var left = pieceIdx + i
 		coordinates.append({
-			"direction":constants.Direction.LEFT,
+			"direction": constants.Direction.LEFT,
 			"row": 0,
 			"col": left
 		})
 		var topLeft = pieceIdx + (8 * i) + i
 		coordinates.append({
-			"direction":constants.Direction.TOP_LEFT,
+			"direction": constants.Direction.TOP_LEFT,
 			"row": i,
 			"col": topLeft
 		})
 		var topRight = pieceIdx + (8 * i) - i
 		coordinates.append({
-			"direction":constants.Direction.TOP_RIGHT,
+			"direction": constants.Direction.TOP_RIGHT,
 			"row": i,
 			"col": topRight
 		})
-		i *= -1 
+		i *= - 1
 		var down = pieceIdx + (8 * i)
 		coordinates.append({
-			"direction":constants.Direction.DOWN,
+			"direction": constants.Direction.DOWN,
 			"row": i,
 			"col": down
 		})
 		var right = pieceIdx + i
 		coordinates.append({
-			"direction":constants.Direction.RIGHT,
+			"direction": constants.Direction.RIGHT,
 			"row": 0,
 			"col": right
 		})
 		var downLeft = pieceIdx + (8 * i) + i
 		coordinates.append({
-			"direction":constants.Direction.DOWN_LEFT,
+			"direction": constants.Direction.DOWN_LEFT,
 			"row": i,
 			"col": downLeft
 		})
 		var downRight = pieceIdx + (8 * i) - i
 		coordinates.append({
-			"direction":constants.Direction.DOWN_RIGHT,
+			"direction": constants.Direction.DOWN_RIGHT,
 			"row": i,
 			"col": downRight
 		})

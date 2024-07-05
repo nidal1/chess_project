@@ -46,5 +46,9 @@ func ToggleVisualDownArrowVisibility(_visible) -> void:
 	var downArr: Sprite3D = self.visualSquare.get_node("DownArrow") as Sprite3D
 	downArr.visible = _visible
 
+func ToggleVisualSwapKingCircleVisibility(_visible) -> void:
+	var swapKingCircle: Sprite3D = self.visualSquare.get_node("SwapKingCircle") as Sprite3D
+	swapKingCircle.visible = _visible
+
 func GetPiece() -> ChessPiece:
 	return self.pieceType
