@@ -22,7 +22,7 @@ const STATES = {
 	},
 	"RULES": {
 		"PromoteAPawnState": "PromoteAPawnState",
-		"SwitchTheKingAndRookState": "SwitchTheQueenAndRook"
+		"SwitchTheKingAndRookState": "SwitchTheKingAndRookState"
 	}
 	
 }
@@ -44,6 +44,10 @@ var targetSquares: Array[ChessSquare] = []
 
 var targetPositions: Array = []
 var nextSquaresToSwapTheKingTo: Array[ChessSquare] = []
+var castlingData = {
+	"leftRook": null,
+	"rightRook": null,
+}
 
 func SwitchPlayers():
 	if Player.CurrentPlayer == blackPlayer:

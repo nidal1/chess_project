@@ -21,6 +21,7 @@ func onSquareClicked(camera: Node, event: InputEvent, position: Vector3, normal:
 func AssignPiece(chessPiece: ChessPiece) -> void:
 	self.pieceType = chessPiece
 	self.isEmpty = false
+	chessPiece.pieceIdx = self.squareIdx
 	# display the moved piece
 	AddVisualPiece()
 

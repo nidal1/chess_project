@@ -50,7 +50,8 @@ func enter(data=""):
 					allRightSquaresAreEmpty = false
 				
 			if allRightSquaresAreEmpty:
-				HandleSelectAvailableRooks(coordinates[0], rightSquareForTheRook)
+				HandleSelectAvailableRooks(coordinates[0][1].col)
+				Constants.castlingData.rightRook = rightSquareForTheRook.GetPiece() as Rook
 
 		if isTheLeftRookForCurrentPlayerRole:
 			for coor in coordinates[1]:
@@ -59,7 +60,8 @@ func enter(data=""):
 					allLeftSquaresAreEmpty = false
 			
 			if allLeftSquaresAreEmpty:
-				HandleSelectAvailableRooks(coordinates[1], leftSquareForTheRook)
+				HandleSelectAvailableRooks(coordinates[1][2].col)
+				Constants.castlingData.leftRook = leftSquareForTheRook.GetPiece() as Rook
 
 		stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
 
@@ -67,11 +69,9 @@ func enter(data=""):
 
 	stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
-func HandleSelectAvailableRooks(coordinates, rookSquare):
-	for coor in coordinates:
-		var square: ChessSquare = Constants.GRID[coor.col]
-		Constants.nextSquaresToSwapTheKingTo.append(square)
-
+func HandleSelectAvailableRooks(squareIdx):
+	var square: ChessSquare = Constants.GRID[squareIdx]
+	Constants.nextSquaresToSwapTheKingTo.append(square)
+	
 	stateMachine.gameUI.visibleHighlightSwapCircles = Constants.nextSquaresToSwapTheKingTo
-	stateMachine.gameUI.visibleHighlightSwapCircles.append(rookSquare)
 	stateMachine.gameUI.ToggleShowHighlightSwapKingCircles(true)

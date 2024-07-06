@@ -12,6 +12,10 @@ func enter(data=null):
 	# get the clicked square
 	var square = data as ChessSquare
 
+	if Constants.nextSquaresToSwapTheKingTo.has(square):
+		stateMachine.switchTo(Constants.STATES.RULES.SwitchTheKingAndRookState, square)
+		return
+
 	# Determine whether the selected square contains a piece or not
 	if square.GetPiece():
 		# Determine whether the piece is for the white or black player role

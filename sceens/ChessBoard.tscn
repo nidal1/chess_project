@@ -20,7 +20,7 @@
 [ext_resource type="Script" path="res://scripts/states/game-states/TakeOppositePlaceState.gd" id="18_wr23j"]
 [ext_resource type="Script" path="res://scripts/states/game-states/SwitchPlacesState.gd" id="19_6ypwv"]
 [ext_resource type="Script" path="res://scripts/states/rules-states/PromoteAPawnState.gd" id="20_pe3rg"]
-[ext_resource type="Script" path="res://scripts/states/rules-states/SwitchTheQueenAndRook.gd" id="21_1qnvh"]
+[ext_resource type="Script" path="res://scripts/states/rules-states/SwitchTheKingAndRookState.gd" id="21_sjbdb"]
 [ext_resource type="Script" path="res://scripts/states/game-states/SelectKingSquareState.gd" id="22_d8tah"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0gl53"]
@@ -289,8 +289,8 @@ script = ExtResource("19_6ypwv")
 [node name="PromoteAPawnState" type="Node" parent="StateMachine"]
 script = ExtResource("20_pe3rg")
 
-[node name="SwitchTheQueenAndRook" type="Node" parent="StateMachine"]
-script = ExtResource("21_1qnvh")
+[node name="SwitchTheKingAndRookState" type="Node" parent="StateMachine"]
+script = ExtResource("21_sjbdb")
 
 [node name="SelectKingSquareState" type="Node" parent="StateMachine"]
 script = ExtResource("22_d8tah")
