@@ -10,7 +10,7 @@ func OnObservingTheClickingOnSquares() -> void:
 func HandleClickingSquare(chessSquare):
 	if not chessSquare.isEmpty:
 		var piece = chessSquare.GetPiece()
-		if piece is King:
+		if piece is King and not piece.isMoved:
 			stateMachine.switchTo(Constants.STATES.GAME.SelectKingSquareState, chessSquare)
 			return
 

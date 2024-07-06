@@ -4,7 +4,6 @@ class_name Rook
 
 var visualBlackRook = preload ("res://sceens/black_rook.tscn")
 var visualWhiteRook = preload ("res://sceens/white_rook.tscn")
-var isMoved: bool = false
 
 func _init(_pieceIdx, _isBlackPiece=true):
 	self.isBlackPiece = _isBlackPiece

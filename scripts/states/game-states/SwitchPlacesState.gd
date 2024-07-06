@@ -7,6 +7,9 @@ func enter(data=null):
 	HandleMovePiece(nextSquare, currentSquare)
 
 	var piece = nextSquare.GetPiece()
+
+	piece.isMoved = true
+
 	if piece is Pawn and stateMachine.gameRules.IsThePieceReachesTheSides(piece):
 		var promotedPawnData = {
 			"pawn": piece,
@@ -26,14 +29,16 @@ func exit():
 	Constants.nextSquares = []
 	Constants.targetSquares = []
 
-func HandleMovePiece(nextSquare: ChessSquare, _selectedSquare: ChessSquare) -> void:
 	stateMachine.gameUI.ToggleShowHighlightCircles(false)
 	stateMachine.gameUI.ToggleShowHighlightArrows(false)
+	stateMachine.gameUI.ToggleShowHighlightSwapKingCircles(false)
+
+	Constants.nextSquaresToSwapTheKingTo = []
+
+func HandleMovePiece(nextSquare: ChessSquare, _selectedSquare: ChessSquare) -> void:
 	var selectedPiece = _selectedSquare.pieceType
 	selectedPiece.pieceIdx = nextSquare.squareIdx
 	_selectedSquare.DetachPiece()
 	nextSquare.AssignPiece(selectedPiece)
 	if selectedPiece is Pawn:
 		selectedPiece.isTheFirstMove = false
-		# if stateMachine.gameRules.IsThePieceReachesTheSides(selectedPiece):
-		# 	stateMachine.gameRules.PromoteAPawn(selectedPiece, nextSquare)

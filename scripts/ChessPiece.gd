@@ -6,6 +6,7 @@ var isBlackPiece: bool
 var withSpecialMovement: bool = true
 var pieceCost: int
 var isFor: String
+var isMoved: bool = false
 
 var constants = preload ("res://scripts/Constants.gd")
 

@@ -4,7 +4,6 @@ class_name King
 
 var visualBlackKing = preload ("res://sceens/black_king.tscn")
 var visualWhiteKing = preload ("res://sceens/white_king.tscn")
-var isMoved: bool = false
 
 func _init(_pieceIdx, _isBlackPiece=true):
 	self.isBlackPiece = _isBlackPiece
