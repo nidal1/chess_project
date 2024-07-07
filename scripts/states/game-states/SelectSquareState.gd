@@ -14,7 +14,7 @@ func enter(data=null):
 
 	if Constants.castlingData.nextSquares.has(square):
 		stateMachine.switchTo(Constants.STATES.RULES.SwitchTheKingAndRookState, square)
-		return         
+		return
 
 	# Determine whether the selected square contains a piece or not
 	if square.GetPiece():
@@ -56,7 +56,18 @@ func enter(data=null):
 	pass
 
 func CheckForExistingSquare(chessSquare: ChessSquare) -> bool:
+
+	if Constants.enPassantData.nextSquare == chessSquare:
+		stateMachine.switchTo(Constants.STATES.RULES.EnPassantState, Constants.selectedSquare)
+		return true
+
 	if Constants.targetSquares.has(chessSquare):
+		Constants.enPassantData = {
+			'leftPawn': null,
+			'rightPawn': null,
+			'prevPawnSquareIdx': - 1,
+			'nextSquare': null,
+		}
 		# switch to take the place of the opposite piece state
 		var takeOppositePlaceData = {
 			"currentSquare": Constants.selectedSquare,
@@ -65,12 +76,13 @@ func CheckForExistingSquare(chessSquare: ChessSquare) -> bool:
 		stateMachine.switchTo(Constants.STATES.GAME.TakeOppositePlaceState, takeOppositePlaceData)
 		return true
 
-	if Constants.enPassantData.nextSquare == chessSquare:
-		stateMachine.switchTo(Constants.STATES.RULES.EnPassantState, Constants.selectedSquare)
-		return true
-		
 	if Constants.nextSquares.has(chessSquare):
-
+		Constants.enPassantData = {
+			'leftPawn': null,
+			'rightPawn': null,
+			'prevPawnSquareIdx': - 1,
+			'nextSquare': null,
+		}
 		# switch places state
 		var switchPlacesData = {
 			"currentSquare": Constants.selectedSquare,
