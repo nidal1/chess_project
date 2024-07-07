@@ -12,12 +12,13 @@ func enter(data=null):
 	# get the clicked square
 	var square = data as ChessSquare
 
-	if Constants.nextSquaresToSwapTheKingTo.has(square):
+	if Constants.castlingData.nextSquares.has(square):
 		stateMachine.switchTo(Constants.STATES.RULES.SwitchTheKingAndRookState, square)
-		return
+		return         
 
 	# Determine whether the selected square contains a piece or not
 	if square.GetPiece():
+		var piece: ChessPiece = square.GetPiece()
 		# Determine whether the piece is for the white or black player role
 		if square.GetPiece().isBlackPiece:
 			pieceType = Constants.blackPlayerLabel
@@ -31,6 +32,12 @@ func enter(data=null):
 
 		# this if statement means that the clicked square is for the current player role
 		if playerRole:
+			if Constants.enPassantData.leftPawn != piece and Constants.enPassantData.rightPawn != piece:
+				stateMachine.gameUI.ToggleShowHighlightSwapPawnCircle(false)
+
+			if not piece is King:
+				stateMachine.gameUI.ToggleShowHighlightSwapKingCircles(false)
+
 			Constants.selectedSquare = square
 			HandleSquareSelection()
 			stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
@@ -57,8 +64,13 @@ func CheckForExistingSquare(chessSquare: ChessSquare) -> bool:
 		}
 		stateMachine.switchTo(Constants.STATES.GAME.TakeOppositePlaceState, takeOppositePlaceData)
 		return true
+
+	if Constants.enPassantData.nextSquare == chessSquare:
+		stateMachine.switchTo(Constants.STATES.RULES.EnPassantState, Constants.selectedSquare)
+		return true
 		
 	if Constants.nextSquares.has(chessSquare):
+
 		# switch places state
 		var switchPlacesData = {
 			"currentSquare": Constants.selectedSquare,

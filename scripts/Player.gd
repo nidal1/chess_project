@@ -5,6 +5,7 @@ class_name Player
 var playerPieces: Array = []
 var playerLabel: String = ""
 var playerScore: int = 0
+var playerPreviousPiece: ChessPiece = null
 
 signal playerScoreObserver(newScore: int, callable)
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://brolde3v3g742"]
+[gd_scene load_steps=28 format=3 uid="uid://brolde3v3g742"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3m62s"]
 [ext_resource type="Script" path="res://scripts/ChessBoard.gd" id="2_brd2w"]
@@ -19,9 +19,11 @@
 [ext_resource type="Script" path="res://scripts/states/game-states/WaitingState.gd" id="17_ln8mt"]
 [ext_resource type="Script" path="res://scripts/states/game-states/TakeOppositePlaceState.gd" id="18_wr23j"]
 [ext_resource type="Script" path="res://scripts/states/game-states/SwitchPlacesState.gd" id="19_6ypwv"]
+[ext_resource type="Script" path="res://scripts/states/game-states/SelectThePawnSquareState.gd" id="19_xgb5u"]
 [ext_resource type="Script" path="res://scripts/states/rules-states/PromoteAPawnState.gd" id="20_pe3rg"]
 [ext_resource type="Script" path="res://scripts/states/rules-states/SwitchTheKingAndRookState.gd" id="21_sjbdb"]
 [ext_resource type="Script" path="res://scripts/states/game-states/SelectKingSquareState.gd" id="22_d8tah"]
+[ext_resource type="Script" path="res://scripts/states/rules-states/EnPassantState.gd" id="24_3l2s0"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0gl53"]
 
@@ -283,6 +285,9 @@ script = ExtResource("17_ln8mt")
 [node name="TakeOppositePlaceState" type="Node" parent="StateMachine"]
 script = ExtResource("18_wr23j")
 
+[node name="SelectThePawnSquareState" type="Node" parent="StateMachine"]
+script = ExtResource("19_xgb5u")
+
 [node name="SwitchPlacesState" type="Node" parent="StateMachine"]
 script = ExtResource("19_6ypwv")
 
@@ -294,6 +299,9 @@ script = ExtResource("21_sjbdb")
 
 [node name="SelectKingSquareState" type="Node" parent="StateMachine"]
 script = ExtResource("22_d8tah")
+
+[node name="EnPassantState" type="Node" parent="StateMachine"]
+script = ExtResource("24_3l2s0")
 
 [connection signal="pressed" from="UI/PromotePawnPanel/WhiteHBoxContainer/WhiteQueenPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_white_queen_promoted_button_pressed"]
 [connection signal="pressed" from="UI/PromotePawnPanel/WhiteHBoxContainer/WhiteBishopPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_white_bishop_promoted_button_pressed"]

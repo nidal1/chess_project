@@ -22,7 +22,7 @@ func exit():
     stateMachine.gameUI.ToggleShowHighlightArrows(false)
     stateMachine.gameUI.ToggleShowHighlightSwapKingCircles(false)
 
-    Constants.nextSquaresToSwapTheKingTo = []
+    Constants.castlingData.nextSquares = []
 
     stateMachine.gameUI.UpdatePlayerRole(Player.CurrentPlayer.playerLabel)
 

@@ -18,11 +18,13 @@ const STATES = {
 		"SwitchPlacesState": "SwitchPlacesState",
 		"TakeOppositePlaceState": "TakeOppositePlaceState",
 		"WaitingState": "WaitingState",
-		"SelectKingSquareState": "SelectKingSquareState"
+		"SelectKingSquareState": "SelectKingSquareState",
+		"SelectThePawnSquareState": "SelectThePawnSquareState"
 	},
 	"RULES": {
 		"PromoteAPawnState": "PromoteAPawnState",
-		"SwitchTheKingAndRookState": "SwitchTheKingAndRookState"
+		"SwitchTheKingAndRookState": "SwitchTheKingAndRookState",
+		"EnPassantState": "EnPassantState",
 	}
 	
 }
@@ -43,10 +45,17 @@ var nextSquares: Array = []
 var targetSquares: Array[ChessSquare] = []
 
 var targetPositions: Array = []
-var nextSquaresToSwapTheKingTo: Array[ChessSquare] = []
 var castlingData = {
 	"leftRook": null,
 	"rightRook": null,
+	"nextSquares": [],
+}
+
+var enPassantData = {
+	'leftPawn': null,
+	'rightPawn': null,
+	'prevPawnSquareIdx': - 1,
+	'nextSquare': null,
 }
 
 func SwitchPlayers():
@@ -64,6 +73,22 @@ func UpdatePlayerScore(UpdateBlackScore: Callable, UpdateWhiteScore: Callable):
 	else:
 		var score = Player.NextPlayer.GetTotalPiecesCost()
 		Player.NextPlayer.playerScoreObserver.emit(score, UpdateWhiteScore)
+
+func ClearData():
+	selectedSquare = null
+	targetSquares = []
+	nextSquares = []
+	castlingData = {
+		"leftRook": null,
+		"rightRook": null,
+		"nextSquares": [],
+	}
+	enPassantData = {
+		'leftPawn': null,
+		'rightPawn': null,
+		'prevPawnSquareIdx': - 1,
+		'nextSquare': null,
+	}
 
 func CreateTimer(timer: float=1.0):
 	await get_tree().create_timer(timer).timeout

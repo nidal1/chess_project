@@ -34,18 +34,9 @@ func enter(data=null):
 
 func exit():
 
-	stateMachine.gameUI.ToggleShowHighlightArrows(false)
-	stateMachine.gameUI.ToggleShowHighlightCircles(false)
-	stateMachine.gameUI.ToggleShowHighlightSwapKingCircles(false)
-
 	Constants.SwitchPlayers()
-	Constants.selectedSquare = null
-	Constants.nextSquaresToSwapTheKingTo = []
-	Constants.castlingData = {
-		"leftRook": null,
-		"rightRook": null,
-	}
+	Constants.ClearData()
+	
+	stateMachine.gameUI.SetToInvisible()
 
-	stateMachine.gameUI.visibleHighlightCircles = []
-	stateMachine.gameUI.visibleHighlightSwapCircles = []
-	stateMachine.gameUI.visibleHighlightArrows = []
+	stateMachine.gameUI.UpdatePlayerRole(Player.CurrentPlayer.playerLabel)

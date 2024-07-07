@@ -3,7 +3,9 @@ extends StateBase
 func enter(data=null):
 	var nextSquare = data.nextSquare as ChessSquare
 	var currentSquare = data.currentSquare as ChessSquare
-	
+
+	IsTheNextSquareBetweenTwoPawns(nextSquare, currentSquare)
+
 	HandleMovePiece(nextSquare, currentSquare)
 
 	var piece = nextSquare.GetPiece()
@@ -19,6 +21,9 @@ func enter(data=null):
 		return
 		
 	else:
+		if piece is Pawn:
+			Player.CurrentPlayer.playerPreviousPiece = piece
+
 		Constants.SwitchPlayers()
 		Constants.selectedSquare = null
 		stateMachine.gameUI.UpdatePlayerRole(Player.CurrentPlayer.playerLabel)
@@ -33,7 +38,7 @@ func exit():
 	stateMachine.gameUI.ToggleShowHighlightArrows(false)
 	stateMachine.gameUI.ToggleShowHighlightSwapKingCircles(false)
 
-	Constants.nextSquaresToSwapTheKingTo = []
+	Constants.castlingData.nextSquares = []
 
 func HandleMovePiece(nextSquare: ChessSquare, _selectedSquare: ChessSquare) -> void:
 	var selectedPiece = _selectedSquare.pieceType
@@ -42,3 +47,22 @@ func HandleMovePiece(nextSquare: ChessSquare, _selectedSquare: ChessSquare) -> v
 	nextSquare.AssignPiece(selectedPiece)
 	if selectedPiece is Pawn:
 		selectedPiece.isTheFirstMove = false
+
+func IsTheNextSquareBetweenTwoPawns(nextSquare, currentSquare):
+	var leftSquare = Constants.GRID[nextSquare.squareIdx + 1]
+	var rightSquare = Constants.GRID[nextSquare.squareIdx - 1]
+
+	if ((not leftSquare.isEmpty) and (leftSquare.GetPiece() is Pawn)) or ((not rightSquare.isEmpty and (rightSquare.GetPiece() is Pawn))):
+		var leftPawn: Pawn = leftSquare.GetPiece() if leftSquare.GetPiece() is Pawn else null
+		var rightPawn: Pawn = rightSquare.GetPiece() if rightSquare.GetPiece() is Pawn else null
+
+		if leftPawn:
+			leftPawn = leftPawn if not Player.CheckRole(leftPawn.isFor) else null
+		
+		if rightPawn:
+			rightPawn = rightPawn if not Player.CheckRole(rightPawn.isFor) else null
+
+		if leftPawn or rightPawn:
+			Constants.enPassantData.prevPawnSquareIdx = currentSquare.squareIdx
+			Constants.enPassantData.leftPawn = leftPawn
+			Constants.enPassantData.rightPawn = rightPawn

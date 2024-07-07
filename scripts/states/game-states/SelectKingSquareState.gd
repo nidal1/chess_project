@@ -71,7 +71,7 @@ func enter(data=""):
 
 func HandleSelectAvailableRooks(squareIdx):
 	var square: ChessSquare = Constants.GRID[squareIdx]
-	Constants.nextSquaresToSwapTheKingTo.append(square)
+	Constants.castlingData.nextSquares.append(square)
 	
-	stateMachine.gameUI.visibleHighlightSwapCircles = Constants.nextSquaresToSwapTheKingTo
+	stateMachine.gameUI.visibleHighlightSwapKingCircles = Constants.castlingData.nextSquares
 	stateMachine.gameUI.ToggleShowHighlightSwapKingCircles(true)
