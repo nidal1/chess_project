@@ -24,8 +24,7 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	self.withSpecialMovement = false
 
 func GetAllOppositePiecePositions():
-	
-	return [{
+	var oppositePiecePositions = [{
 		"row": 1 * direction,
 		"col": pieceIdx + 8 * direction + 1
 	},
@@ -34,8 +33,27 @@ func GetAllOppositePiecePositions():
 		"col": pieceIdx + 8 * direction - 1
 	}
 	]
+	var currentRowPosition = self.LocalizationOfSelectedPiece()
+	var nextPositions = []
 
-func GetTheNextPosition():
+	for coor in oppositePiecePositions:
+		var nextSelectedRow = currentRowPosition + coor.row
+		var isNextSelectedRowBetweenEdges = nextSelectedRow > 0 and nextSelectedRow <= Constants.ROWS
+		if isNextSelectedRowBetweenEdges:
+			var boundaries: Array[int] = Constants.GetTheBoundariesOfASelectedRow(nextSelectedRow)
+			var selectedCol = coor.col
+			var firstIdx = boundaries[0]
+			var lastIdx = boundaries[1]
+			var isSelectedColBetweenEdges = selectedCol >= firstIdx and selectedCol <= lastIdx
+			if isSelectedColBetweenEdges:
+				nextPositions.append({
+					"nextCol": selectedCol,
+					"direction": null
+				})
+
+	return nextPositions
+
+func GetNextCoordinates():
 
 	if isTheFirstMove:
 		return [

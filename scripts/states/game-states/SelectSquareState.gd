@@ -102,80 +102,39 @@ func HandleSquareSelection():
 func SelectNewSquare() -> void:
 	# get the type of the current piece
 	var piece = Constants.selectedSquare.GetPiece()
-	var pieceIdx = Constants.selectedSquare.GetPiece().pieceIdx
-		# get the row index of the current piece
-	var selectedRow = stateMachine.gameRules.LocalizationOfSelectedPiece(pieceIdx)
 	
-	if piece.withSpecialMovement:
-		Constants.nextSquares = HandleSpecialMovementPiece(piece, selectedRow)
+	var nextCoordinates = piece.GetNextPositions()
+	var nextPositions = nextCoordinates.nextPositions
+	if nextCoordinates.withSpecialMovement:
+		Constants.nextSquares = FilterBlockedDirections(nextPositions, piece)
 	else:
-		# calculate the incoming positions
-		var coordinations = piece.GetTheNextPosition()
-		Constants.nextSquares = HandleNonSpecialMovementPiece(coordinations, piece, selectedRow)
+		Constants.nextSquares = FilterSimilarPieces(nextPositions, piece)
 
 	if not piece is Pawn:
 		Constants.targetSquares = GetAllOppositePieces(Constants.nextSquares, piece)
 	else:
-		piece = piece as Pawn
-		var coordinations = piece.GetAllOppositePiecePositions()
-		var nextSquares = HandleNonSpecialMovementPiece(coordinations, piece, selectedRow)
-		Constants.targetSquares = GetAllOppositePieces(nextSquares, piece)
+		var pawn: Pawn = piece
+		var nextSquares = HandlePawnNextTargets(pawn)
+		Constants.targetSquares = GetAllOppositePieces(nextSquares, pawn)
 
-	# blackKing.OnCheckTheCheckRule(targetSquares)
-	# whiteKing.OnCheckTheCheckRule(targetSquares)
 	stateMachine.gameUI.visibleHighlightArrows = Constants.targetSquares
 	stateMachine.gameUI.visibleHighlightCircles = Constants.nextSquares
 	stateMachine.gameUI.ToggleShowHighlightArrows(true)
 	stateMachine.gameUI.ToggleShowHighlightCircles(true)
 
-# Pawn, knight, king
-## @params: piece[ChessPiece], selectedRow[int]
-## @return: Array[ChessPiece] next positions
-func HandleNonSpecialMovementPiece(coordinations: Array, piece: ChessPiece, selectedRow: int) -> Array:
+func HandlePawnNextTargets(pawn: Pawn) -> Array:
 	var nextPositions: Array
-	if coordinations.size():
-		nextPositions = HandleNextPositions(coordinations, selectedRow)
-		nextPositions = FilterSimilarPieces(nextPositions, piece)
+	nextPositions = pawn.GetAllOppositePiecePositions()
+	nextPositions = FilterSimilarPieces(nextPositions, pawn)
+		
 	return nextPositions
-
-## Queen, Rook,  Bishop
-func HandleSpecialMovementPiece(piece: ChessPiece, selectedRow: int) -> Array:
-	# calculate the incoming positions
-	var coordinations = piece.GetTheNextPosition()
-	var nextPositions: Array
-	if coordinations.size():
-		nextPositions = HandleNextPositions(coordinations, selectedRow)
-		nextPositions = FilterBlockedDirections(nextPositions, piece)
-	
-	return nextPositions
-
-## Get all possible positions for this current piece
-func HandleNextPositions(coordinations, currentRowPosition) -> Array:
-	var nextSquares: Array = []
-	for coor in coordinations:
-		var nextSelectedRow = currentRowPosition + coor.row
-		var isNextSelectedRowBetweenEdges = nextSelectedRow > 0 and nextSelectedRow <= stateMachine.gameRules.ROWS
-		if isNextSelectedRowBetweenEdges:
-			var boundaries = stateMachine.gameRules.GetTheBoundariesOfASelectedRow(nextSelectedRow)
-			var selectedCol = coor.col
-			var firstIdx = boundaries[0]
-			var lastIdx = boundaries[1]
-			var isSelectedColBetweenEdges = selectedCol >= firstIdx and selectedCol <= lastIdx
-			if isSelectedColBetweenEdges:
-				var nextSquare: ChessSquare = Constants.GRID[selectedCol]
-				nextSquares.append({
-					"nextSquare": nextSquare,
-					"direction": coor.direction if coor.has("direction") else null
-					})
-
-	return nextSquares
 
 ## Get all possible positions for this current piece after been filtered by blocked directions
 func FilterBlockedDirections(nextPositions, chessPiece) -> Array[ChessSquare]:
 	var blockedDirections = []
 	var nextSquares: Array[ChessSquare] = []
 	for pos in nextPositions:
-		var nextSquare = pos.nextSquare
+		var nextSquare = Constants.GRID[pos.nextCol]
 		if not nextSquare.isEmpty:
 			if nextSquare.pieceType.CanMove(chessPiece) and not blockedDirections.has(pos.direction):
 				nextSquares.append(nextSquare)
@@ -190,21 +149,13 @@ func FilterBlockedDirections(nextPositions, chessPiece) -> Array[ChessSquare]:
 func FilterSimilarPieces(nextPositions, chessPiece) -> Array[ChessSquare]:
 	var nextSquares: Array[ChessSquare] = []
 	for pos in nextPositions:
-		var nextSquare = pos.nextSquare
+		var nextSquare = Constants.GRID[pos.nextCol]
 		if not nextSquare.isEmpty and nextSquare.pieceType.CanMove(chessPiece):
 			nextSquares.append(nextSquare)
 		if nextSquare.isEmpty:
 			nextSquares.append(nextSquare)
 	
 	return nextSquares
-
-func FilterSquares(_nextSquares) -> Array[ChessSquare]:
-	var filteredSquares: Array[ChessSquare] = []
-	for square in _nextSquares:
-		if square.isEmpty:
-			filteredSquares.append(square)
-
-	return filteredSquares
 
 func GetAllOppositePieces(_nextSquares, piece) -> Array[ChessSquare]:
 	var _targetSquares: Array[ChessSquare] = []

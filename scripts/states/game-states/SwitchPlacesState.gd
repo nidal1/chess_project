@@ -12,7 +12,7 @@ func enter(data=null):
 
 	piece.isMoved = true
 
-	if piece is Pawn and stateMachine.gameRules.IsThePieceReachesTheSides(piece):
+	if piece is Pawn and piece.IsThePieceReachesTheSides(piece):
 		var promotedPawnData = {
 			"pawn": piece,
 			"targetSquare": nextSquare,
@@ -24,6 +24,7 @@ func enter(data=null):
 		if piece is Pawn:
 			Player.CurrentPlayer.playerPreviousPiece = piece
 
+		Player.CurrentPlayer.playerPreviousPiece = nextSquare.GetPiece()
 		Constants.SwitchPlayers()
 		Constants.selectedSquare = null
 		stateMachine.gameUI.UpdatePlayerRole(Player.CurrentPlayer.playerLabel)

@@ -18,13 +18,15 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	self.pieceCost = 1
 	self.withSpecialMovement = false
 
-func OnCheckTheCheckRule(nextSquares):
-	for square in nextSquares:
-		if square.pieceType.pieceIdx == self.pieceIdx:
-			var gameRules: GameRule = GameRule.new()
-			gameRules.CheckRule.emit(square)
+func IsTheKingUnderAttack():
+	var opponentPrevPieceNextPositions := []
+	var row = self.LocalizationOfSelectedPiece()
+	print(row)
+	var coordinates = Player.NextPlayer.playerPreviousPiece.GetNextCoordinates()
+	
+	coordinates = coordinates.filter(func(coor): return coor.col >= 0 and coor.col < Constants.COLS * Constants.ROWS)
 
-func GetTheNextPosition():
+func GetNextCoordinates():
 	return [{
 		"row": 0,
 		"col": pieceIdx + 1

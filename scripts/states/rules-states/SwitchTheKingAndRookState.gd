@@ -30,6 +30,8 @@ func enter(data=null):
 	king.isMoved = true
 	rook.isMoved = true
 
+	Player.CurrentPlayer.playerPreviousPiece = king
+
 	stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
 func exit():

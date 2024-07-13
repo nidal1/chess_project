@@ -32,6 +32,9 @@ const STATES = {
 const blackPlayerLabel = "Black Player"
 const whitePlayerLabel = "White Player"
 
+const COLS = 8
+const ROWS = 8
+
 var GRID: Array[ChessSquare] = []
 
 signal observingClickingOnSquares(chessSquare)
@@ -92,3 +95,8 @@ func ClearData():
 
 func CreateTimer(timer: float=1.0):
 	await get_tree().create_timer(timer).timeout
+
+func GetTheBoundariesOfASelectedRow(row: int) -> Array[int]:
+	var firstIdx = (row - 1) * Constants.ROWS
+	var lastIdx = (row * Constants.ROWS) - 1
+	return [firstIdx, lastIdx]

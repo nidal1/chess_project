@@ -21,11 +21,12 @@ func enter(data=null):
 		stateMachine.gameUI.UpdateWhiteScore
 	)
 
-	# stateMachine.gameUI.ToggleShowHighlightSwapKingCircles(true)
+	Player.CurrentPlayer.playerPreviousPiece = pawn
 
 	stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
 func exit():
+
 	Constants.SwitchPlayers()
 	Constants.ClearData()
 	stateMachine.gameUI.SetToInvisible()

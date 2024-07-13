@@ -16,39 +16,37 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	self.pieceCost = 3
 	self.withSpecialMovement = false
 
-func GetTheNextPosition():
-	# var coordinates = []
-	# var topRight = 
+func GetNextCoordinates():
 	return [{
-		"row": 1,
-		"col": pieceIdx + 8 - 2
-	},
-	{
-		"row": 1,
-		"col": pieceIdx + 8 + 2
-	},
-	{
-		"row": 2,
-		"col": pieceIdx + 16 + 1
-	},
-	{
-		"row": 2,
-		"col": pieceIdx + 16 - 1
-	},
-	{
-		"row": - 1,
-		"col": pieceIdx - 8 - 2
-	},
-	{
-		"row": - 1,
-		"col": pieceIdx - 8 + 2
-	},
-	{
-		"row": - 2,
-		"col": pieceIdx - 16 - 1
-	},
-	{
-		"row": - 2,
-		"col": pieceIdx - 16 + 1
-	},
+			"row": 1,
+			"col": pieceIdx + 8 - 2
+		},
+		{
+			"row": 1,
+			"col": pieceIdx + 8 + 2
+		},
+		{
+			"row": 2,
+			"col": pieceIdx + 16 + 1
+		},
+		{
+			"row": 2,
+			"col": pieceIdx + 16 - 1
+		},
+		{
+			"row": - 1,
+			"col": pieceIdx - 8 - 2
+		},
+		{
+			"row": - 1,
+			"col": pieceIdx - 8 + 2
+		},
+		{
+			"row": - 2,
+			"col": pieceIdx - 16 - 1
+		},
+		{
+			"row": - 2,
+			"col": pieceIdx - 16 + 1
+		},
 	]

@@ -91,8 +91,8 @@ func InitBoardSquares() -> void:
 	currentSquareType = "white"
 	var squareVisualInstance: Node3D
 	var idx = 0
-	for row in range(stateMachine.gameRules.ROWS):
-		for col in range(stateMachine.gameRules.COLS):
+	for row in range(Constants.ROWS):
+		for col in range(Constants.COLS):
 			var square = ChessSquare.new()
 			square.squareType = currentSquareType
 			square.squareIdx = idx
@@ -104,7 +104,7 @@ func InitBoardSquares() -> void:
 			square.AssignVisualSquare(squareVisualInstance)
 			Constants.GRID.append(square)
 			idx += 1
-			if col != stateMachine.gameRules.COLS - 1:
+			if col != Constants.COLS - 1:
 				SwipeTheColorOfCurrentSquare()
 		SwipeTheColorOfTheFistSquareInTheRow()
 
@@ -115,8 +115,8 @@ func InitPieces() -> void:
 
 func RenderChessSquares() -> void:
 	var idx = 0
-	for row in stateMachine.gameRules.ROWS:
-		for col in stateMachine.gameRules.COLS:
+	for row in Constants.ROWS:
+		for col in Constants.COLS:
 			var square: ChessSquare = Constants.GRID[idx]
 			var instance: Node3D = square.visualSquare
 			instance.position.x += col

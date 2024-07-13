@@ -211,9 +211,8 @@ theme_override_font_sizes/font_size = 30
 text = "Remove check"
 uppercase = true
 
-[node name="GameRules" type="Node3D" parent="." node_paths=PackedStringArray("gameUI")]
+[node name="GameRules" type="Node3D" parent="."]
 script = ExtResource("11_88m4m")
-gameUI = NodePath("../UI")
 
 [node name="ChessBoard" type="Node3D" parent="." node_paths=PackedStringArray("gameUI", "gameRules")]
 script = ExtResource("2_brd2w")

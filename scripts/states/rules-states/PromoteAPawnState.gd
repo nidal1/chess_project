@@ -11,7 +11,7 @@ func enter(data=null):
 	PromoteAPawn()
 
 func PromoteAPawn() -> void:
-	if stateMachine.gameRules.IsThePieceReachesTheSides(pawn):
+	if pawn.IsThePieceReachesTheSides(pawn):
 		if pawn.isBlackPiece:
 			stateMachine.gameUI.ToggleBlackHPassantContainer()
 		else:
@@ -25,6 +25,8 @@ func SelectPromotedPiece(promotedPiece: ChessPiece):
 
 	Player.CurrentPlayer.AppendPiece(promotedPiece)
 
+	Player.CurrentPlayer.playerPreviousPiece = promotedPiece
+
 	if promotedPiece.isBlackPiece:
 		stateMachine.gameUI.ToggleBlackHPassantContainer()
 	else:
@@ -33,6 +35,7 @@ func SelectPromotedPiece(promotedPiece: ChessPiece):
 	stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
 func exit():
+	
 	Constants.SwitchPlayers()
 		
 	Constants.UpdatePlayerScore(

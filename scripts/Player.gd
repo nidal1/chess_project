@@ -5,6 +5,7 @@ class_name Player
 var playerPieces: Array = []
 var playerLabel: String = ""
 var playerScore: int = 0
+#FIXME: Convert this to an array
 var playerPreviousPiece: ChessPiece = null
 
 signal playerScoreObserver(newScore: int, callable)
@@ -29,7 +30,6 @@ func GetTotalPiecesCost() -> int:
 	return total
 
 func RemovePiece(piece: ChessPiece):
-	print(self.playerPieces)
 	var pieceIdx = self.playerPieces.find(piece)
 	self.playerPieces.remove_at(pieceIdx)
 
