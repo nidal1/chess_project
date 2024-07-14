@@ -25,6 +25,7 @@ const STATES = {
 		"PromoteAPawnState": "PromoteAPawnState",
 		"SwitchTheKingAndRookState": "SwitchTheKingAndRookState",
 		"EnPassantState": "EnPassantState",
+		"KingUnderAttackState": "KingUnderAttackState",
 	}
 	
 }
@@ -48,6 +49,8 @@ var nextSquares: Array = []
 var targetSquares: Array[ChessSquare] = []
 
 var targetPositions: Array = []
+
+var isTheKingUnderAttack: bool = false
 var castlingData = {
 	"leftRook": null,
 	"rightRook": null,

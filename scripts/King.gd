@@ -18,13 +18,17 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	self.pieceCost = 1
 	self.withSpecialMovement = false
 
-func IsTheKingUnderAttack():
+func IsTheKingUnderAttack() -> bool:
 	var opponentPrevPieceNextPositions := []
 	var row = self.LocalizationOfSelectedPiece()
-	print(row)
-	var coordinates = Player.NextPlayer.playerPreviousPiece.GetNextCoordinates()
-	
-	coordinates = coordinates.filter(func(coor): return coor.col >= 0 and coor.col < Constants.COLS * Constants.ROWS)
+
+	var positions = Player.NextPlayer.playerPreviousPiece.GetNextPositions()
+
+	var isPositionsContainsKingIndex: bool = positions.nextPositions.filter(func(np): return np.nextCol == self.pieceIdx).size() > 0
+
+	if isPositionsContainsKingIndex:
+		return true
+	return false
 
 func GetNextCoordinates():
 	return [{

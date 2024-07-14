@@ -11,6 +11,7 @@ class_name GameUI
 @onready var checkContainer: HBoxContainer = %HBoxContainer3
 
 var visibleHighlightCircles: Array[ChessSquare] = []
+var visibleHighlightRedCircles: ChessSquare = null
 var visibleHighlightSwapKingCircles: Array = []
 var visibleHighlightSwapPawnCircle: ChessSquare = null
 var visibleHighlightArrows: Array[ChessSquare] = []
@@ -60,6 +61,10 @@ func ToggleShowHighlightCircles(_visible) -> void:
 	if visibleHighlightCircles.size() > 0:
 		for square in visibleHighlightCircles:
 			square.ToggleVisualCircleVisibility(_visible)
+
+func ToggleShowHighlightRedCircles(_visible) -> void:
+	if visibleHighlightRedCircles:
+		visibleHighlightRedCircles.ToggleVisualRedCircleVisibility(_visible)
 
 func ToggleShowHighlightSwapKingCircles(_visible):
 	if visibleHighlightSwapKingCircles.size():

@@ -16,24 +16,31 @@ func enter(data=null):
 	stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
 func exit():
+
 	Constants.SwitchPlayers()
-	var king: King = Player.NextPlayer.playerPieces.filter(GetTheKing)[0]
-	
-	king.IsTheKingUnderAttack()
+
+	if Player.NextPlayer.playerPreviousPiece:
+		var king: King = Player.CurrentPlayer.playerPieces.filter(GetTheKing)[0]
+
+		Constants.isTheKingUnderAttack = king.IsTheKingUnderAttack()
+		
+		if Constants.isTheKingUnderAttack:
+			stateMachine.gameUI.visibleHighlightRedCircles = Constants.GRID[king.pieceIdx]
+			stateMachine.gameUI.ToggleShowHighlightRedCircles(true)
+
 	Constants.selectedSquare = null
 	Constants.nextSquares = []
 	Constants.targetSquares = []
 
 	stateMachine.gameUI.ToggleShowHighlightCircles(false)
+	if not Constants.isTheKingUnderAttack:
+		stateMachine.gameUI.ToggleShowHighlightRedCircles(false)
 	stateMachine.gameUI.ToggleShowHighlightArrows(false)
 	stateMachine.gameUI.ToggleShowHighlightSwapKingCircles(false)
 
 	Constants.castlingData.nextSquares = []
 
 	stateMachine.gameUI.UpdatePlayerRole(Player.CurrentPlayer.playerLabel)
-
-func GetTheKing(p: ChessPiece):
-	return p if p is King else null
 
 func TakePlaceOfOpponentPiece(nextSquare: ChessSquare, selectedSquare: ChessSquare) -> ChessPiece:
 
@@ -45,3 +52,6 @@ func TakePlaceOfOpponentPiece(nextSquare: ChessSquare, selectedSquare: ChessSqua
 	selectedPiece.pieceIdx = nextSquare.squareIdx
 	selectedPiece.isMoved = true
 	return removedPiece
+
+func GetTheKing(p: ChessPiece):
+	return p if p is King else null
