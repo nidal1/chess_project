@@ -124,7 +124,7 @@ func SelectNewSquare() -> void:
 
 func HandlePawnNextTargets(pawn: Pawn) -> Array:
 	var nextPositions: Array
-	nextPositions = pawn.GetAllOppositePiecePositions()
+	nextPositions = pawn.GetAllOppositePiecePositions().nextPositions
 	nextPositions = FilterSimilarPieces(nextPositions, pawn)
 		
 	return nextPositions

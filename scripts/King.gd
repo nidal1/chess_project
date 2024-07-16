@@ -19,16 +19,24 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	self.withSpecialMovement = false
 
 func IsTheKingUnderAttack() -> bool:
-	var opponentPrevPieceNextPositions := []
-	var row = self.LocalizationOfSelectedPiece()
 
 	var positions = Player.NextPlayer.playerPreviousPiece.GetNextPositions()
 
-	var isPositionsContainsKingIndex: bool = positions.nextPositions.filter(func(np): return np.nextCol == self.pieceIdx).size() > 0
+	var isPiecePositionsContainsKingIndex: bool = positions.nextPositions.filter(func(np): return np.nextCol == self.pieceIdx).size() > 0
 
-	if isPositionsContainsKingIndex:
+	if isPiecePositionsContainsKingIndex:
 		return true
-	return false
+
+	var opponentNextPositions = []
+	for op in Player.NextPlayer.playerPieces:
+		var p: ChessPiece = op as ChessPiece
+		opponentNextPositions.append(p.GetNextPositions().nextPositions)
+	
+	for onp in opponentNextPositions:
+		if onp.filter(func(np): return np.nextCol == self.pieceIdx).size() > 0:
+			isPiecePositionsContainsKingIndex = true
+			
+	return isPiecePositionsContainsKingIndex
 
 func GetNextCoordinates():
 	return [{

@@ -23,7 +23,7 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	self.pieceCost = 1
 	self.withSpecialMovement = false
 
-func GetAllOppositePiecePositions():
+func GetAllOppositePiecePositions() -> Dictionary:
 	var oppositePiecePositions = [{
 		"row": 1 * direction,
 		"col": pieceIdx + 8 * direction + 1
@@ -34,7 +34,10 @@ func GetAllOppositePiecePositions():
 	}
 	]
 	var currentRowPosition = self.LocalizationOfSelectedPiece()
-	var nextPositions = []
+	var nextCoordinates = {
+		"withSpecialMovement": self.withSpecialMovement,
+		"nextPositions":[]
+	}
 
 	for coor in oppositePiecePositions:
 		var nextSelectedRow = currentRowPosition + coor.row
@@ -46,12 +49,12 @@ func GetAllOppositePiecePositions():
 			var lastIdx = boundaries[1]
 			var isSelectedColBetweenEdges = selectedCol >= firstIdx and selectedCol <= lastIdx
 			if isSelectedColBetweenEdges:
-				nextPositions.append({
+				nextCoordinates.nextPositions.append({
 					"nextCol": selectedCol,
 					"direction": null
 				})
 
-	return nextPositions
+	return nextCoordinates
 
 func GetNextCoordinates():
 

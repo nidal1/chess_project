@@ -76,12 +76,16 @@ func SelectOnlyPermittedSquare() -> void:
 	stateMachine.gameUI.ToggleShowHighlightCircles(true)
 
 func filterPositionByOtherPiecesPositions(nextPositions):
+	var positions
 	var opponentPieces: Array = Player.NextPlayer.playerPieces
 	for op in opponentPieces:
 		var piece = op as ChessPiece
-		var positions = piece.GetNextPositions()
+		
+		positions = piece.GetAllOppositePiecePositions() if piece is Pawn else piece.GetNextPositions()
+		
 		for pos in positions.nextPositions:
 			nextPositions = nextPositions.filter(func(np): return np.nextCol != pos.nextCol)
+
 	return nextPositions
 
 func FilterSimilarPieces(nextPositions, chessPiece) -> Array[ChessSquare]:
