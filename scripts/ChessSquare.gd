@@ -55,5 +55,9 @@ func ToggleVisualSwapKingCircleVisibility(_visible) -> void:
 	var swapKingCircle: Sprite3D = self.visualSquare.get_node("SwapKingCircle") as Sprite3D
 	swapKingCircle.visible = _visible
 
+func SetVisualIdxLabel(idx: int) -> void:
+	var label: Label3D = self.visualSquare.get_node("IdxLabel") as Label3D
+	label.text = str(idx)
+
 func GetPiece() -> ChessPiece:
 	return self.pieceType

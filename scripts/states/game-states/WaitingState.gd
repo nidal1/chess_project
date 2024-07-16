@@ -8,13 +8,14 @@ func OnObservingTheClickingOnSquares() -> void:
 		Constants.observingClickingOnSquares.connect(HandleClickingSquare)
 
 func HandleClickingSquare(chessSquare):
+	if Constants.theKingUnderAttackData.isTheKingUnderAttack:
+			stateMachine.switchTo(Constants.STATES.RULES.KingUnderAttackState, chessSquare)
+			return
+
 	if not chessSquare.isEmpty:
 		var piece = chessSquare.GetPiece()
 
-		if (not piece is King) and (Constants.isTheKingUnderAttack):
-			return
-		elif (piece is King) and (Constants.isTheKingUnderAttack):
-			stateMachine.switchTo(Constants.STATES.RULES.KingUnderAttackState, chessSquare)
+		if (not piece is King) and (Constants.theKingUnderAttackData.isTheKingUnderAttack):
 			return
 
 		if piece is Pawn and Constants.enPassantData.prevPawnSquareIdx >= 0:

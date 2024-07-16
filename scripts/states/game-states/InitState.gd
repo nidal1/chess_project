@@ -10,13 +10,13 @@ var visualWhiteChessSquare = preload ("res://sceens/SquareWhite.tscn")
 
 var blackKing = King.new(3)
 var blackQueen = Queen.new(4)
-var blackKnight_1 = Knight.new(36)
-var blackKnight_2 = Knight.new(1)
+var blackKnight_1 = Knight.new(1)
+var blackKnight_2 = Knight.new(36)
 var blackBishop_1 = Bishop.new(2)
 var blackBishop_2 = Bishop.new(5)
 var blackRook_1 = Rook.new(0)
 var blackRook_2 = Rook.new(7)
-var blackP0 = Pawn.new(8)
+var blackP0 = Pawn.new(51)
 var blackP1 = Pawn.new(9)
 var blackP2 = Pawn.new(10)
 var blackP3 = Pawn.new(11)
@@ -123,6 +123,7 @@ func RenderChessSquares() -> void:
 			instance.position.z += row
 			visualChessBoard.add_child(instance)
 			square.AssignVisualSquare(instance)
+			square.SetVisualIdxLabel(idx)
 			idx += 1
 
 func InitPlayers():

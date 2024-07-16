@@ -18,22 +18,14 @@ func enter(data=null):
 func exit():
 
 	Constants.SwitchPlayers()
-
-	if Player.NextPlayer.playerPreviousPiece:
-		var king: King = Player.CurrentPlayer.playerPieces.filter(GetTheKing)[0]
-
-		Constants.isTheKingUnderAttack = king.IsTheKingUnderAttack()
-		
-		if Constants.isTheKingUnderAttack:
-			stateMachine.gameUI.visibleHighlightRedCircles = Constants.GRID[king.pieceIdx]
-			stateMachine.gameUI.ToggleShowHighlightRedCircles(true)
+	Constants.CheckIfTheKingIsUnderAttack(stateMachine.gameUI)
 
 	Constants.selectedSquare = null
 	Constants.nextSquares = []
 	Constants.targetSquares = []
 
 	stateMachine.gameUI.ToggleShowHighlightCircles(false)
-	if not Constants.isTheKingUnderAttack:
+	if not Constants.theKingUnderAttackData.isTheKingUnderAttack:
 		stateMachine.gameUI.ToggleShowHighlightRedCircles(false)
 	stateMachine.gameUI.ToggleShowHighlightArrows(false)
 	stateMachine.gameUI.ToggleShowHighlightSwapKingCircles(false)

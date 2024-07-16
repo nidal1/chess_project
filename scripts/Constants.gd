@@ -50,7 +50,12 @@ var targetSquares: Array[ChessSquare] = []
 
 var targetPositions: Array = []
 
-var isTheKingUnderAttack: bool = false
+var theKingUnderAttackData = {
+	isTheKingUnderAttack = false,
+	targetSquares = [],
+	nextSquares = [],
+}
+
 var castlingData = {
 	"leftRook": null,
 	"rightRook": null,
@@ -103,3 +108,16 @@ func GetTheBoundariesOfASelectedRow(row: int) -> Array[int]:
 	var firstIdx = (row - 1) * Constants.ROWS
 	var lastIdx = (row * Constants.ROWS) - 1
 	return [firstIdx, lastIdx]
+
+func CheckIfTheKingIsUnderAttack(gameUI: GameUI):
+	if Player.NextPlayer.playerPreviousPiece:
+		var king: King = Player.CurrentPlayer.playerPieces.filter(GetTheKing)[0]
+		print("the king under attack: " + king.isFor)
+		theKingUnderAttackData.isTheKingUnderAttack = king.IsTheKingUnderAttack()
+		
+		if theKingUnderAttackData.isTheKingUnderAttack:
+			gameUI.visibleHighlightRedCircles = GRID[king.pieceIdx]
+			gameUI.ToggleShowHighlightRedCircles(true)
+
+func GetTheKing(p: ChessPiece):
+	return p if p is King else null

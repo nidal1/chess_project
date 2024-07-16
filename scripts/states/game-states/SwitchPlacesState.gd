@@ -31,20 +31,13 @@ func enter(data=null):
 		stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
 func exit():
-	if Player.NextPlayer.playerPreviousPiece:
-		var king: King = Player.NextPlayer.playerPieces.filter(GetTheKing)[0]
-		
-		Constants.isTheKingUnderAttack = king.IsTheKingUnderAttack()
-		
-		if Constants.isTheKingUnderAttack:
-			stateMachine.gameUI.visibleHighlightRedCircles = Constants.GRID[king.pieceIdx]
-			stateMachine.gameUI.ToggleShowHighlightRedCircles(true)
+	Constants.CheckIfTheKingIsUnderAttack(stateMachine.gameUI)
 	
 	Constants.nextSquares = []
 	Constants.targetSquares = []
 
 	stateMachine.gameUI.ToggleShowHighlightCircles(false)
-	if not Constants.isTheKingUnderAttack:
+	if not Constants.theKingUnderAttackData.isTheKingUnderAttack:
 		stateMachine.gameUI.ToggleShowHighlightRedCircles(false)
 	stateMachine.gameUI.ToggleShowHighlightArrows(false)
 	stateMachine.gameUI.ToggleShowHighlightSwapKingCircles(false)
@@ -77,6 +70,3 @@ func IsTheNextSquareBetweenTwoPawns(nextSquare, currentSquare):
 			Constants.enPassantData.prevPawnSquareIdx = currentSquare.squareIdx
 			Constants.enPassantData.leftPawn = leftPawn
 			Constants.enPassantData.rightPawn = rightPawn
-
-func GetTheKing(p: ChessPiece):
-	return p if p is King else null

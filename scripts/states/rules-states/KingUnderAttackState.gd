@@ -1,32 +1,60 @@
 extends StateBase
 
 func enter(data=null):
-	# check if the square is of the player role or not
+	
+	# on the king under attack:
+		# 1. think to remove the piece (the last played piece) that attacking the king
+		# 2. this to move the king to the safe position:
+			# 2.1. by taking the place of an opponent piece
+			# 2.2. by switching the place to an empty square
 
 	var pieceType
 	var playerRole
 
 	# get the clicked square
 	var square = data as ChessSquare
-	var king: King = square.GetPiece()
 	
-	pieceType = king.isFor
-
-	# then check the role to determine whether we should setting the selected square variable or not.
-	# The selected square should be set only if the current clicked square contains the piece and for the current
-	# player role._add_constant_force
-	playerRole = Player.CheckRole(pieceType)
-
-	# this if statement means that the clicked square is for the current player role
-	if playerRole:
-		Constants.selectedSquare = square
-		if not stateMachine.gameUI.visibleHighlightArrows.has(Constants.selectedSquare):
-			stateMachine.gameUI.ClearHighlightArrows()
-			stateMachine.gameUI.ClearHighlightCircles(Constants.selectedSquare)
+	if not square.isEmpty:
+		var piece: ChessPiece = square.GetPiece()
+		pieceType = piece.isFor
 		
-		SelectOnlyPermittedSquare()
-		stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
-		return
+		playerRole = Player.CheckRole(pieceType)
+		if piece is King:
+			if playerRole:
+				Constants.selectedSquare = square
+				if not stateMachine.gameUI.visibleHighlightArrows.has(Constants.selectedSquare):
+					stateMachine.gameUI.ClearHighlightArrows()
+					stateMachine.gameUI.ClearHighlightCircles(Constants.selectedSquare)
+				
+				SelectOnlyPermittedSquare()
+				stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
+				return
+
+		else:
+			if ((piece == Player.NextPlayer.playerPreviousPiece) or playerRole):
+				# this case means the king is under attack and you are targeting a opponent piece that will not remove
+				# the check rule
+				stateMachine.gameUI.ToggleShowHighlightCircles(false)
+				stateMachine.gameUI.ToggleShowHighlightArrows(false)
+				stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
+				return
+			
+			if (Constants.theKingUnderAttackData.targetSquares.has(square)):
+				# this case means that this square is for a king target
+				Constants.targetSquares.append(square)
+				Constants.theKingUnderAttackData.isTheKingUnderAttack = false
+				stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
+				return
+			
+			stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
+			return
+
+	else:
+		if Constants.theKingUnderAttackData.nextSquares.has(square):
+			Constants.nextSquares = Constants.theKingUnderAttackData.nextSquares
+			Constants.theKingUnderAttackData.isTheKingUnderAttack = false
+			stateMachine.gameUI.ToggleShowHighlightRedCircles(false)
+			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
 
 func SelectOnlyPermittedSquare() -> void:
 	# get the type of the current piece
@@ -38,12 +66,12 @@ func SelectOnlyPermittedSquare() -> void:
 	# filter
 	nextPositions = filterPositionByOtherPiecesPositions(nextPositions)
 	
-	Constants.nextSquares = FilterSimilarPieces(nextPositions, piece)
+	Constants.theKingUnderAttackData.nextSquares = FilterSimilarPieces(nextPositions, piece)
 
-	Constants.targetSquares = GetAllOppositePieces(Constants.nextSquares, piece)
+	Constants.theKingUnderAttackData.targetSquares = GetAllOppositePieces(Constants.theKingUnderAttackData.nextSquares, piece)
 
-	stateMachine.gameUI.visibleHighlightArrows = Constants.targetSquares
-	stateMachine.gameUI.visibleHighlightCircles = Constants.nextSquares
+	stateMachine.gameUI.visibleHighlightArrows = Constants.theKingUnderAttackData.targetSquares
+	stateMachine.gameUI.visibleHighlightCircles = Constants.theKingUnderAttackData.nextSquares
 	stateMachine.gameUI.ToggleShowHighlightArrows(true)
 	stateMachine.gameUI.ToggleShowHighlightCircles(true)
 
