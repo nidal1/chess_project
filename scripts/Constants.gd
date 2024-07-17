@@ -54,6 +54,7 @@ var theKingUnderAttackData = {
 	isTheKingUnderAttack = false,
 	targetSquares = [],
 	nextSquares = [],
+	withSpecialMovementPieceTargetPositionsToTheKing = []
 }
 
 var castlingData = {
@@ -110,14 +111,57 @@ func GetTheBoundariesOfASelectedRow(row: int) -> Array[int]:
 	return [firstIdx, lastIdx]
 
 func CheckIfTheKingIsUnderAttack(gameUI: GameUI):
-	if Player.NextPlayer.playerPreviousPiece:
-		var king: King = Player.CurrentPlayer.playerPieces.filter(GetTheKing)[0]
-		print("the king under attack: " + king.isFor)
-		theKingUnderAttackData.isTheKingUnderAttack = king.IsTheKingUnderAttack()
-		
-		if theKingUnderAttackData.isTheKingUnderAttack:
-			gameUI.visibleHighlightRedCircles = GRID[king.pieceIdx]
-			gameUI.ToggleShowHighlightRedCircles(true)
+	var king: King = Player.CurrentPlayer.playerPieces.filter(GetTheKing)[0]
+	theKingUnderAttackData.isTheKingUnderAttack = king.IsTheKingUnderAttack()
+	
+	if theKingUnderAttackData.isTheKingUnderAttack:
+		gameUI.visibleHighlightRedCircles = GRID[king.pieceIdx]
+		gameUI.ToggleShowHighlightRedCircles(true)
 
 func GetTheKing(p: ChessPiece):
 	return p if p is King else null
+
+## Get all possible positions for this current piece after been filtered by blocked directions
+func FilterBlockedDirections(nextPositions, chessPiece) -> Array[ChessSquare]:
+	var blockedDirections = []
+	var _nextSquares: Array[ChessSquare] = []
+	for pos in nextPositions:
+		var nextSquare = Constants.GRID[pos.nextCol]
+		if not nextSquare.isEmpty:
+			if nextSquare.pieceType.CanMove(chessPiece) and not blockedDirections.has(pos.direction):
+				_nextSquares.append(nextSquare)
+			blockedDirections.append(pos.direction)
+
+		else:
+			if not blockedDirections.has(pos.direction):
+				_nextSquares.append(nextSquare)
+
+	return _nextSquares
+
+func FilterBlockedDirectionsAndReturnPositions(nextPositions, chessPiece) -> Array:
+	var blockedDirections = []
+	var _nextPositions: Array = []
+	for pos in nextPositions:
+		var nextSquare = Constants.GRID[pos.nextCol]
+		if not nextSquare.isEmpty:
+			if nextSquare.pieceType.CanMove(chessPiece) and not blockedDirections.has(pos.direction):
+				_nextPositions.append(pos)
+			blockedDirections.append(pos.direction)
+
+		else:
+			if not blockedDirections.has(pos.direction):
+				_nextPositions.append(pos)
+
+	return _nextPositions
+
+func GetThePositionsFromASquaresIndexes(squares: Array[ChessSquare]):
+	
+	var lf = func(square: ChessSquare):
+		var positionData = {
+			"nextCol": square.squareIdx,
+			"direction": null
+		}
+		return positionData
+
+	var nextPositions = squares.map(lf)
+	return nextPositions

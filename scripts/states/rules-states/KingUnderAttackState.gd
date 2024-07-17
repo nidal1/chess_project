@@ -9,7 +9,7 @@ func enter(data=null):
 			# 2.2. by switching the place to an empty square
 
 	var pieceType
-	var playerRole
+	var playerRolePiece
 
 	# get the clicked square
 	var square = data as ChessSquare
@@ -18,40 +18,35 @@ func enter(data=null):
 		var piece: ChessPiece = square.GetPiece()
 		pieceType = piece.isFor
 		
-		playerRole = Player.CheckRole(pieceType)
-		if piece is King:
-			if playerRole:
-				Constants.selectedSquare = square
-				if not stateMachine.gameUI.visibleHighlightArrows.has(Constants.selectedSquare):
-					stateMachine.gameUI.ClearHighlightArrows()
-					stateMachine.gameUI.ClearHighlightCircles(Constants.selectedSquare)
-				
-				SelectOnlyPermittedSquare()
-				stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
-				return
+		playerRolePiece = Player.CheckRole(pieceType)
 
-		else:
-			if ((piece == Player.NextPlayer.playerPreviousPiece) or playerRole):
-				# this case means the king is under attack and you are targeting a opponent piece that will not remove
-				# the check rule
-				stateMachine.gameUI.ToggleShowHighlightCircles(false)
-				stateMachine.gameUI.ToggleShowHighlightArrows(false)
-				stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
-				return
-			
-			if (Constants.theKingUnderAttackData.targetSquares.has(square)):
-				# this case means that this square is for a king target
-				Constants.targetSquares.append(square)
-				Constants.theKingUnderAttackData.isTheKingUnderAttack = false
-				stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
-				return
-			
-			stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
+		if ((piece == Player.NextPlayer.playerPreviousPiece) or playerRolePiece):
+			# this case means the king is under attack and you are targeting a opponent piece that will remove
+			# the check rule
+			stateMachine.gameUI.ToggleShowHighlightCircles(false)
+			stateMachine.gameUI.ToggleShowHighlightArrows(false)
+			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
 			return
+		
+		if (Constants.theKingUnderAttackData.targetSquares.has(square)):
+			# this case means that this square is for a king target
+			Constants.targetSquares.append(square)
+			Constants.theKingUnderAttackData.isTheKingUnderAttack = false
+			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
+			return
+		
+		stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
+		return
 
 	else:
 		if Constants.theKingUnderAttackData.nextSquares.has(square):
 			Constants.nextSquares = Constants.theKingUnderAttackData.nextSquares
+			Constants.theKingUnderAttackData.isTheKingUnderAttack = false
+			stateMachine.gameUI.ToggleShowHighlightRedCircles(false)
+			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
+
+		if Constants.theKingUnderAttackData.withSpecialMovementPieceTargetPositionsToTheKing.has(square):
+			Constants.nextSquares = Constants.theKingUnderAttackData.withSpecialMovementPieceTargetPositionsToTheKing
 			Constants.theKingUnderAttackData.isTheKingUnderAttack = false
 			stateMachine.gameUI.ToggleShowHighlightRedCircles(false)
 			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
@@ -61,10 +56,7 @@ func SelectOnlyPermittedSquare() -> void:
 	var piece: King = Constants.selectedSquare.GetPiece()
 	
 	var nextCoordinates = piece.GetNextPositions()
-	var nextPositions = nextCoordinates.nextPositions
-
-	# filter
-	nextPositions = filterPositionByOtherPiecesPositions(nextPositions)
+	var nextPositions = piece.filterPositionByOtherPiecesPositions(nextCoordinates.nextPositions)
 	
 	Constants.theKingUnderAttackData.nextSquares = FilterSimilarPieces(nextPositions, piece)
 
@@ -74,19 +66,6 @@ func SelectOnlyPermittedSquare() -> void:
 	stateMachine.gameUI.visibleHighlightCircles = Constants.theKingUnderAttackData.nextSquares
 	stateMachine.gameUI.ToggleShowHighlightArrows(true)
 	stateMachine.gameUI.ToggleShowHighlightCircles(true)
-
-func filterPositionByOtherPiecesPositions(nextPositions):
-	var positions
-	var opponentPieces: Array = Player.NextPlayer.playerPieces
-	for op in opponentPieces:
-		var piece = op as ChessPiece
-		
-		positions = piece.GetAllOppositePiecePositions() if piece is Pawn else piece.GetNextPositions()
-		
-		for pos in positions.nextPositions:
-			nextPositions = nextPositions.filter(func(np): return np.nextCol != pos.nextCol)
-
-	return nextPositions
 
 func FilterSimilarPieces(nextPositions, chessPiece) -> Array[ChessSquare]:
 	var nextSquares: Array[ChessSquare] = []

@@ -105,8 +105,10 @@ func SelectNewSquare() -> void:
 	
 	var nextCoordinates = piece.GetNextPositions()
 	var nextPositions = nextCoordinates.nextPositions
+	if piece is King:
+		nextPositions = piece.FilterPositionByOtherPiecesPositions(nextPositions)
 	if nextCoordinates.withSpecialMovement:
-		Constants.nextSquares = FilterBlockedDirections(nextPositions, piece)
+		Constants.nextSquares = Constants.FilterBlockedDirections(nextPositions, piece)
 	else:
 		Constants.nextSquares = FilterSimilarPieces(nextPositions, piece)
 
@@ -129,22 +131,6 @@ func HandlePawnNextTargets(pawn: Pawn) -> Array:
 		
 	return nextPositions
 
-## Get all possible positions for this current piece after been filtered by blocked directions
-func FilterBlockedDirections(nextPositions, chessPiece) -> Array[ChessSquare]:
-	var blockedDirections = []
-	var nextSquares: Array[ChessSquare] = []
-	for pos in nextPositions:
-		var nextSquare = Constants.GRID[pos.nextCol]
-		if not nextSquare.isEmpty:
-			if nextSquare.pieceType.CanMove(chessPiece) and not blockedDirections.has(pos.direction):
-				nextSquares.append(nextSquare)
-			blockedDirections.append(pos.direction)
-
-		else:
-			if not blockedDirections.has(pos.direction):
-				nextSquares.append(nextSquare)
-			
-	return nextSquares
 ## Get all possible positions for this current piece after been filtered by similar pieces
 func FilterSimilarPieces(nextPositions, chessPiece) -> Array[ChessSquare]:
 	var nextSquares: Array[ChessSquare] = []

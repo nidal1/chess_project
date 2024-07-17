@@ -46,20 +46,19 @@ func GetNextPositions() -> Dictionary:
 		"withSpecialMovement": self.withSpecialMovement,
 		"nextPositions":[]
 	}
-	if coordinations.size():
-		for coor in coordinations:
-			var nextSelectedRow = currentRowPosition + coor.row
-			var isNextSelectedRowBetweenEdges = nextSelectedRow > 0 and nextSelectedRow <= Constants.ROWS
-			if isNextSelectedRowBetweenEdges:
-				var boundaries: Array[int] = Constants.GetTheBoundariesOfASelectedRow(nextSelectedRow)
-				var selectedCol = coor.col
-				var firstIdx = boundaries[0]
-				var lastIdx = boundaries[1]
-				var isSelectedColBetweenEdges = selectedCol >= firstIdx and selectedCol <= lastIdx
-				if isSelectedColBetweenEdges:
-					nextCoordinates.nextPositions.append({
-						"nextCol": selectedCol,
-						"direction": coor.direction if coor.has("direction") else null
-					})
+	for coor in coordinations:
+		var nextSelectedRow = currentRowPosition + coor.row
+		var isNextSelectedRowBetweenEdges = nextSelectedRow > 0 and nextSelectedRow <= Constants.ROWS
+		if isNextSelectedRowBetweenEdges:
+			var boundaries: Array[int] = Constants.GetTheBoundariesOfASelectedRow(nextSelectedRow)
+			var selectedCol = coor.col
+			var firstIdx = boundaries[0]
+			var lastIdx = boundaries[1]
+			var isSelectedColBetweenEdges = selectedCol >= firstIdx and selectedCol <= lastIdx
+			if isSelectedColBetweenEdges:
+				nextCoordinates.nextPositions.append({
+					"nextCol": selectedCol,
+					"direction": coor.direction if coor.has("direction") else null
+				})
 
 	return nextCoordinates

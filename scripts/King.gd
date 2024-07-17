@@ -19,23 +19,38 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	self.withSpecialMovement = false
 
 func IsTheKingUnderAttack() -> bool:
-
-	var positions = Player.NextPlayer.playerPreviousPiece.GetNextPositions()
-
-	var isPiecePositionsContainsKingIndex: bool = positions.nextPositions.filter(func(np): return np.nextCol == self.pieceIdx).size() > 0
-
-	if isPiecePositionsContainsKingIndex:
-		return true
-
+	var isPiecePositionsContainsKingIndex = false
 	var opponentNextPositions = []
 	for op in Player.NextPlayer.playerPieces:
 		var p: ChessPiece = op as ChessPiece
-		opponentNextPositions.append(p.GetNextPositions().nextPositions)
+		if p.withSpecialMovement:
+
+			var positions = p.GetNextPositions().nextPositions
+			positions = Constants.FilterBlockedDirectionsAndReturnPositions(positions, p)
+			for pos in positions:
+				var test = pos.nextCol == self.pieceIdx
+				if test:
+					var targetDirection = pos.direction
+					var targetP = positions.filter(func(p): return p.direction == targetDirection)
+					for tp in targetP:
+						if tp.nextCol == self.pieceIdx:
+							break
+						Constants.theKingUnderAttackData.withSpecialMovementPieceTargetPositionsToTheKing.append(Constants.GRID[tp.nextCol])
+
+					isPiecePositionsContainsKingIndex = true
+					break
+			
+			if isPiecePositionsContainsKingIndex:
+				return true
+
+		else:
+			opponentNextPositions.append(p.GetAllOppositePiecePositions().nextPositions if p is Pawn else p.GetNextPositions().nextPositions)
 	
 	for onp in opponentNextPositions:
-		if onp.filter(func(np): return np.nextCol == self.pieceIdx).size() > 0:
+		var test = onp.filter(func(np): return np.nextCol == self.pieceIdx)
+		if test.size() > 0:
 			isPiecePositionsContainsKingIndex = true
-			
+	
 	return isPiecePositionsContainsKingIndex
 
 func GetNextCoordinates():
@@ -104,3 +119,16 @@ func GetSquaresNeededToBeEmptyToSwapWithRooks() -> Array:
 			"leftRook": pieceIdx + 4
 		}
 	]
+
+func FilterPositionByOtherPiecesPositions(nextPositions):
+	var positions
+	var opponentPieces: Array = Player.NextPlayer.playerPieces
+	for op in opponentPieces:
+		var piece = op as ChessPiece
+		
+		positions = piece.GetAllOppositePiecePositions() if piece is Pawn else piece.GetNextPositions()
+		
+		for pos in positions.nextPositions:
+			nextPositions = nextPositions.filter(func(np): return np.nextCol != pos.nextCol)
+
+	return nextPositions

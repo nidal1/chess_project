@@ -11,7 +11,7 @@ func enter(data=null):
 		stateMachine.gameUI.UpdateWhiteScore
 	)
 
-	Player.CurrentPlayer.playerPreviousPiece = nextSquare.GetPiece()
+	Player.CurrentPlayer.playerPreviousPiece = nextSquare.GetPiece() if nextSquare.GetPiece() != removedPiece else null
 
 	stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
