@@ -4,7 +4,12 @@ func enter(data=""):
 
 	var square: ChessSquare = data
 
-	if (Player.NextPlayer.playerPreviousPiece != null) and (Player.NextPlayer.playerPreviousPiece is Pawn):
+	CheckForEnPassantState(square)
+	
+	stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, data)
+
+func CheckForEnPassantState(square: ChessSquare):
+	if (Player.NextPlayer.playerPreviousPiece != null) and (Player.NextPlayer.playerPreviousPiece is Pawn) and Constants.enPassantData.prevPawnSquareIdx >= 0:
 		var pawn: Pawn = square.GetPiece()
 		if (pawn == Constants.enPassantData.leftPawn) or (pawn == Constants.enPassantData.rightPawn):
 			var enPassantSquare = Constants.GRID[Constants.enPassantData.prevPawnSquareIdx]
@@ -15,6 +20,4 @@ func enter(data=""):
 
 			stateMachine.gameUI.ToggleShowHighlightSwapPawnCircle(true)
 
-			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, data)
-	
-	stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, data)
+			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)

@@ -18,7 +18,7 @@ func HandleClickingSquare(chessSquare):
 		if (not piece is King) and (Constants.theKingUnderAttackData.isTheKingUnderAttack):
 			return
 
-		if piece is Pawn and Constants.enPassantData.prevPawnSquareIdx >= 0:
+		if piece is Pawn:
 			stateMachine.switchTo(Constants.STATES.GAME.SelectThePawnSquareState, chessSquare)
 			return
 

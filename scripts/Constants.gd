@@ -175,8 +175,13 @@ func FilterSimilarPieces(nextPositions, chessPiece) -> Array[ChessSquare]:
 	var _nextSquares: Array[ChessSquare] = []
 	for pos in nextPositions:
 		var nextSquare = Constants.GRID[pos.nextCol]
-		if not nextSquare.isEmpty and nextSquare.pieceType.CanMove(chessPiece):
-			_nextSquares.append(nextSquare)
+		
+		if not nextSquare.isEmpty and nextSquare.pieceType.CanMove(chessPiece) and (chessPiece is Pawn):
+			break
+
+		if not nextSquare.isEmpty and nextSquare.pieceType.CanMove(chessPiece) and (not chessPiece is Pawn):
+			nextSquares.append(nextSquare)
+			
 		if nextSquare.isEmpty:
 			_nextSquares.append(nextSquare)
 	
