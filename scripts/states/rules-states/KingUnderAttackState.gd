@@ -1,12 +1,20 @@
 extends StateBase
 
 func enter(data=null):
+	# Done
+	# when will be the king under attack?
+	# if any of opponent pieces will the next target positions is one of the king's position
+	# for the pawn
+		# next target position
+	# for the with special movements pieces like queen, rook and bishop
+		# one of the none blocked directions directed to the king's position
 	
 	# on the king under attack:
 		# 1. think to remove the piece (the last played piece) that attacking the king
-		# 2. this to move the king to the safe position:
+		# 2. think to move the king to the safe position:
 			# 2.1. by taking the place of an opponent piece
 			# 2.2. by switching the place to an empty square
+		# 3. think to switch another piece to one of the squares directed to the king under attack
 
 	var pieceType
 	var playerRolePiece
@@ -20,6 +28,13 @@ func enter(data=null):
 		
 		playerRolePiece = Player.CheckRole(pieceType)
 
+		if (Constants.theKingUnderAttackData.targetSquares.has(square) and Constants.selectedSquare):
+			# this case means that this square is for a king target
+			Constants.targetSquares.append(square)
+			Constants.theKingUnderAttackData.isTheKingUnderAttack = false
+			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
+			return
+
 		if ((piece == Player.NextPlayer.playerPreviousPiece) or playerRolePiece):
 			# this case means the king is under attack and you are targeting a opponent piece that will remove
 			# the check rule
@@ -27,16 +42,6 @@ func enter(data=null):
 			stateMachine.gameUI.ToggleShowHighlightArrows(false)
 			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
 			return
-		
-		if (Constants.theKingUnderAttackData.targetSquares.has(square)):
-			# this case means that this square is for a king target
-			Constants.targetSquares.append(square)
-			Constants.theKingUnderAttackData.isTheKingUnderAttack = false
-			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
-			return
-		
-		stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
-		return
 
 	else:
 		if Constants.theKingUnderAttackData.nextSquares.has(square):
@@ -44,12 +49,17 @@ func enter(data=null):
 			Constants.theKingUnderAttackData.isTheKingUnderAttack = false
 			stateMachine.gameUI.ToggleShowHighlightRedCircles(false)
 			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
+			return
 
 		if Constants.theKingUnderAttackData.withSpecialMovementPieceTargetPositionsToTheKing.has(square):
 			Constants.nextSquares = Constants.theKingUnderAttackData.withSpecialMovementPieceTargetPositionsToTheKing
 			Constants.theKingUnderAttackData.isTheKingUnderAttack = false
 			stateMachine.gameUI.ToggleShowHighlightRedCircles(false)
 			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
+			return
+
+	stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
+	return
 
 func SelectOnlyPermittedSquare() -> void:
 	# get the type of the current piece

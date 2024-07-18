@@ -18,41 +18,6 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	self.pieceCost = 1
 	self.withSpecialMovement = false
 
-func IsTheKingUnderAttack() -> bool:
-	var isPiecePositionsContainsKingIndex = false
-	var opponentNextPositions = []
-	for op in Player.NextPlayer.playerPieces:
-		var p: ChessPiece = op as ChessPiece
-		if p.withSpecialMovement:
-
-			var positions = p.GetNextPositions().nextPositions
-			positions = Constants.FilterBlockedDirectionsAndReturnPositions(positions, p)
-			for pos in positions:
-				var test = pos.nextCol == self.pieceIdx
-				if test:
-					var targetDirection = pos.direction
-					var targetP = positions.filter(func(p): return p.direction == targetDirection)
-					for tp in targetP:
-						if tp.nextCol == self.pieceIdx:
-							break
-						Constants.theKingUnderAttackData.withSpecialMovementPieceTargetPositionsToTheKing.append(Constants.GRID[tp.nextCol])
-
-					isPiecePositionsContainsKingIndex = true
-					break
-			
-			if isPiecePositionsContainsKingIndex:
-				return true
-
-		else:
-			opponentNextPositions.append(p.GetAllOppositePiecePositions().nextPositions if p is Pawn else p.GetNextPositions().nextPositions)
-	
-	for onp in opponentNextPositions:
-		var test = onp.filter(func(np): return np.nextCol == self.pieceIdx)
-		if test.size() > 0:
-			isPiecePositionsContainsKingIndex = true
-	
-	return isPiecePositionsContainsKingIndex
-
 func GetNextCoordinates():
 	return [{
 		"row": 0,
@@ -132,3 +97,38 @@ func FilterPositionByOtherPiecesPositions(nextPositions):
 			nextPositions = nextPositions.filter(func(np): return np.nextCol != pos.nextCol)
 
 	return nextPositions
+
+func IsTheKingUnderAttack() -> bool:
+	var isPiecePositionsContainsKingIndex = false
+	var opponentNextPositions = []
+	for op in Player.NextPlayer.playerPieces:
+		var p: ChessPiece = op as ChessPiece
+		if p.withSpecialMovement:
+
+			var positions = p.GetNextPositions().nextPositions
+			positions = Constants.FilterBlockedDirectionsAndReturnPositions(positions, p)
+			for pos in positions:
+				var test = pos.nextCol == self.pieceIdx
+				if test:
+					var targetDirection = pos.direction
+					var targetP = positions.filter(func(p): return p.direction == targetDirection)
+					for tp in targetP:
+						if tp.nextCol == self.pieceIdx:
+							break
+						Constants.theKingUnderAttackData.withSpecialMovementPieceTargetPositionsToTheKing.append(Constants.GRID[tp.nextCol])
+
+					isPiecePositionsContainsKingIndex = true
+					break
+			
+			if isPiecePositionsContainsKingIndex:
+				return true
+
+		else:
+			opponentNextPositions.append(p.GetAllOppositePiecePositions().nextPositions if p is Pawn else p.GetNextPositions().nextPositions)
+	
+	for onp in opponentNextPositions:
+		var test = onp.filter(func(np): return np.nextCol == self.pieceIdx)
+		if test.size() > 0:
+			isPiecePositionsContainsKingIndex = true
+	
+	return isPiecePositionsContainsKingIndex

@@ -115,6 +115,10 @@ func CheckIfTheKingIsUnderAttack(gameUI: GameUI):
 	theKingUnderAttackData.isTheKingUnderAttack = king.IsTheKingUnderAttack()
 	
 	if theKingUnderAttackData.isTheKingUnderAttack:
+		var nextPositions = king.GetNextPositions().nextPositions
+		nextPositions = king.FilterPositionByOtherPiecesPositions(nextPositions)
+		var _nextSquares = FilterSimilarPieces(nextPositions, king)
+		theKingUnderAttackData.targetSquares = GetAllOppositePieces(_nextSquares, king)
 		gameUI.visibleHighlightRedCircles = GRID[king.pieceIdx]
 		gameUI.ToggleShowHighlightRedCircles(true)
 
@@ -165,3 +169,27 @@ func GetThePositionsFromASquaresIndexes(squares: Array[ChessSquare]):
 
 	var nextPositions = squares.map(lf)
 	return nextPositions
+
+## Get all possible positions for this current piece after been filtered by similar pieces
+func FilterSimilarPieces(nextPositions, chessPiece) -> Array[ChessSquare]:
+	var _nextSquares: Array[ChessSquare] = []
+	for pos in nextPositions:
+		var nextSquare = Constants.GRID[pos.nextCol]
+		if not nextSquare.isEmpty and nextSquare.pieceType.CanMove(chessPiece):
+			_nextSquares.append(nextSquare)
+		if nextSquare.isEmpty:
+			_nextSquares.append(nextSquare)
+	
+	return _nextSquares
+
+func GetAllOppositePieces(_nextSquares, piece) -> Array[ChessSquare]:
+	var _targetSquares: Array[ChessSquare] = []
+	for square in _nextSquares:
+		if not square.isEmpty:
+			if not AreThePiecesTheSameColor(piece, square.pieceType):
+				_targetSquares.append(square)
+
+	return _targetSquares
+
+func AreThePiecesTheSameColor(p1: ChessPiece, p2: ChessPiece) -> bool:
+	return int(p1.isBlackPiece) + int(p2.isBlackPiece) == 2

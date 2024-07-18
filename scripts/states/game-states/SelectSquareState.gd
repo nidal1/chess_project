@@ -110,14 +110,14 @@ func SelectNewSquare() -> void:
 	if nextCoordinates.withSpecialMovement:
 		Constants.nextSquares = Constants.FilterBlockedDirections(nextPositions, piece)
 	else:
-		Constants.nextSquares = FilterSimilarPieces(nextPositions, piece)
+		Constants.nextSquares = Constants.FilterSimilarPieces(nextPositions, piece)
 
 	if not piece is Pawn:
-		Constants.targetSquares = GetAllOppositePieces(Constants.nextSquares, piece)
+		Constants.targetSquares = Constants.GetAllOppositePieces(Constants.nextSquares, piece)
 	else:
 		var pawn: Pawn = piece
 		var nextSquares = HandlePawnNextTargets(pawn)
-		Constants.targetSquares = GetAllOppositePieces(nextSquares, pawn)
+		Constants.targetSquares = Constants.GetAllOppositePieces(nextSquares, pawn)
 
 	stateMachine.gameUI.visibleHighlightArrows = Constants.targetSquares
 	stateMachine.gameUI.visibleHighlightCircles = Constants.nextSquares
@@ -127,30 +127,6 @@ func SelectNewSquare() -> void:
 func HandlePawnNextTargets(pawn: Pawn) -> Array:
 	var nextPositions: Array
 	nextPositions = pawn.GetAllOppositePiecePositions().nextPositions
-	nextPositions = FilterSimilarPieces(nextPositions, pawn)
+	nextPositions = Constants.FilterSimilarPieces(nextPositions, pawn)
 		
 	return nextPositions
-
-## Get all possible positions for this current piece after been filtered by similar pieces
-func FilterSimilarPieces(nextPositions, chessPiece) -> Array[ChessSquare]:
-	var nextSquares: Array[ChessSquare] = []
-	for pos in nextPositions:
-		var nextSquare = Constants.GRID[pos.nextCol]
-		if not nextSquare.isEmpty and nextSquare.pieceType.CanMove(chessPiece):
-			nextSquares.append(nextSquare)
-		if nextSquare.isEmpty:
-			nextSquares.append(nextSquare)
-	
-	return nextSquares
-
-func GetAllOppositePieces(_nextSquares, piece) -> Array[ChessSquare]:
-	var _targetSquares: Array[ChessSquare] = []
-	for square in _nextSquares:
-		if not square.isEmpty:
-			if not AreThePiecesTheSameColor(piece, square.pieceType):
-				_targetSquares.append(square)
-
-	return _targetSquares
-
-func AreThePiecesTheSameColor(p1: ChessPiece, p2: ChessPiece) -> bool:
-	return int(p1.isBlackPiece) + int(p2.isBlackPiece) == 2
