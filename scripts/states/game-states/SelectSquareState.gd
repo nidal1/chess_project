@@ -116,8 +116,7 @@ func SelectNewSquare() -> void:
 		Constants.targetSquares = Constants.GetAllOppositePieces(Constants.nextSquares, piece)
 	else:
 		var pawn: Pawn = piece
-		var nextSquares = HandlePawnNextTargets(pawn)
-		Constants.targetSquares = Constants.GetAllOppositePieces(nextSquares, pawn)
+		Constants.targetSquares = HandlePawnNextTargets(pawn)
 
 	stateMachine.gameUI.visibleHighlightArrows = Constants.targetSquares
 	stateMachine.gameUI.visibleHighlightCircles = Constants.nextSquares
@@ -127,6 +126,7 @@ func SelectNewSquare() -> void:
 func HandlePawnNextTargets(pawn: Pawn) -> Array:
 	var nextPositions: Array
 	nextPositions = pawn.GetAllOppositePiecePositions().nextPositions
-	nextPositions = Constants.FilterSimilarPieces(nextPositions, pawn)
+	nextPositions = Constants.FilterPiecesForPawnToAttack(nextPositions, pawn)
+	print(nextPositions)
 		
 	return nextPositions

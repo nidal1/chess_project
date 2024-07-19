@@ -24,15 +24,7 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	self.withSpecialMovement = false
 
 func GetAllOppositePiecePositions() -> Dictionary:
-	var oppositePiecePositions = [{
-		"row": 1 * direction,
-		"col": pieceIdx + 8 * direction + 1
-	},
-	{
-		"row": 1 * direction,
-		"col": pieceIdx + 8 * direction - 1
-	}
-	]
+	var oppositePiecePositions = GetOppositeCoordinates()
 	var currentRowPosition = self.LocalizationOfSelectedPiece()
 	var nextCoordinates = {
 		"withSpecialMovement": self.withSpecialMovement,
@@ -55,6 +47,17 @@ func GetAllOppositePiecePositions() -> Dictionary:
 				})
 
 	return nextCoordinates
+
+func GetOppositeCoordinates():
+	return [{
+		"row": 1 * direction,
+		"col": pieceIdx + 8 * direction + 1
+	},
+	{
+		"row": 1 * direction,
+		"col": pieceIdx + 8 * direction - 1
+	}
+	]
 
 func GetNextCoordinates():
 
