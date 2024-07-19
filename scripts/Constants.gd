@@ -26,6 +26,7 @@ const STATES = {
 		"SwitchTheKingAndRookState": "SwitchTheKingAndRookState",
 		"EnPassantState": "EnPassantState",
 		"KingUnderAttackState": "KingUnderAttackState",
+		"CheckmateState": "CheckmateState",
 	}
 	
 }
@@ -68,6 +69,13 @@ var enPassantData = {
 	'rightPawn': null,
 	'prevPawnSquareIdx': - 1,
 	'nextSquare': null,
+}
+
+var checkmateData = {
+	checkmateChecked = false,
+	king = null,
+	nextPositions = [],
+	targetPositions = [],
 }
 
 func SwitchPlayers():
@@ -118,9 +126,19 @@ func CheckIfTheKingIsUnderAttack(gameUI: GameUI):
 		var nextPositions = king.GetNextPositions().nextPositions
 		nextPositions = king.FilterPositionByOtherPiecesPositions(nextPositions)
 		var _nextSquares = FilterSimilarPieces(nextPositions, king)
+		nextPositions = GetThePositionsFromASquaresIndexes(_nextSquares)
+
 		theKingUnderAttackData.targetSquares = GetAllOppositePieces(_nextSquares, king)
+		
 		gameUI.visibleHighlightRedCircles = GRID[king.pieceIdx]
 		gameUI.ToggleShowHighlightRedCircles(true)
+
+		checkmateData = {
+			checkmateChecked = false,
+			king = king,
+			nextPositions = nextPositions,
+			targetPositions = GetThePositionsFromASquaresIndexes(theKingUnderAttackData.targetSquares),
+		}
 
 func GetTheKing(p: ChessPiece):
 	return p if p is King else null
@@ -181,7 +199,7 @@ func FilterSimilarPieces(nextPositions, chessPiece) -> Array[ChessSquare]:
 
 		if not nextSquare.isEmpty and nextSquare.pieceType.CanMove(chessPiece) and (not chessPiece is Pawn):
 			nextSquares.append(nextSquare)
-			
+
 		if nextSquare.isEmpty:
 			_nextSquares.append(nextSquare)
 	

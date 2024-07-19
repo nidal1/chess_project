@@ -35,6 +35,11 @@ func UpdatePlayerRole(role: String) -> void:
 	playerRoleLabel.text = role + "'s role"
 	pass
 
+func UpdatePlayerWinning(role: String) -> void:
+	# Update the player role label
+	playerRoleLabel.text = role + " win"
+	pass
+
 func ToggleCheckContainer() -> void:
 	if checkContainer.visible == true:
 		checkContainer.visible = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://brolde3v3g742"]
+[gd_scene load_steps=30 format=3 uid="uid://brolde3v3g742"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3m62s"]
 [ext_resource type="Script" path="res://scripts/ChessBoard.gd" id="2_brd2w"]
@@ -25,6 +25,7 @@
 [ext_resource type="Script" path="res://scripts/states/game-states/SelectKingSquareState.gd" id="22_d8tah"]
 [ext_resource type="Script" path="res://scripts/states/rules-states/EnPassantState.gd" id="24_3l2s0"]
 [ext_resource type="Script" path="res://scripts/states/rules-states/KingUnderAttackState.gd" id="25_ewi1s"]
+[ext_resource type="Script" path="res://scripts/states/rules-states/CheckmateState.gd" id="26_25ys0"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0gl53"]
 
@@ -305,6 +306,9 @@ script = ExtResource("24_3l2s0")
 
 [node name="KingUnderAttackState" type="Node" parent="StateMachine"]
 script = ExtResource("25_ewi1s")
+
+[node name="CheckmateState" type="Node" parent="StateMachine"]
+script = ExtResource("26_25ys0")
 
 [connection signal="pressed" from="UI/PromotePawnPanel/WhiteHBoxContainer/WhiteQueenPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_white_queen_promoted_button_pressed"]
 [connection signal="pressed" from="UI/PromotePawnPanel/WhiteHBoxContainer/WhiteBishopPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_white_bishop_promoted_button_pressed"]
