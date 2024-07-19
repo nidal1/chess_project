@@ -90,10 +90,13 @@ func FilterPositionByOtherPiecesPositions(nextPositions):
 	var opponentPieces: Array = Player.NextPlayer.playerPieces
 	for op in opponentPieces:
 		var piece = op as ChessPiece
+		if piece.withSpecialMovement:
+			positions = piece.GetNextPositions().nextPositions
+			positions = Constants.FilterBlockedDirectionsAndReturnPositions(positions, piece)
+		else:
+			positions = piece.GetAllOppositePiecePositions().nextPositions if piece is Pawn else piece.GetNextPositions().nextPositions
 		
-		positions = piece.GetAllOppositePiecePositions() if piece is Pawn else piece.GetNextPositions()
-		
-		for pos in positions.nextPositions:
+		for pos in positions:
 			nextPositions = nextPositions.filter(func(np): return np.nextCol != pos.nextCol)
 
 	return nextPositions
