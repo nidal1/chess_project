@@ -64,26 +64,30 @@ func FindThePieceThatTargetingThisPiece(player: Player, piece: ChessPiece) -> Ch
 func CanSwitchToOneOfTheSpecialMovementPiecePositions(king: King):
 	var isExist = false
 	for position in specialMovementPiecePositionsTowardTheKing:
-		var direction = position.filter(func(p): return p.nextCol == king.pieceIdx)[0].direction
+		
+		# var direction = position.filter(func(p): return p.nextCol == king.pieceIdx)[0].direction if position.size() > 0 else - 1
+		var targetDirection = position.filter(func(p): return p.nextCol == king.pieceIdx)
+		if targetDirection.size() > 0:
+			var direction = targetDirection[0].direction
+			if direction >= 0:
+				var targetP = position.filter(func(p): return p.direction == direction)
 
-		var targetP = position.filter(func(p): return p.direction == direction)
-
-		for tp in targetP:
-			for piece in Player.CurrentPlayer.playerPieces:
-				var ownPositions = []
-				piece = piece as ChessPiece
-				if piece.withSpecialMovement:
-					ownPositions = piece.GetNextPositions().nextPositions
-					ownPositions = Constants.FilterBlockedDirectionsAndReturnPositions(ownPositions, piece)
-				elif piece is King:
-					ownPositions = piece.GetNextPositions().nextPositions
-					ownPositions = piece.FilterPositionByOtherPiecesPositions(ownPositions)
-				else:
-					ownPositions = piece.GetNextPositions().nextPositions
-				
-				var test = ownPositions.filter(func(op): return op.nextCol == tp.nextCol)
-				if test.size() > 0:
-					isExist = true
-					break
+				for tp in targetP:
+					for piece in Player.CurrentPlayer.playerPieces:
+						var ownPositions = []
+						piece = piece as ChessPiece
+						if piece.withSpecialMovement:
+							ownPositions = piece.GetNextPositions().nextPositions
+							ownPositions = Constants.FilterBlockedDirectionsAndReturnPositions(ownPositions, piece)
+						elif piece is King:
+							ownPositions = piece.GetNextPositions().nextPositions
+							ownPositions = piece.FilterPositionByOtherPiecesPositions(ownPositions)
+						else:
+							ownPositions = piece.GetNextPositions().nextPositions
+						
+						var test = ownPositions.filter(func(op): return op.nextCol == tp.nextCol)
+						if test.size() > 0:
+							isExist = true
+							break
 
 	return isExist
