@@ -4,6 +4,7 @@ func enter(data=null):
 	if Constants.theKingUnderAttackData.isTheKingUnderAttack and not Constants.checkmateData.checkmateChecked:
 		Constants.observingClickingOnSquares.disconnect(HandleClickingSquare)
 		stateMachine.switchTo(Constants.STATES.RULES.CheckmateState)
+		return
 		
 	else: self.OnObservingTheClickingOnSquares()
 

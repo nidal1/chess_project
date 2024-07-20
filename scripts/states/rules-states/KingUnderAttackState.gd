@@ -44,11 +44,13 @@ func enter(data=null):
 			return
 
 	else:
+		print(Constants.theKingUnderAttackData.nextSquares)
 		if Constants.theKingUnderAttackData.nextSquares.has(square):
 			Constants.nextSquares = Constants.theKingUnderAttackData.nextSquares
 			Constants.theKingUnderAttackData.isTheKingUnderAttack = false
 			stateMachine.gameUI.ToggleShowHighlightRedCircles(false)
 			stateMachine.switchTo(Constants.STATES.GAME.SelectSquareState, square)
+			print("here")
 			return
 
 		if Constants.theKingUnderAttackData.withSpecialMovementPieceTargetPositionsToTheKing.has(square):
@@ -68,9 +70,9 @@ func SelectOnlyPermittedSquare() -> void:
 	var nextCoordinates = piece.GetNextPositions()
 	var nextPositions = piece.filterPositionByOtherPiecesPositions(nextCoordinates.nextPositions)
 	
-	Constants.theKingUnderAttackData.nextSquares = FilterSimilarPieces(nextPositions, piece)
+	Constants.theKingUnderAttackData.nextSquares = Constants.FilterSimilarPieces(nextPositions, piece)
 
-	Constants.theKingUnderAttackData.targetSquares = GetAllOppositePieces(Constants.theKingUnderAttackData.nextSquares, piece)
+	Constants.theKingUnderAttackData.targetSquares = Constants.GetAllOppositePieces(Constants.theKingUnderAttackData.nextSquares, piece)
 
 	stateMachine.gameUI.visibleHighlightArrows = Constants.theKingUnderAttackData.targetSquares
 	stateMachine.gameUI.visibleHighlightCircles = Constants.theKingUnderAttackData.nextSquares

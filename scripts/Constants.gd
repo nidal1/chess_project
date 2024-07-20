@@ -126,8 +126,8 @@ func CheckIfTheKingIsUnderAttack(gameUI: GameUI):
 		var nextPositions = king.GetNextPositions().nextPositions
 		nextPositions = king.FilterPositionByOtherPiecesPositions(nextPositions)
 		var _nextSquares = FilterSimilarPieces(nextPositions, king)
+		theKingUnderAttackData.nextSquares = _nextSquares
 		nextPositions = GetThePositionsFromASquaresIndexes(_nextSquares)
-
 		theKingUnderAttackData.targetSquares = GetAllOppositePieces(_nextSquares, king)
 		
 		gameUI.visibleHighlightRedCircles = GRID[king.pieceIdx]

@@ -107,6 +107,7 @@ func SelectNewSquare() -> void:
 	var nextPositions = nextCoordinates.nextPositions
 	if piece is King:
 		nextPositions = piece.FilterPositionByOtherPiecesPositions(nextPositions)
+		print(nextPositions)
 	if nextCoordinates.withSpecialMovement:
 		Constants.nextSquares = Constants.FilterBlockedDirections(nextPositions, piece)
 	else:
@@ -127,6 +128,5 @@ func HandlePawnNextTargets(pawn: Pawn) -> Array:
 	var nextPositions: Array
 	nextPositions = pawn.GetAllOppositePiecePositions().nextPositions
 	nextPositions = Constants.FilterPiecesForPawnToAttack(nextPositions, pawn)
-	print(nextPositions)
 		
 	return nextPositions
