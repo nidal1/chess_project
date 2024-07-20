@@ -105,6 +105,7 @@ func SelectNewSquare() -> void:
 	
 	var nextCoordinates = piece.GetNextPositions()
 	var nextPositions = nextCoordinates.nextPositions
+	print(nextPositions)
 	if piece is King:
 		nextPositions = piece.FilterPositionByOtherPiecesPositions(nextPositions)
 	if nextCoordinates.withSpecialMovement:

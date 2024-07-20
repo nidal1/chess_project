@@ -195,11 +195,10 @@ func FilterSimilarPieces(nextPositions, chessPiece) -> Array[ChessSquare]:
 		var nextSquare = Constants.GRID[pos.nextCol]
 		# FIXME: fix this
 		if not nextSquare.isEmpty:
-			if nextSquare.pieceType.CanMove(chessPiece):
-				if (chessPiece is Pawn):
+			if (chessPiece is Pawn):
 					break
-				else:
-					_nextSquares.append(nextSquare)
+			if nextSquare.pieceType.CanMove(chessPiece):
+				_nextSquares.append(nextSquare)
 
 		if nextSquare.isEmpty:
 			_nextSquares.append(nextSquare)

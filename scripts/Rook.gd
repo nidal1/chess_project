@@ -18,7 +18,7 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	self.pieceIdx = _pieceIdx
 	self.pieceCost = 5
 
-func GetTheNextPosition():
+func GetNextCoordinates():
 	var coordinates = []
 	for i in range(1, 8):
 		var top = pieceIdx + (8 * i)
