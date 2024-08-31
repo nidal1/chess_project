@@ -1,6 +1,6 @@
 extends StateBase
 
-func enter(data=""):
+func enter(data = ""):
 
 	var square: ChessSquare = data
 
@@ -12,6 +12,7 @@ func CheckForEnPassantState(square: ChessSquare):
 	if (Player.NextPlayer.playerPreviousPiece != null) and (Player.NextPlayer.playerPreviousPiece is Pawn) and Constants.enPassantData.prevPawnSquareIdx >= 0:
 		var pawn: Pawn = square.GetPiece()
 		if (pawn == Constants.enPassantData.leftPawn) or (pawn == Constants.enPassantData.rightPawn):
+			
 			var enPassantSquare = Constants.GRID[Constants.enPassantData.prevPawnSquareIdx]
 
 			Constants.enPassantData.nextSquare = enPassantSquare

@@ -12,7 +12,7 @@ extends Node
 func _ready():
 	for child in get_children():
 		child.stateMachine = self
-		child.showInfo()
+		# child.showInfo()
 		
 	currentState.enter(null)
 
@@ -20,7 +20,7 @@ func _ready():
 func _physics_process(delta):
 	currentState.update(delta)
 	
-func switchTo(targetState: String, data=null):
+func switchTo(targetState: String, data = null):
 	if not has_node(targetState):
 		print("could not find the target state node")
 		return

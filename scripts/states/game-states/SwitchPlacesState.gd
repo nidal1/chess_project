@@ -1,13 +1,23 @@
 extends StateBase
 
-func enter(data=null):
+func enter(data = null):
 	var nextSquare = data.nextSquare as ChessSquare
 	var currentSquare = data.currentSquare as ChessSquare
 
-	IsTheNextSquareBetweenTwoPawns(nextSquare, currentSquare)
+	var isBetweenPawns = IsTheNextSquareBetweenTwoPawns(nextSquare, currentSquare)
 
-	HandleMovePiece(nextSquare, currentSquare)
+	Constants.HandleMovePiece(nextSquare, currentSquare)
 
+	if isBetweenPawns:
+		SendEnPassantData(
+			nextSquare.squareIdx,
+			currentSquare.squareIdx
+		)
+
+	else:
+		SendSwitchPlacesData(currentSquare, nextSquare)
+
+	
 	var piece = nextSquare.GetPiece()
 
 	piece.isMoved = true
@@ -31,7 +41,10 @@ func enter(data=null):
 		stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
 func exit():
-	Constants.CheckIfTheKingIsUnderAttack(stateMachine.gameUI)
+	var isTheKingUnderAttack: bool = Constants.CheckIfTheKingIsUnderAttack(stateMachine.gameUI)
+
+	# if isTheKingUnderAttack:
+	# 	pass
 	
 	Constants.nextSquares = []
 	Constants.targetSquares = []
@@ -44,13 +57,6 @@ func exit():
 
 	Constants.castlingData.nextSquares = []
 
-func HandleMovePiece(nextSquare: ChessSquare, _selectedSquare: ChessSquare) -> void:
-	var selectedPiece = _selectedSquare.pieceType
-	selectedPiece.pieceIdx = nextSquare.squareIdx
-	_selectedSquare.DetachPiece()
-	nextSquare.AssignPiece(selectedPiece)
-	if selectedPiece is Pawn:
-		selectedPiece.isTheFirstMove = false
 
 func IsTheNextSquareBetweenTwoPawns(nextSquare, currentSquare):
 	var leftSquare = Constants.GRID[nextSquare.squareIdx + 1]
@@ -70,3 +76,42 @@ func IsTheNextSquareBetweenTwoPawns(nextSquare, currentSquare):
 			Constants.enPassantData.prevPawnSquareIdx = currentSquare.squareIdx
 			Constants.enPassantData.leftPawn = leftPawn
 			Constants.enPassantData.rightPawn = rightPawn
+			return true
+
+	return false
+
+
+func SendEnPassantData(targetSquareIndex, pawnSquareIndex):
+	var outgoingData = {
+		operation = {
+			service = "playing",
+			type = "enpassant",
+			data = {
+				matchId = client.matchId,
+				playerId = client.playerDictionary.info.id,
+				targetSquareIndex = targetSquareIndex,
+				pawnSquareIndex = pawnSquareIndex,
+			}
+		}
+	}
+
+	client.Send(JSON.stringify(outgoingData))
+
+# func SendTheKingUnderAttackData(targetSquareIndex, pawnSquareIndex):
+
+
+func SendSwitchPlacesData(currentSquare, nextSquare):
+	var outgoingData = {
+		operation = {
+			service = "playing",
+			type = "switchplace",
+			data = {
+				matchId = client.matchId,
+				playerId = client.playerDictionary.info.id,
+				selectedSquareIndex = currentSquare.squareIdx,
+				nextSquareIndex = nextSquare.squareIdx
+			}
+		}
+	}
+
+	client.Send(JSON.stringify(outgoingData))

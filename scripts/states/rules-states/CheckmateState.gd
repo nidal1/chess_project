@@ -8,28 +8,32 @@ extends StateBase
 
 var specialMovementPiecePositionsTowardTheKing = []
 
-func enter(data=null):
+func enter(data = null):
 	Constants.checkmateData.checkmateChecked = true
 	var king: King = Constants.checkmateData.king
-
+	
 	if Constants.checkmateData.nextPositions.size() > 0:
 		stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 		return
+	
 
 	if Constants.checkmateData.targetPositions.size() > 0:
 		stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 		return
+
 
 	var piece: ChessPiece = FindThePieceThatTargetingThisPiece(Player.NextPlayer, king)
 
 	if piece == null:
 		stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 		return
+	
 	else:
 		if piece.withSpecialMovement and specialMovementPiecePositionsTowardTheKing.size() > 0:
 			if CanSwitchToOneOfTheSpecialMovementPiecePositions(king):
 				stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 				return
+			
 
 	var ownPiece: ChessPiece = FindThePieceThatTargetingThisPiece(Player.CurrentPlayer, piece)
 
@@ -37,6 +41,7 @@ func enter(data=null):
 		stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 		return
 
+	
 	stateMachine.gameUI.UpdatePlayerWinning(Player.NextPlayer.playerLabel)
 
 func FindThePieceThatTargetingThisPiece(player: Player, piece: ChessPiece) -> ChessPiece:

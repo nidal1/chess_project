@@ -5,6 +5,10 @@ class_name Player
 var playerPieces: Array = []
 var playerLabel: String = ""
 var playerScore: int = 0
+var isMainSession: bool = false:
+	get:
+		return isMainSession
+	
 #FIXME: Convert this to an array
 var playerPreviousPiece: ChessPiece = null
 
@@ -16,11 +20,14 @@ static var NextPlayer: Player = null
 func _init():
 	playerScoreObserver.connect(SetPlayerScore)
 
-func SetPlayerScore(score: int, callable=null) -> void:
+func SetPlayerScore(score: int, callable = null) -> void:
 	playerScore = score
 	if callable != null:
 		callable = callable as Callable
 		callable.call(playerScore)
+
+func SetIsMainSession():
+	isMainSession = !isMainSession
 
 func GetTotalPiecesCost() -> int:
 	var total = 0

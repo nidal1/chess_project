@@ -1,15 +1,26 @@
-[gd_scene load_steps=9 format=3 uid="uid://cu5i86crrtoo8"]
+[gd_scene load_steps=13 format=3 uid="uid://cu5i86crrtoo8"]
 
 [ext_resource type="Script" path="res://scripts/lobby.gd" id="1_vibkn"]
+[ext_resource type="Texture2D" uid="uid://dtaads6hmk1mo" path="res://images/360_F_571998686_7q0qDN2lvCn5wv90SHEepoffd0Pq8NRY.png" id="2_5brgk"]
 [ext_resource type="Texture2D" uid="uid://b42sdsfqgbcfv" path="res://images/hourglass.png" id="3_5ld74"]
 [ext_resource type="Texture2D" uid="uid://buxpydmjg0bxj" path="res://images/check-mark.png" id="4_elf82"]
 [ext_resource type="Texture2D" uid="uid://bjwojdenkwodm" path="res://images/black-user.png" id="5_m5n68"]
-[ext_resource type="Texture2D" uid="uid://cgbiyb5eqkuot" path="res://images/black-knight.png" id="6_o6nbs"]
+[ext_resource type="Texture2D" uid="uid://drfkgl6a6mte" path="res://images/timer-under.png" id="6_bj0wb"]
 [ext_resource type="Texture2D" uid="uid://mc7jsmfotpkc" path="res://images/white-user.png" id="7_ep1is"]
-[ext_resource type="Texture2D" uid="uid://tm3k4cnro0fc" path="res://images/white-knight.png" id="8_6gm50"]
+[ext_resource type="Texture2D" uid="uid://bpykidcqcpa87" path="res://images/timer-progress.png" id="7_m4oo7"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nlxs2"]
-bg_color = Color(0.235294, 0.235294, 0.235294, 1)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_orkm6"]
+resource_local_to_scene = true
+texture = ExtResource("2_5brgk")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o42kv"]
+bg_color = Color(0.247059, 0.247059, 0.247059, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1kxib"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1y772"]
+bg_color = Color(1, 1, 1, 1)
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -80,7 +91,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_nlxs2")
+theme_override_styles/panel = SubResource("StyleBoxTexture_orkm6")
+
+[node name="Panel" type="Panel" parent="ConfirmPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ConfirmPanel"]
 layout_mode = 1
@@ -98,11 +117,28 @@ grow_vertical = 2
 theme_override_constants/separation = 100
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ConfirmPanel/HBoxContainer"]
+[node name="Panel" type="Panel" parent="ConfirmPanel/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_o42kv")
 
-[node name="BlackClockImage" type="TextureRect" parent="ConfirmPanel/HBoxContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ConfirmPanel/HBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -57.0
+offset_top = -141.0
+offset_right = 57.0
+offset_bottom = 141.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="BlackClockImage" type="TextureRect" parent="ConfirmPanel/HBoxContainer/Panel/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -110,7 +146,7 @@ texture = ExtResource("3_5ld74")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BlackConfirmImage" type="TextureRect" parent="ConfirmPanel/HBoxContainer/VBoxContainer"]
+[node name="BlackConfirmImage" type="TextureRect" parent="ConfirmPanel/HBoxContainer/Panel/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(50, 30)
@@ -119,14 +155,14 @@ texture = ExtResource("4_elf82")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect3" type="TextureRect" parent="ConfirmPanel/HBoxContainer/VBoxContainer"]
+[node name="TextureRect3" type="TextureRect" parent="ConfirmPanel/HBoxContainer/Panel/VBoxContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("5_m5n68")
 expand_mode = 5
 stretch_mode = 5
 
-[node name="BlackPlayerLabel" type="Label" parent="ConfirmPanel/HBoxContainer/VBoxContainer"]
+[node name="BlackPlayerLabel" type="Label" parent="ConfirmPanel/HBoxContainer/Panel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
@@ -134,27 +170,48 @@ text = "Player 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect2" type="TextureRect" parent="ConfirmPanel/HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("6_o6nbs")
-expand_mode = 1
-stretch_mode = 5
+[node name="Panel" type="Panel" parent="ConfirmPanel/HBoxContainer/Panel"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kxib")
 
-[node name="Label" type="Label" parent="ConfirmPanel/HBoxContainer"]
+[node name="TextureProgressBar" type="TextureProgressBar" parent="ConfirmPanel/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-theme_override_font_sizes/font_size = 60
-text = "vs
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-uppercase = true
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="ConfirmPanel/HBoxContainer"]
-layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 4
+max_value = 30.0
+rounded = true
+fill_mode = 4
+texture_under = ExtResource("6_bj0wb")
+texture_progress = ExtResource("7_m4oo7")
 
-[node name="WhiteClockImage" type="TextureRect" parent="ConfirmPanel/HBoxContainer/VBoxContainer2"]
+[node name="Panel2" type="Panel" parent="ConfirmPanel/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_o42kv")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="ConfirmPanel/HBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -57.0
+offset_top = -141.0
+offset_right = 57.0
+offset_bottom = 141.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="WhiteClockImage" type="TextureRect" parent="ConfirmPanel/HBoxContainer/Panel2/VBoxContainer2"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -162,7 +219,7 @@ texture = ExtResource("3_5ld74")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="WhiteConfirmImage" type="TextureRect" parent="ConfirmPanel/HBoxContainer/VBoxContainer2"]
+[node name="WhiteConfirmImage" type="TextureRect" parent="ConfirmPanel/HBoxContainer/Panel2/VBoxContainer2"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(50, 30)
@@ -171,14 +228,14 @@ texture = ExtResource("4_elf82")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect3" type="TextureRect" parent="ConfirmPanel/HBoxContainer/VBoxContainer2"]
+[node name="TextureRect3" type="TextureRect" parent="ConfirmPanel/HBoxContainer/Panel2/VBoxContainer2"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("7_ep1is")
 expand_mode = 5
 stretch_mode = 5
 
-[node name="WhitePlayerLabel" type="Label" parent="ConfirmPanel/HBoxContainer/VBoxContainer2"]
+[node name="WhitePlayerLabel" type="Label" parent="ConfirmPanel/HBoxContainer/Panel2/VBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
@@ -186,13 +243,13 @@ text = "Player 2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect4" type="TextureRect" parent="ConfirmPanel/HBoxContainer/VBoxContainer2"]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-texture = ExtResource("8_6gm50")
-expand_mode = 1
-stretch_mode = 5
-flip_h = true
+[node name="Panel" type="Panel" parent="ConfirmPanel/HBoxContainer/Panel2"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1y772")
 
 [node name="AcceptMatching" type="Button" parent="ConfirmPanel"]
 unique_name_in_owner = true
@@ -202,29 +259,14 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -30.0
-offset_top = -189.0
-offset_right = 30.0
-offset_bottom = -158.0
+offset_left = -53.0
+offset_top = -117.0
+offset_right = 53.0
+offset_bottom = -67.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 30
 text = "Accept"
-
-[node name="Label" type="Label" parent="ConfirmPanel"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -20.0
-offset_top = 365.0
-offset_right = 20.0
-offset_bottom = 391.0
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 20
-text = "30"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [connection signal="pressed" from="FindMatchButton" to="." method="OnWebSocketSendMessage"]
 [connection signal="pressed" from="ConfirmPanel/AcceptMatching" to="." method="OnWebSocketSendMessageAcceptMatching"]

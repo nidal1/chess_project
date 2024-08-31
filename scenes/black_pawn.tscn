@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://s36vsgb051qr"]
 
 [ext_resource type="PackedScene" uid="uid://m1mn0pbgrlxr" path="res://fbx/black_pawn.fbx" id="1_nc2vp"]
-[ext_resource type="PackedScene" uid="uid://d2yl3ek5frrqb" path="res://sceens/piece_spot_light_3d.tscn" id="2_xj1bj"]
+[ext_resource type="PackedScene" uid="uid://d2yl3ek5frrqb" path="res://scenes/piece_spot_light_3d.tscn" id="2_xj1bj"]
 
 [node name="black_pawn" instance=ExtResource("1_nc2vp")]
 transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0.5, 0)

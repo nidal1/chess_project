@@ -2,8 +2,10 @@ extends Node3D
 
 class_name GameUI
 
-@onready var whiteScoreLabel: Label = $HBoxContainer/WhiteScore
-@onready var blackScoreLabel: Label = $HBoxContainer2/BlackScore
+@onready var whitePlayerLabel: Label = %WhitePlayerLabel
+@onready var blackPlayerLabel: Label = %BlackPlayerLabel
+@onready var whiteScoreLabel: Label = %WhiteScore
+@onready var blackScoreLabel: Label = %BlackScore
 @onready var playerRoleLabel: Label = $PlayerRole
 @onready var promotePawnPanel: Panel = $PromotePawnPanel
 @onready var blackHPassantContainer: HBoxContainer = $PromotePawnPanel/BlackHBoxContainer
@@ -11,6 +13,7 @@ class_name GameUI
 @onready var checkContainer: HBoxContainer = %HBoxContainer3
 
 var visibleHighlightCircles: Array[ChessSquare] = []
+var visibleRemoteHighlightCircles: Array[ChessSquare] = []
 var visibleHighlightRedCircles: ChessSquare = null
 var visibleHighlightSwapKingCircles: Array = []
 var visibleHighlightSwapPawnCircle: ChessSquare = null
@@ -19,6 +22,12 @@ var visibleHighlightArrows: Array[ChessSquare] = []
 func InitScoreLabels(_blackScore, _whiteScore):
 	blackScoreLabel.text = str(_blackScore)
 	whiteScoreLabel.text = str(_whiteScore)
+
+func SetWhitePlayerLabel(label: String):
+	whitePlayerLabel.text = label
+
+func SetBlackPlayerLabel(label: String):
+	blackPlayerLabel.text = label
 
 func UpdateWhiteScore(score: int) -> void:
 	# Update the white score label
@@ -67,6 +76,11 @@ func ToggleShowHighlightCircles(_visible) -> void:
 		for square in visibleHighlightCircles:
 			square.ToggleVisualCircleVisibility(_visible)
 
+func ToggleShowRemoteHighlightCircles(_visible) -> void:
+	if visibleRemoteHighlightCircles.size() > 0:
+		for square in visibleRemoteHighlightCircles:
+			square.ToggleRemoteVisualCircleVisibility(_visible)
+
 func ToggleShowHighlightRedCircles(_visible) -> void:
 	if visibleHighlightRedCircles:
 		visibleHighlightRedCircles.ToggleVisualRedCircleVisibility(_visible)
@@ -84,6 +98,10 @@ func ClearHighlightCircles(selectedSquare) -> void:
 	ToggleShowHighlightCircles(false)
 	visibleHighlightCircles.clear()
 	selectedSquare = null
+
+func ClearRemoteHighlightCircles() -> void:
+	ToggleShowRemoteHighlightCircles(false)
+	visibleRemoteHighlightCircles.clear()
 
 func ToggleShowHighlightArrows(_visible) -> void:
 	if visibleHighlightArrows.size() > 0:

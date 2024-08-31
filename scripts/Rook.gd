@@ -2,10 +2,10 @@ extends ChessPiece
 
 class_name Rook
 
-var visualBlackRook = preload ("res://sceens/black_rook.tscn")
-var visualWhiteRook = preload ("res://sceens/white_rook.tscn")
+var visualBlackRook = preload("res://scenes/black_rook.tscn")
+var visualWhiteRook = preload("res://scenes/white_rook.tscn")
 
-func _init(_pieceIdx, _isBlackPiece=true):
+func _init(_pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
 	if self.isBlackPiece:
 		self.visual = visualBlackRook.instantiate()
@@ -33,7 +33,7 @@ func GetNextCoordinates():
 			"row": 0,
 			"col": left
 		})
-		i *= - 1
+		i *= -1
 		var down = pieceIdx + (8 * i)
 		coordinates.append({
 			"direction": Constants.Direction.DOWN,

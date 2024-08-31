@@ -2,10 +2,10 @@ extends ChessPiece
 
 class_name King
 
-var visualBlackKing = preload ("res://sceens/black_king.tscn")
-var visualWhiteKing = preload ("res://sceens/white_king.tscn")
+var visualBlackKing = preload("res://scenes/black_king.tscn")
+var visualWhiteKing = preload("res://scenes/white_king.tscn")
 
-func _init(_pieceIdx, _isBlackPiece=true):
+func _init(_pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
 	if self.isBlackPiece:
 		self.visual = visualBlackKing.instantiate()
@@ -19,7 +19,7 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	self.withSpecialMovement = false
 
 func GetNextCoordinates():
-	return [{
+	return [ {
 		"row": 0,
 		"col": pieceIdx + 1
 	},
@@ -97,7 +97,7 @@ func FilterPositionByOtherPiecesPositions(nextPositions):
 			positions = piece.GetAllOppositePiecePositions().nextPositions if piece is Pawn else piece.GetNextPositions().nextPositions
 		
 		for pos in positions:
-			nextPositions = nextPositions.filter(func(np): return np.nextCol != pos.nextCol)
+			nextPositions = nextPositions.filter(func(np): return np.nextCol == pos.nextCol)
 
 	return nextPositions
 

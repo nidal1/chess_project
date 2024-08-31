@@ -23,11 +23,15 @@ func enter(data=""):
 				stateMachine.gameUI.ClearHighlightArrows()
 				stateMachine.gameUI.ClearHighlightCircles(Constants.selectedSquare)
 			
-			SelectOnlyPermittedSquare()
+			SelectOnlyPermittedSquare(king)
 			stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 			return
+		
 		else:
 			CheckForCastling(king, pieceType, square)
+			SelectOnlyPermittedSquare(king)
+			stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
+			return
 
 	stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
@@ -39,7 +43,7 @@ func HandleSelectAvailableRooks(squareIdx):
 	stateMachine.gameUI.ToggleShowHighlightSwapKingCircles(true)
 
 func CheckForCastling(king: King, pieceType, square):
-	if Constants.theKingUnderAttackData.isTheKingUnderAttack:
+	if not Constants.theKingUnderAttackData.isTheKingUnderAttack:
 		var allRightSquaresAreEmpty: bool = true
 		var allLeftSquaresAreEmpty: bool = true
 
@@ -90,16 +94,13 @@ func CheckForCastling(king: King, pieceType, square):
 
 	return
 
-func SelectOnlyPermittedSquare() -> void:
-	# get the type of the current piece
-	var piece: King = Constants.selectedSquare.GetPiece()
+func SelectOnlyPermittedSquare(king: King) -> void:
 	
-	var nextCoordinates = piece.GetNextPositions()
-	var nextPositions = piece.FilterPositionByOtherPiecesPositions(nextCoordinates.nextPositions)
-	print("nextPositions: ", nextPositions)
-	Constants.theKingUnderAttackData.nextSquares = Constants.FilterSimilarPieces(nextPositions, piece)
+	var nextCoordinates = king.GetNextPositions()
+	var nextPositions = king.FilterPositionByOtherPiecesPositions(nextCoordinates.nextPositions)
+	Constants.theKingUnderAttackData.nextSquares = Constants.FilterSimilarPieces(nextPositions, king)
 
-	Constants.theKingUnderAttackData.targetSquares = Constants.GetAllOppositePieces(Constants.theKingUnderAttackData.nextSquares, piece)
+	Constants.theKingUnderAttackData.targetSquares = Constants.GetAllOppositePieces(Constants.theKingUnderAttackData.nextSquares, king)
 
 	stateMachine.gameUI.visibleHighlightArrows = Constants.theKingUnderAttackData.targetSquares
 	stateMachine.gameUI.visibleHighlightCircles = Constants.theKingUnderAttackData.nextSquares

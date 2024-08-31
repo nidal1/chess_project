@@ -44,6 +44,12 @@ signal observingClickingOnSquares(chessSquare)
 var whitePlayer = Player.new()
 var blackPlayer = Player.new()
 
+var mainPlayer: Player = null:
+	get:
+		return mainPlayer
+	set(value):
+		mainPlayer = value
+
 var selectedSquare: ChessSquare = null
 
 var nextSquares: Array = []
@@ -79,12 +85,10 @@ var checkmateData = {
 }
 
 func SwitchPlayers():
-	if Player.CurrentPlayer == blackPlayer:
-		Player.CurrentPlayer = whitePlayer
-		Player.NextPlayer = blackPlayer
-		return
-	Player.CurrentPlayer = blackPlayer
-	Player.NextPlayer = whitePlayer
+
+	var temp = Player.CurrentPlayer
+	Player.CurrentPlayer = Player.NextPlayer
+	Player.NextPlayer = temp
 
 func UpdatePlayerScore(UpdateBlackScore: Callable, UpdateWhiteScore: Callable):
 	if Player.NextPlayer.playerLabel == blackPlayerLabel:
@@ -110,7 +114,7 @@ func ClearData():
 		'nextSquare': null,
 	}
 
-func CreateTimer(timer: float=1.0):
+func CreateTimer(timer: float = 1.0):
 	await get_tree().create_timer(timer).timeout
 
 func GetTheBoundariesOfASelectedRow(row: int) -> Array[int]:
@@ -118,7 +122,7 @@ func GetTheBoundariesOfASelectedRow(row: int) -> Array[int]:
 	var lastIdx = (row * Constants.ROWS) - 1
 	return [firstIdx, lastIdx]
 
-func CheckIfTheKingIsUnderAttack(gameUI: GameUI):
+func CheckIfTheKingIsUnderAttack(gameUI: GameUI) -> bool:
 	var king: King = Player.CurrentPlayer.playerPieces.filter(GetTheKing)[0]
 	theKingUnderAttackData.isTheKingUnderAttack = king.IsTheKingUnderAttack()
 	
@@ -139,6 +143,10 @@ func CheckIfTheKingIsUnderAttack(gameUI: GameUI):
 			nextPositions = nextPositions,
 			targetPositions = GetThePositionsFromASquaresIndexes(theKingUnderAttackData.targetSquares),
 		}
+		return true
+	
+	return false
+
 
 func GetTheKing(p: ChessPiece):
 	return p if p is King else null
@@ -227,3 +235,35 @@ func GetAllOppositePieces(_nextSquares, piece) -> Array[ChessSquare]:
 
 func AreThePiecesTheSameColor(p1: ChessPiece, p2: ChessPiece) -> bool:
 	return int(p1.isBlackPiece) + int(p2.isBlackPiece) == 2
+
+
+func HandleMovePiece(nextSquare: ChessSquare, _selectedSquare: ChessSquare) -> void:
+	var selectedPiece = _selectedSquare.pieceType
+	selectedPiece.pieceIdx = nextSquare.squareIdx
+	_selectedSquare.DetachPiece()
+	nextSquare.AssignPiece(selectedPiece)
+	if selectedPiece is Pawn:
+		selectedPiece.isTheFirstMove = false
+
+func TakeEnPassantPlace(currentSquare: ChessSquare, enPassantSquare: ChessSquare, opponentSquare: ChessSquare, pawn: Pawn):
+
+	currentSquare.DetachPiece()
+
+	enPassantSquare.AssignPiece(pawn)
+
+	Player.NextPlayer.RemovePiece(opponentSquare.GetPiece())
+
+	opponentSquare.DetachPiece()
+
+	Player.CurrentPlayer.playerPreviousPiece = pawn
+
+func TakePlaceOfOpponentPiece(_nextSquare: ChessSquare, _selectedSquare: ChessSquare) -> ChessPiece:
+
+	var selectedPiece = _selectedSquare.GetPiece()
+	var removedPiece = _nextSquare.GetPiece()
+	_selectedSquare.DetachPiece()
+	_nextSquare.DetachPiece()
+	_nextSquare.AssignPiece(selectedPiece)
+	selectedPiece.pieceIdx = _nextSquare.squareIdx
+	selectedPiece.isMoved = true
+	return removedPiece

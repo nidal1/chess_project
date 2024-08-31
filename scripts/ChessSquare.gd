@@ -43,6 +43,10 @@ func ToggleVisualCircleVisibility(_visible) -> void:
 	var circle: Sprite3D = self.visualSquare.get_node("Circle") as Sprite3D
 	circle.visible = _visible
 
+func ToggleRemoteVisualCircleVisibility(_visible) -> void:
+	var circle: Sprite3D = self.visualSquare.get_node("Circle") as Sprite3D
+	circle.visible = _visible
+
 func ToggleVisualRedCircleVisibility(_visible) -> void:
 	var circle: Sprite3D = self.visualSquare.get_node("RedCircle") as Sprite3D
 	circle.visible = _visible

@@ -2,13 +2,13 @@ extends ChessPiece
 
 class_name Pawn
 
-var visualBlackPawn = preload ("res://sceens/black_pawn.tscn")
-var visualWhitePawn = preload ("res://sceens/white_pawn.tscn")
+var visualBlackPawn = preload("res://scenes/black_pawn.tscn")
+var visualWhitePawn = preload("res://scenes/white_pawn.tscn")
 
 var isTheFirstMove: bool = true
 var direction: int
 
-func _init(_pieceIdx, _isBlackPiece=true):
+func _init(_pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
 	if self.isBlackPiece:
 		self.visual = visualBlackPawn.instantiate()
@@ -28,7 +28,7 @@ func GetAllOppositePiecePositions() -> Dictionary:
 	var currentRowPosition = self.LocalizationOfSelectedPiece()
 	var nextCoordinates = {
 		"withSpecialMovement": self.withSpecialMovement,
-		"nextPositions":[]
+		"nextPositions": []
 	}
 
 	for coor in oppositePiecePositions:
@@ -49,7 +49,7 @@ func GetAllOppositePiecePositions() -> Dictionary:
 	return nextCoordinates
 
 func GetOppositeCoordinates():
-	return [{
+	return [ {
 		"row": 1 * direction,
 		"col": pieceIdx + 8 * direction + 1
 	},

@@ -1,24 +1,26 @@
 extends StateBase
 
 @export var visualChessBoard: Node3D
+@export var visualSpringArm: SpringArm3D
+
 
 var currentSquareType: String
 var prevSquareType: String
 
-var visualBlackChessSquare = preload ("res://sceens/SquareBlack.tscn")
-var visualWhiteChessSquare = preload ("res://sceens/SquareWhite.tscn")
+var visualBlackChessSquare = preload("res://scenes/SquareBlack.tscn")
+var visualWhiteChessSquare = preload("res://scenes/SquareWhite.tscn")
 
 var blackKing = King.new(3)
 var blackQueen = Queen.new(4)
-var blackKnight_1 = Knight.new(20)
+var blackKnight_1 = Knight.new(1)
 var blackKnight_2 = Knight.new(6)
-var blackBishop_1 = Bishop.new(29)
+var blackBishop_1 = Bishop.new(2)
 var blackBishop_2 = Bishop.new(5)
 var blackRook_1 = Rook.new(0)
 var blackRook_2 = Rook.new(7)
 var blackP0 = Pawn.new(8)
 var blackP1 = Pawn.new(9)
-var blackP2 = Pawn.new(26)
+var blackP2 = Pawn.new(10)
 var blackP3 = Pawn.new(11)
 var blackP4 = Pawn.new(12)
 var blackP5 = Pawn.new(13)
@@ -26,17 +28,17 @@ var blackP6 = Pawn.new(14)
 var blackP7 = Pawn.new(15)
 
 var whiteKing = King.new(59, false)
-var whiteQueen = Queen.new(60, false)
+var whiteQueen = Queen.new(24, false)
 var whiteKnight_1 = Knight.new(57, false)
 var whiteKnight_2 = Knight.new(62, false)
 var whiteBishop_1 = Bishop.new(61, false)
-var whiteBishop_2 = Bishop.new(58, false)
+var whiteBishop_2 = Bishop.new(37, false)
 var whiteRook_1 = Rook.new(63, false)
 var whiteRook_2 = Rook.new(56, false)
-var whiteP0 = Pawn.new(36, false)
-var whiteP1 = Pawn.new(34, false)
+var whiteP0 = Pawn.new(48, false)
+var whiteP1 = Pawn.new(49, false)
 var whiteP2 = Pawn.new(50, false)
-var whiteP3 = Pawn.new(43, false)
+var whiteP3 = Pawn.new(51, false)
 var whiteP4 = Pawn.new(52, false)
 var whiteP5 = Pawn.new(53, false)
 var whiteP6 = Pawn.new(54, false)
@@ -77,12 +79,12 @@ var pieces = [
 	whiteP7,
 	]
 
-func enter(data=null):
+func enter(data = null):
+	self.InitPlayers()
 	self.InitBoardSquares()
 	self.InitPieces()
 	self.RenderChessSquares()
-
-	self.InitPlayers()
+	self.RotateTheBoard()
 
 	stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
@@ -139,11 +141,19 @@ func InitPlayers():
 	score = Constants.whitePlayer.GetTotalPiecesCost()
 	Constants.whitePlayer.playerScoreObserver.emit(score)
 
-	Player.CurrentPlayer = Constants.blackPlayer
-	Player.NextPlayer = Constants.whitePlayer
+
+	Constants.mainPlayer = Constants.whitePlayer if Constants.whitePlayer.isMainSession else Constants.blackPlayer
+
+	Player.CurrentPlayer = Constants.mainPlayer if Constants.mainPlayer.playerLabel == Constants.whitePlayerLabel else Constants.whitePlayer
+	Player.NextPlayer = Constants.mainPlayer if Constants.mainPlayer.playerLabel == Constants.blackPlayerLabel else Constants.blackPlayer
+
 
 	stateMachine.gameUI.InitScoreLabels(Constants.blackPlayer.playerScore, Constants.whitePlayer.playerScore)
 	stateMachine.gameUI.UpdatePlayerRole(Player.CurrentPlayer.playerLabel)
+
+func RotateTheBoard():
+	if Constants.mainPlayer.playerLabel == "White Player":
+		visualSpringArm.rotate_y(PI)
 
 func SwipeTheColorOfCurrentSquare() -> void:
 	if prevSquareType == "black":

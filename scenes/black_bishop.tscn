@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://81v2xwe6hf3x"]
 
 [ext_resource type="PackedScene" uid="uid://b15viqubwqd0f" path="res://fbx/black_bishop.fbx" id="1_8fp85"]
-[ext_resource type="PackedScene" uid="uid://d2yl3ek5frrqb" path="res://sceens/piece_spot_light_3d.tscn" id="2_towcj"]
+[ext_resource type="PackedScene" uid="uid://d2yl3ek5frrqb" path="res://scenes/piece_spot_light_3d.tscn" id="2_towcj"]
 
 [node name="black_bishop" instance=ExtResource("1_8fp85")]
 transform = Transform3D(20, 0, 0, 0, 25, 0, 0, 0, 20, 0, 0.5, 0)

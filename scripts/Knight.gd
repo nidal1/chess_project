@@ -1,10 +1,10 @@
 extends ChessPiece
 
 class_name Knight
-var visualBlackKnight = preload ("res://sceens/black_knight.tscn")
-var visualWhiteKnight = preload ("res://sceens/white_knight.tscn")
+var visualBlackKnight = preload("res://scenes/black_knight.tscn")
+var visualWhiteKnight = preload("res://scenes/white_knight.tscn")
 
-func _init(_pieceIdx, _isBlackPiece=true):
+func _init(_pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
 	if self.isBlackPiece:
 		self.isFor = Constants.blackPlayerLabel
@@ -17,7 +17,7 @@ func _init(_pieceIdx, _isBlackPiece=true):
 	self.withSpecialMovement = false
 
 func GetNextCoordinates():
-	return [{
+	return [ {
 			"row": 1,
 			"col": pieceIdx + 8 - 2
 		},

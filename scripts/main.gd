@@ -4,6 +4,10 @@ extends Node3D
 @onready var leftButtonPressed: bool = false
 @export var CAMERA_ROTATION_SPEED: float = 0.02
 
+func _ready():
+	print("from chessboard")
+
+
 func _unhandled_input(event) -> void:
 	if event is InputEventMouseButton:
 		leftButtonPressed = event.is_pressed()

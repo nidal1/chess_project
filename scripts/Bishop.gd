@@ -2,10 +2,10 @@ extends ChessPiece
 
 class_name Bishop
 
-var visualBlackBishop = preload ("res://sceens/black_bishop.tscn")
-var visualWhiteBishop = preload ("res://sceens/white_bishop.tscn")
+var visualBlackBishop = preload("res://scenes/black_bishop.tscn")
+var visualWhiteBishop = preload("res://scenes/white_bishop.tscn")
 
-func _init(_pieceIdx, _isBlackPiece=true):
+func _init(_pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
 	if self.isBlackPiece:
 		self.isFor = Constants.blackPlayerLabel
@@ -31,7 +31,7 @@ func GetNextCoordinates():
 			"row": i,
 			"col": topRight
 		})
-		i *= - 1
+		i *= -1
 		var downLeft = pieceIdx + (8 * i) + i
 		coordinates.append({
 			"direction": Constants.Direction.DOWN_LEFT,

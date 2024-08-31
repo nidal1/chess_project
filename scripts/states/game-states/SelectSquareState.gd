@@ -2,7 +2,7 @@ extends StateBase
 
 class_name SelectSquareState
 
-func enter(data=null):
+func enter(data = null):
 	
 	# check if the square is of the player role or not
 
@@ -98,6 +98,20 @@ func HandleSquareSelection():
 		stateMachine.gameUI.ClearHighlightCircles(Constants.selectedSquare)
 
 	SelectNewSquare()
+	
+	var data = {
+		operation = {
+			service = "playing",
+			type = "selectsquare",
+			data = {
+				matchId = client.matchId,
+				playerId = client.playerDictionary.info.id,
+				selectedSquareIndex = Constants.selectedSquare.squareIdx,
+			}
+		}
+	}
+
+	client.Send(JSON.stringify(data))
 
 func SelectNewSquare() -> void:
 	# get the type of the current piece

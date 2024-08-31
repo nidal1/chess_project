@@ -1,9 +1,9 @@
 extends StateBase
 
-func enter(data=null):
+func enter(data = null):
 	var nextSquare = data.nextSquare as ChessSquare
 	var currentSquare = data.currentSquare as ChessSquare
-	var removedPiece = TakePlaceOfOpponentPiece(nextSquare, currentSquare)
+	var removedPiece = Constants.TakePlaceOfOpponentPiece(nextSquare, currentSquare)
 	Player.NextPlayer.RemovePiece(removedPiece)
 
 	Constants.UpdatePlayerScore(
@@ -12,6 +12,8 @@ func enter(data=null):
 	)
 
 	Player.CurrentPlayer.playerPreviousPiece = nextSquare.GetPiece() if nextSquare.GetPiece() != removedPiece else null
+
+	SendTakeOppositePlaceData(currentSquare, nextSquare)
 
 	stateMachine.switchTo(Constants.STATES.GAME.WaitingState)
 
@@ -34,16 +36,23 @@ func exit():
 
 	stateMachine.gameUI.UpdatePlayerRole(Player.CurrentPlayer.playerLabel)
 
-func TakePlaceOfOpponentPiece(nextSquare: ChessSquare, selectedSquare: ChessSquare) -> ChessPiece:
-
-	var selectedPiece = selectedSquare.GetPiece()
-	var removedPiece = nextSquare.GetPiece()
-	selectedSquare.DetachPiece()
-	nextSquare.DetachPiece()
-	nextSquare.AssignPiece(selectedPiece)
-	selectedPiece.pieceIdx = nextSquare.squareIdx
-	selectedPiece.isMoved = true
-	return removedPiece
 
 func GetTheKing(p: ChessPiece):
 	return p if p is King else null
+
+
+func SendTakeOppositePlaceData(currentSquare, nextSquare):
+	var outgoingData = {
+		operation = {
+			service = "playing",
+			type = "takeoppositeplace",
+			data = {
+				matchId = client.matchId,
+				playerId = client.playerDictionary.info.id,
+				selectedSquareIndex = currentSquare.squareIdx,
+				nextSquareIndex = nextSquare.squareIdx
+			}
+		}
+	}
+
+	client.Send(JSON.stringify(outgoingData))

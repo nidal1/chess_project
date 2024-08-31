@@ -2,10 +2,10 @@ extends ChessPiece
 
 class_name Queen
 
-var visualBlackQueen = preload ("res://sceens/black_queen.tscn")
-var visualWhiteQueen = preload ("res://sceens/white_queen.tscn")
+var visualBlackQueen = preload("res://scenes/black_queen.tscn")
+var visualWhiteQueen = preload("res://scenes/white_queen.tscn")
 
-func _init(_pieceIdx, _isBlackPiece=true):
+func _init(_pieceIdx, _isBlackPiece = true):
 	self.isBlackPiece = _isBlackPiece
 	if self.isBlackPiece:
 		self.visual = visualBlackQueen.instantiate()
@@ -45,7 +45,7 @@ func GetNextCoordinates():
 			"row": i,
 			"col": topRight
 		})
-		i *= - 1
+		i *= -1
 		var down = pieceIdx + (8 * i)
 		coordinates.append({
 			"direction": Constants.Direction.DOWN,

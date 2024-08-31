@@ -1,31 +1,32 @@
-[gd_scene load_steps=30 format=3 uid="uid://brolde3v3g742"]
+[gd_scene load_steps=31 format=3 uid="uid://brolde3v3g742"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_3m62s"]
-[ext_resource type="Script" path="res://scripts/ChessBoard.gd" id="2_brd2w"]
-[ext_resource type="Script" path="res://scripts/GameUI.gd" id="3_12gjm"]
-[ext_resource type="Texture2D" uid="uid://c7kcplmfvjgld" path="res://images/black-queen.png" id="3_21snu"]
-[ext_resource type="Texture2D" uid="uid://dsu7k8hpftam" path="res://images/white-queen.png" id="3_qfq7r"]
-[ext_resource type="Texture2D" uid="uid://cgbiyb5eqkuot" path="res://images/black-knight.png" id="4_ne2dm"]
-[ext_resource type="Texture2D" uid="uid://tm3k4cnro0fc" path="res://images/white-knight.png" id="4_p0js5"]
-[ext_resource type="Texture2D" uid="uid://dwvapl0inp65c" path="res://images/white-bishop.png" id="5_bx32t"]
-[ext_resource type="Texture2D" uid="uid://b16cs0qjd3mwf" path="res://images/black-bishop.png" id="5_gbexc"]
-[ext_resource type="Texture2D" uid="uid://bq35dvu6j1am5" path="res://images/black-rock.png" id="6_gcdru"]
-[ext_resource type="Texture2D" uid="uid://cor2lofa800cl" path="res://images/white-rool.png" id="6_ij8f5"]
-[ext_resource type="Texture2D" uid="uid://bu3562l0bkky5" path="res://images/warning.png" id="11_21fbv"]
-[ext_resource type="Script" path="res://scripts/GameRule.gd" id="11_88m4m"]
-[ext_resource type="Script" path="res://scripts/states/StateMachine.gd" id="14_g8b2h"]
-[ext_resource type="Script" path="res://scripts/states/game-states/InitState.gd" id="15_rb6ew"]
-[ext_resource type="Script" path="res://scripts/states/game-states/SelectSquareState.gd" id="16_atdd6"]
-[ext_resource type="Script" path="res://scripts/states/game-states/WaitingState.gd" id="17_ln8mt"]
-[ext_resource type="Script" path="res://scripts/states/game-states/TakeOppositePlaceState.gd" id="18_wr23j"]
-[ext_resource type="Script" path="res://scripts/states/game-states/SwitchPlacesState.gd" id="19_6ypwv"]
-[ext_resource type="Script" path="res://scripts/states/game-states/SelectThePawnSquareState.gd" id="19_xgb5u"]
-[ext_resource type="Script" path="res://scripts/states/rules-states/PromoteAPawnState.gd" id="20_pe3rg"]
-[ext_resource type="Script" path="res://scripts/states/rules-states/SwitchTheKingAndRookState.gd" id="21_sjbdb"]
-[ext_resource type="Script" path="res://scripts/states/game-states/SelectKingSquareState.gd" id="22_d8tah"]
-[ext_resource type="Script" path="res://scripts/states/rules-states/EnPassantState.gd" id="24_3l2s0"]
-[ext_resource type="Script" path="res://scripts/states/rules-states/KingUnderAttackState.gd" id="25_ewi1s"]
-[ext_resource type="Script" path="res://scripts/states/rules-states/CheckmateState.gd" id="26_25ys0"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_8h1wj"]
+[ext_resource type="Script" path="res://scripts/GameUI.gd" id="2_btn8d"]
+[ext_resource type="Texture2D" uid="uid://dfjkjxr4hu1ee" path="res://images/profile-user.png" id="3_77va7"]
+[ext_resource type="Texture2D" uid="uid://dsu7k8hpftam" path="res://images/white-queen.png" id="3_y61rx"]
+[ext_resource type="Texture2D" uid="uid://dwvapl0inp65c" path="res://images/white-bishop.png" id="4_mjxy3"]
+[ext_resource type="Texture2D" uid="uid://tm3k4cnro0fc" path="res://images/white-knight.png" id="5_773rh"]
+[ext_resource type="Texture2D" uid="uid://cor2lofa800cl" path="res://images/white-rool.png" id="6_1k2ja"]
+[ext_resource type="Texture2D" uid="uid://c7kcplmfvjgld" path="res://images/black-queen.png" id="7_23a1y"]
+[ext_resource type="Texture2D" uid="uid://b16cs0qjd3mwf" path="res://images/black-bishop.png" id="8_ox2bf"]
+[ext_resource type="Texture2D" uid="uid://cgbiyb5eqkuot" path="res://images/black-knight.png" id="9_eyfhm"]
+[ext_resource type="Texture2D" uid="uid://bq35dvu6j1am5" path="res://images/black-rock.png" id="10_1xpem"]
+[ext_resource type="Texture2D" uid="uid://bu3562l0bkky5" path="res://images/warning.png" id="11_5lv4t"]
+[ext_resource type="Script" path="res://scripts/GameRule.gd" id="12_biqn2"]
+[ext_resource type="Script" path="res://scripts/ChessBoard.gd" id="13_n4x4h"]
+[ext_resource type="Script" path="res://scripts/states/StateMachine.gd" id="14_enixx"]
+[ext_resource type="Script" path="res://scripts/states/game-states/InitState.gd" id="15_37esn"]
+[ext_resource type="Script" path="res://scripts/states/game-states/SelectSquareState.gd" id="16_y05qp"]
+[ext_resource type="Script" path="res://scripts/states/game-states/WaitingState.gd" id="17_v3e5c"]
+[ext_resource type="Script" path="res://scripts/states/game-states/TakeOppositePlaceState.gd" id="18_p1gmn"]
+[ext_resource type="Script" path="res://scripts/states/game-states/SelectThePawnSquareState.gd" id="19_lkjuk"]
+[ext_resource type="Script" path="res://scripts/states/game-states/SwitchPlacesState.gd" id="20_8gcr5"]
+[ext_resource type="Script" path="res://scripts/states/rules-states/PromoteAPawnState.gd" id="21_60y18"]
+[ext_resource type="Script" path="res://scripts/states/rules-states/SwitchTheKingAndRookState.gd" id="22_xksqb"]
+[ext_resource type="Script" path="res://scripts/states/game-states/SelectKingSquareState.gd" id="23_qe24x"]
+[ext_resource type="Script" path="res://scripts/states/rules-states/EnPassantState.gd" id="24_vnulh"]
+[ext_resource type="Script" path="res://scripts/states/rules-states/KingUnderAttackState.gd" id="25_x0eid"]
+[ext_resource type="Script" path="res://scripts/states/rules-states/CheckmateState.gd" id="26_tu0ba"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0gl53"]
 
@@ -37,50 +38,93 @@ background_energy_multiplier = 2.19
 volumetric_fog_density = 0.5167
 
 [node name="Main" type="Node3D"]
-script = ExtResource("1_3m62s")
+script = ExtResource("1_8h1wj")
 
 [node name="UI" type="Node3D" parent="."]
-script = ExtResource("3_12gjm")
+script = ExtResource("2_btn8d")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI"]
-offset_right = 114.0
-offset_bottom = 26.0
+offset_left = 21.0
+offset_top = 16.0
+offset_right = 222.0
+offset_bottom = 107.0
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="score" type="Label" parent="UI/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="UI/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-text = "white score:"
+texture = ExtResource("3_77va7")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/separation = -10
+alignment = 2
+
+[node name="WhitePlayerLabel" type="Label" parent="UI/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Player 1"
 vertical_alignment = 2
 
-[node name="WhiteScore" type="Label" parent="UI/HBoxContainer"]
+[node name="WhiteScore" type="Label" parent="UI/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 64
+theme_override_constants/line_spacing = 0
+theme_override_font_sizes/font_size = 30
 text = "0
 "
+vertical_alignment = 1
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="UI"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -138.0
-offset_bottom = 91.0
+offset_left = -225.0
+offset_top = 13.0
+offset_right = -24.0
+offset_bottom = 104.0
 grow_horizontal = 0
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="score" type="Label" parent="UI/HBoxContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/HBoxContainer2"]
 layout_mode = 2
-text = "black score:"
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/separation = -10
+
+[node name="BlackPlayerLabel" type="Label" parent="UI/HBoxContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Player 2"
 vertical_alignment = 2
 
-[node name="BlackScore" type="Label" parent="UI/HBoxContainer2"]
+[node name="BlackScore" type="Label" parent="UI/HBoxContainer2/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 64
+theme_override_constants/line_spacing = 0
+theme_override_font_sizes/font_size = 30
 text = "0
 "
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="UI/HBoxContainer2"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("3_77va7")
+expand_mode = 1
+stretch_mode = 4
 
 [node name="PlayerRole" type="Label" parent="UI"]
 anchors_preset = 5
@@ -123,28 +167,28 @@ alignment = 1
 [node name="WhiteQueenPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/WhiteHBoxContainer"]
 custom_minimum_size = Vector2(57, 100)
 layout_mode = 2
-texture_normal = ExtResource("3_qfq7r")
+texture_normal = ExtResource("3_y61rx")
 ignore_texture_size = true
 stretch_mode = 4
 
 [node name="WhiteBishopPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/WhiteHBoxContainer"]
 custom_minimum_size = Vector2(57, 100)
 layout_mode = 2
-texture_normal = ExtResource("5_bx32t")
+texture_normal = ExtResource("4_mjxy3")
 ignore_texture_size = true
 stretch_mode = 4
 
 [node name="WhiteKnightPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/WhiteHBoxContainer"]
 custom_minimum_size = Vector2(57, 100)
 layout_mode = 2
-texture_normal = ExtResource("4_p0js5")
+texture_normal = ExtResource("5_773rh")
 ignore_texture_size = true
 stretch_mode = 4
 
 [node name="WhiteRookPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/WhiteHBoxContainer"]
 custom_minimum_size = Vector2(74, 100)
 layout_mode = 2
-texture_normal = ExtResource("6_ij8f5")
+texture_normal = ExtResource("6_1k2ja")
 ignore_texture_size = true
 stretch_mode = 4
 
@@ -163,28 +207,28 @@ alignment = 1
 [node name="BlackQueenPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/BlackHBoxContainer"]
 custom_minimum_size = Vector2(57, 100)
 layout_mode = 2
-texture_normal = ExtResource("3_21snu")
+texture_normal = ExtResource("7_23a1y")
 ignore_texture_size = true
 stretch_mode = 4
 
 [node name="BlackBishopPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/BlackHBoxContainer"]
 custom_minimum_size = Vector2(57, 100)
 layout_mode = 2
-texture_normal = ExtResource("5_gbexc")
+texture_normal = ExtResource("8_ox2bf")
 ignore_texture_size = true
 stretch_mode = 4
 
 [node name="BlackKnightPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/BlackHBoxContainer"]
 custom_minimum_size = Vector2(57, 100)
 layout_mode = 2
-texture_normal = ExtResource("4_ne2dm")
+texture_normal = ExtResource("9_eyfhm")
 ignore_texture_size = true
 stretch_mode = 4
 
 [node name="BlackRookPromotedButton" type="TextureButton" parent="UI/PromotePawnPanel/BlackHBoxContainer"]
 custom_minimum_size = Vector2(74, 100)
 layout_mode = 2
-texture_normal = ExtResource("6_gcdru")
+texture_normal = ExtResource("10_1xpem")
 ignore_texture_size = true
 stretch_mode = 4
 
@@ -204,7 +248,7 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
-texture = ExtResource("11_21fbv")
+texture = ExtResource("11_5lv4t")
 stretch_mode = 4
 
 [node name="RemoveCheck" type="Label" parent="UI/HBoxContainer3"]
@@ -214,10 +258,10 @@ text = "Remove check"
 uppercase = true
 
 [node name="GameRules" type="Node3D" parent="."]
-script = ExtResource("11_88m4m")
+script = ExtResource("12_biqn2")
 
 [node name="ChessBoard" type="Node3D" parent="." node_paths=PackedStringArray("gameUI", "gameRules")]
-script = ExtResource("2_brd2w")
+script = ExtResource("13_n4x4h")
 gameUI = NodePath("../UI")
 gameRules = NodePath("../GameRules")
 
@@ -268,47 +312,48 @@ spot_range = 6.0
 spot_angle = 58.3241
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("gameUI", "gameRules")]
-script = ExtResource("14_g8b2h")
+script = ExtResource("14_enixx")
 initialState = NodePath("InitState")
 gameUI = NodePath("../UI")
 gameRules = NodePath("../GameRules")
 
-[node name="InitState" type="Node" parent="StateMachine" node_paths=PackedStringArray("visualChessBoard")]
-script = ExtResource("15_rb6ew")
+[node name="InitState" type="Node" parent="StateMachine" node_paths=PackedStringArray("visualChessBoard", "visualSpringArm")]
+script = ExtResource("15_37esn")
 visualChessBoard = NodePath("../../ChessBoard")
+visualSpringArm = NodePath("../../ChessBoard/SpringArm3D")
 
 [node name="SelectSquareState" type="Node" parent="StateMachine"]
-script = ExtResource("16_atdd6")
+script = ExtResource("16_y05qp")
 
 [node name="WaitingState" type="Node" parent="StateMachine"]
-script = ExtResource("17_ln8mt")
+script = ExtResource("17_v3e5c")
 
 [node name="TakeOppositePlaceState" type="Node" parent="StateMachine"]
-script = ExtResource("18_wr23j")
+script = ExtResource("18_p1gmn")
 
 [node name="SelectThePawnSquareState" type="Node" parent="StateMachine"]
-script = ExtResource("19_xgb5u")
+script = ExtResource("19_lkjuk")
 
 [node name="SwitchPlacesState" type="Node" parent="StateMachine"]
-script = ExtResource("19_6ypwv")
+script = ExtResource("20_8gcr5")
 
 [node name="PromoteAPawnState" type="Node" parent="StateMachine"]
-script = ExtResource("20_pe3rg")
+script = ExtResource("21_60y18")
 
 [node name="SwitchTheKingAndRookState" type="Node" parent="StateMachine"]
-script = ExtResource("21_sjbdb")
+script = ExtResource("22_xksqb")
 
 [node name="SelectKingSquareState" type="Node" parent="StateMachine"]
-script = ExtResource("22_d8tah")
+script = ExtResource("23_qe24x")
 
 [node name="EnPassantState" type="Node" parent="StateMachine"]
-script = ExtResource("24_3l2s0")
+script = ExtResource("24_vnulh")
 
 [node name="KingUnderAttackState" type="Node" parent="StateMachine"]
-script = ExtResource("25_ewi1s")
+script = ExtResource("25_x0eid")
 
 [node name="CheckmateState" type="Node" parent="StateMachine"]
-script = ExtResource("26_25ys0")
+script = ExtResource("26_tu0ba")
 
 [connection signal="pressed" from="UI/PromotePawnPanel/WhiteHBoxContainer/WhiteQueenPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_white_queen_promoted_button_pressed"]
 [connection signal="pressed" from="UI/PromotePawnPanel/WhiteHBoxContainer/WhiteBishopPromotedButton" to="StateMachine/PromoteAPawnState" method="_on_white_bishop_promoted_button_pressed"]
