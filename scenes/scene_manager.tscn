@@ -1,10 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://c2q208t11sim0"]
+[gd_scene load_steps=6 format=3 uid="uid://c2q208t11sim0"]
 
 [ext_resource type="Script" path="res://scripts/SceneManager.gd" id="1_f5o2v"]
+[ext_resource type="PackedScene" uid="uid://cu5i86crrtoo8" path="res://scenes/lobby.tscn" id="2_gwtgi"]
 [ext_resource type="Script" path="res://scripts/websocket/WSClient.gd" id="2_p640f"]
+[ext_resource type="PackedScene" uid="uid://brolde3v3g742" path="res://scenes/ChessBoard.tscn" id="3_xy7xo"]
+[ext_resource type="PackedScene" uid="uid://cxvkdcvt65owm" path="res://scenes/authentication.tscn" id="4_m48rb"]
 
 [node name="SceneManager" type="Node"]
 script = ExtResource("1_f5o2v")
+lobbyResource = ExtResource("2_gwtgi")
+chessBoardResource = ExtResource("3_xy7xo")
+authenticationResource = ExtResource("4_m48rb")
 
 [node name="WSC" type="Node" parent="."]
 script = ExtResource("2_p640f")

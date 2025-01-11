@@ -3,22 +3,44 @@ extends Node
 # Stores the currently loaded scene
 var current_scene: Node = null
 
-# Preload your scenes (optional but recommended for efficiency)
-var lobby = preload("res://scenes/lobby.tscn").instantiate()
-var chessBoard = preload("res://scenes/ChessBoard.tscn").instantiate()
+@export var lobbyResource: Resource
+@export var chessBoardResource: Resource
+@export var authenticationResource: Resource
+
+var lobby
+var chessBoard
+var authenticationScene
+
+enum SCENES {
+	LOBBY,
+	CHESSBOARD,
+	AUTHENTICATION,
+}
+
 
 func _ready():
+	lobby = lobbyResource.instantiate()
+	chessBoard = chessBoardResource.instantiate()
+	authenticationScene = authenticationResource.instantiate()
 	# Load the first scene when the game starts
-	change_scene(lobby)
+	change_scene(SCENES.AUTHENTICATION)
 
 # Function to change the scene
-func change_scene(new_scene: Node):
+func change_scene(new_scene: SCENES):
 	if current_scene != null:
 		# Remove the current scene from the tree
 		current_scene.queue_free()
 
-	# Instance the new scene
-	current_scene = new_scene
+
+	match new_scene:
+		SCENES.LOBBY:
+			current_scene = lobby
+		SCENES.CHESSBOARD:
+			current_scene = chessBoard
+		SCENES.AUTHENTICATION:
+			current_scene = authenticationScene
+		_:
+			current_scene = authenticationScene
 
 	# Add the new scene to the current scene tree
 	add_child(current_scene)

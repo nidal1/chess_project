@@ -15,14 +15,13 @@ extends Control
 
 var serverUrl := "ws://localhost:8080"
 
-
 func ConnectToMatchMakingServer():
 	var error = client.ConnectToURL(serverUrl)
 
 	if error != OK:
 		print("Error connecting to server: %s" % [serverUrl])
 		set_process(false)
-		
+
 
 func _ready():
 	print("Attempting to connect to server")
