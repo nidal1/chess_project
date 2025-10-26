@@ -1,4 +1,5 @@
 extends Node
+class_name SceneManager
 
 # Stores the currently loaded scene
 var current_scene: Node = null

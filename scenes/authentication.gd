@@ -78,7 +78,23 @@ func OnRegisterButtonPressed():
 
 
 func OnClientReceivedMessage(message):
-	print(message)
+	var json = JSON.parse_string(message)
+	
+	
+	if json["operation"]["service"] == "authentication":
+		var type = json["operation"]["type"]
+
+		if type == "signin" or type == "signup":
+			var userData = json["operation"]["data"]
+			var user = User.new(userData)
+			if user:
+				if not user.username:
+					user.username = "Guest"
+				client.playerDictionary["info"] = user.GetData()
+				print(client.playerDictionary)
+				var sceneManager: SceneManager = get_parent()
+				sceneManager.change_scene(sceneManager.SCENES.LOBBY)
+			
 
 func OnConnectionClosed():
 	print("client closed")

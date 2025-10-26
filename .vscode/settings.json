@@ -1,6 +1,4 @@
 {
-    "cSpell.enableFiletypes": [
-        "gdscript"
-    ],
-    "godotTools.editorPath.godot4": "/home/mnt/applications/Godot_v4.1.3-stable_linux.x86_64"
+  "cSpell.enableFiletypes": ["gdscript"],
+  "godotTools.editorPath.godot4": "c:\\Users\\user\\Documents\\godot\\Godot_v4.3-stable_mono_win64\\Godot_v4.3-stable_mono_win64.exe"
 }
