@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://cu5i86crrtoo8"]
 
-[ext_resource type="Script" path="res://scripts/lobby.gd" id="1_vibkn"]
+[ext_resource type="Script" uid="uid://dg22ndeeoch4f" path="res://scripts/lobby.gd" id="1_vibkn"]
 [ext_resource type="Texture2D" uid="uid://dtaads6hmk1mo" path="res://images/360_F_571998686_7q0qDN2lvCn5wv90SHEepoffd0Pq8NRY.png" id="2_5brgk"]
 [ext_resource type="Texture2D" uid="uid://b42sdsfqgbcfv" path="res://images/hourglass.png" id="3_5ld74"]
 [ext_resource type="Texture2D" uid="uid://buxpydmjg0bxj" path="res://images/check-mark.png" id="4_elf82"]
@@ -269,4 +269,5 @@ theme_override_font_sizes/font_size = 30
 text = "Accept"
 
 [connection signal="pressed" from="FindMatchButton" to="." method="OnWebSocketSendMessage"]
+[connection signal="pressed" from="FindMatchButton" to="." method="_on_find_match_button_pressed"]
 [connection signal="pressed" from="ConfirmPanel/AcceptMatching" to="." method="OnWebSocketSendMessageAcceptMatching"]

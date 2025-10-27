@@ -32,7 +32,6 @@ func _ready():
 
 
 func OnLoginButtonPressed():
-
 	if not (client.lastState == WebSocketPeer.STATE_OPEN):
 		signIinErrorMessageLabel.text = 'Error connecting to server please try again.'
 		return
@@ -48,6 +47,7 @@ func OnLoginButtonPressed():
 		email = email,
 		password = password
 	}
+
 
 	var output = WSSendMessage.new("authentication", "signin", data).stringify()
 
@@ -55,7 +55,6 @@ func OnLoginButtonPressed():
 
 
 func OnRegisterButtonPressed():
-
 	if not (client.lastState == WebSocketPeer.STATE_OPEN):
 		signIinErrorMessageLabel.text = 'Error connecting to server please try again.'
 		return
@@ -72,7 +71,7 @@ func OnRegisterButtonPressed():
 		password = password
 	}
 
-	var output = WSSendMessage.new("authentication", "signup", data).stringify()
+	var output: String = WSSendMessage.new("authentication", "signup", data).stringify()
 
 	client.Send(output)
 
@@ -90,8 +89,8 @@ func OnClientReceivedMessage(message):
 			if user:
 				if not user.username:
 					user.username = "Guest"
-				client.playerDictionary["info"] = user.GetData()
-				print(client.playerDictionary)
+				Session.playerDictionary["info"] = user.GetData()
+				print("User authenticated: %s" % [user.username])
 				var sceneManager: SceneManager = get_parent()
 				sceneManager.change_scene(sceneManager.SCENES.LOBBY)
 			

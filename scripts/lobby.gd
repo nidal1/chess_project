@@ -1,7 +1,6 @@
 extends Control
 
 @onready var client: WSClient = get_node("/root/SceneManager/WSC")
-@onready var session: Node = get_node("/root/Session")
 @onready var yourNameInput: TextEdit = %YourNameInput
 @onready var confirmPanel: Panel = %ConfirmPanel
 @onready var findMatchButton: Button = %FindMatchButton
@@ -29,7 +28,8 @@ func _ready():
 	client.connection_closed.connect(_on_web_socket_connection_closed)
 	client.message_received.connect(_on_web_socket_message_received)
 	_connect_to_matchmaking_server()
-	yourNameInput.text = session.playerDictionary.get("info", {}).get("username", "")
+	var username = Session.playerDictionary.get("info", {}).get("username", "")
+	yourNameInput.text = username
 
 func _on_web_socket_connection_closed():
 	var ws = client.GetSocket() # Assuming this is a method on your WSClient
@@ -59,7 +59,7 @@ func _on_web_socket_message_received(message):
 
 func _handle_connection_message(data):
 	print("Received connection data: %s" % [data])
-	session.playerDictionary = data
+	Session.playerDictionary = data
 
 func _handle_matchmaking_message(operation):
 	var state = operation.get("state")
@@ -67,7 +67,7 @@ func _handle_matchmaking_message(operation):
 	
 	match state:
 		"finding":
-			session.playerDictionary = data
+			Session.playerDictionary = data
 		"waiting":
 			_handle_match_waiting(data)
 		"waitingtoconfirm":
@@ -83,29 +83,29 @@ func _handle_match_waiting(data):
 	print("Waiting for confirmation")
 	confirmPanel.visible = true
 	
-	var my_id = session.playerDictionary["info"]["id"]
+	var my_id = Session.playerDictionary["info"]["id"]
 	for p in data.get("players", []):
 		if p["info"]["id"] == my_id:
-			session.playerDictionary = p
+			Session.playerDictionary = p
 		else:
-			session.opponentDictionary = p
+			Session.opponentDictionary = p
 	
-	session.matchId = data.get("matchId")
+	Session.matchId = data.get("matchId")
 
-	if session.playerDictionary["role"] == "black":
-		blackPlayerLabel.text = session.playerDictionary["info"]["name"]
-		whitePlayerLabel.text = session.opponentDictionary["info"]["name"]
+	if Session.playerDictionary["role"] == "black":
+		blackPlayerLabel.text = Session.playerDictionary["info"]["name"]
+		whitePlayerLabel.text = Session.opponentDictionary["info"]["name"]
 		Constants.blackPlayer.SetIsMainSession()
 	else:
-		whitePlayerLabel.text = session.playerDictionary["info"]["name"]
-		blackPlayerLabel.text = session.opponentDictionary["info"]["name"]
+		whitePlayerLabel.text = Session.playerDictionary["info"]["name"]
+		blackPlayerLabel.text = Session.opponentDictionary["info"]["name"]
 		Constants.whitePlayer.SetIsMainSession()
 	
 	var payload = {
 		"operation": {
 			"service": "matchmaking",
 			"type": "waitingtoconfirm",
-			"data": {"matchId": session.matchId}
+			"data": {"matchId": Session.matchId}
 		}
 	}
 	client.Send(JSON.stringify(payload))
@@ -125,20 +125,20 @@ func _on_web_socket_client_connected():
 	# or callback in _ready(). If your WSClient has a 'connected' signal,
 	# you might want to connect it to this function.
 	print("Successfully connected to server: %s" % [serverUrl])
-	print(session.playerDictionary["info"]["username"])
-	yourNameInput.text = session.playerDictionary["info"]["username"]
+	print("_on_web_socket_client_connected: ", Session.playerDictionary["info"]["username"])
+	yourNameInput.text = Session.playerDictionary["info"]["username"]
 
 
 func _on_find_match_button_pressed():
 	if yourNameInput.text == "": return
 	findMatchButton.disabled = true
 	findMatchButton.text = "Finding..."
-	session.playerDictionary["info"]["username"] = yourNameInput.text
+	Session.playerDictionary["info"]["username"] = yourNameInput.text
 	var dic = {
 		operation = {
 		  service = "matchmaking",
 		  type = 'findmatch',
-		  data = session.playerDictionary
+		  data = Session.playerDictionary
 		},
 	}
 
@@ -155,9 +155,9 @@ func _on_accept_matching_button_pressed():
 		  service = "matchmaking",
 		  type = 'peerconfirmed',
 		  data = {
-			id = session.playerDictionary["info"]["id"],
-			role = session.playerDictionary["role"],
-			matchId = session.matchId,
+			id = Session.playerDictionary["info"]["id"],
+			role = Session.playerDictionary["role"],
+			matchId = Session.matchId,
 		  }
 		},
 	}

@@ -3,12 +3,31 @@ extends Node
 class_name WSClient
 
 var socket := WebSocketPeer.new()
-var _last_state = WebSocketPeer.STATE_CLOSED
+var lastState = WebSocketPeer.STATE_CLOSED
+var matchId: String
 
 signal connecting()
 signal connected_to_server()
 signal connection_closed()
 signal message_received(message: Variant)
+
+func SetConnectedToServerCallback(callback):
+	connected_to_server.connect(callback)
+
+func SetConnectionClosedToServerCallback(callback):
+	connection_closed.connect(callback)
+
+func SetMessageReceivedFromTheServerCallback(callback):
+	message_received.connect(callback)
+
+func SetDisconnectedToServerCallback(callback):
+	connected_to_server.disconnect(callback)
+
+func SetDisconnectionClosedToServerCallback(callback):
+	connection_closed.disconnect(callback)
+
+func SetDisconnectedMessageReceivedFromTheServerCallback(callback):
+	message_received.disconnect(callback)
 
 func Poll():
 	if socket.get_ready_state() != socket.STATE_CLOSED:
@@ -16,8 +35,8 @@ func Poll():
 
 	var state = socket.get_ready_state()
 
-	if _last_state != state:
-		_last_state = state
+	if lastState != state:
+		lastState = state
 
 		if state == socket.STATE_CONNECTING:
 			connecting.emit()
@@ -25,10 +44,9 @@ func Poll():
 			connected_to_server.emit()
 		elif state == socket.STATE_CLOSED:
 			connection_closed.emit()
-			set_process(false)
 	
 	while socket.get_ready_state() == socket.STATE_OPEN and socket.get_available_packet_count():
-		message_received.emit(_get_message())
+		message_received.emit(GetMessage())
 
 func Send(message) -> int:
 	if typeof(message) == TYPE_STRING:
@@ -41,11 +59,10 @@ func ConnectToURL(url: String) -> int:
 	if error != OK:
 		return error
 
-	_last_state = socket.get_ready_state()
-	set_process(true)
+	lastState = socket.get_ready_state()
 	return OK
 
-func _get_message() -> Variant:
+func GetMessage() -> Variant:
 	if socket.get_available_packet_count() < 1:
 		return null
 
@@ -57,12 +74,10 @@ func _get_message() -> Variant:
 
 func Close(code := 1000, reason = ""):
 	socket.close(code, reason)
-	_last_state = socket.get_ready_state()
+	lastState = socket.get_ready_state()
 
 func Clear():
-	# This function is empty. Consider adding logic to reset the client
-	# or remove it if it's not needed.
-	print("WSClient cleared")
+	print("clear")
 
 func GetSocket() -> WebSocketPeer:
 	return socket
