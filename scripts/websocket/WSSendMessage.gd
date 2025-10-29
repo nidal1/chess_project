@@ -1,21 +1,16 @@
 class_name WSSendMessage
 
-var service: String
-var type: String
+var event: String
 var data: Variant = null
 
 
-func _init(_service: String, _type: String, _data: Variant):
-	self.service = _service
-	self.type = _type
+func _init(_event: String, _data: Variant):
+	self.event = _event
 	self.data = _data
 
 func stringify():
 	var output = {
-		operation = {
-			service = service,
-			type = type,
-			data = data
-		}
+		event = self.event,
+		data = self.data
 	}
 	return JSON.stringify(output)

@@ -13,7 +13,7 @@ extends Control
 @onready var usernameInput = %UsernameInput
 @onready var nextButton = %NextButton
 
-var serverUrl := "ws://localhost:8080"
+var serverUrl := "ws://localhost:3000/game"
 
 func ConnectToMatchMakingServer():
 	var error = client.ConnectToURL(serverUrl)
@@ -49,7 +49,7 @@ func OnLoginButtonPressed():
 	}
 
 
-	var output = WSSendMessage.new("authentication", "signin", data).stringify()
+	var output = WSSendMessage.new("login", data).stringify()
 
 	client.Send(output)
 
@@ -71,26 +71,26 @@ func OnRegisterButtonPressed():
 		password = password
 	}
 
-	var output: String = WSSendMessage.new("authentication", "signup", data).stringify()
+	var output: String = WSSendMessage.new("register", data).stringify()
 
 	client.Send(output)
 
 
 func OnClientReceivedMessage(message):
-	var json = JSON.parse_string(message)
-	
-	
-	if json["operation"]["service"] == "authentication":
-		var type = json["operation"]["type"]
+	var wsr = WSResponse.new(message)
 
-		if type == "signin" or type == "signup":
-			var userData = json["operation"]["data"]
+	if wsr.error:
+		signIinErrorMessageLabel.text = wsr.error
+
+	if wsr.service == "authentication":
+		if wsr.operation == "login" or wsr.operation == "register":
+			var userData = wsr.data["user"]["providerData"][0]
 			var user = User.new(userData)
 			if user:
-				if not user.username:
-					user.username = "Guest"
-				Session.playerDictionary["info"] = user.GetData()
-				print("User authenticated: %s" % [user.username])
+				if not user.displayName:
+					user.displayName = "Guest"
+				Session.playerDictionary["info"] = user.get_data()
+				print("User authenticated: %s" % [user.displayName])
 				var sceneManager: SceneManager = get_parent()
 				sceneManager.change_scene(sceneManager.SCENES.LOBBY)
 			
