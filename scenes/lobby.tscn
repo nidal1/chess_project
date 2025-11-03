@@ -271,3 +271,4 @@ text = "Accept"
 [connection signal="pressed" from="FindMatchButton" to="." method="OnWebSocketSendMessage"]
 [connection signal="pressed" from="FindMatchButton" to="." method="_on_find_match_button_pressed"]
 [connection signal="pressed" from="ConfirmPanel/AcceptMatching" to="." method="OnWebSocketSendMessageAcceptMatching"]
+[connection signal="pressed" from="ConfirmPanel/AcceptMatching" to="." method="_on_accept_matching_button_pressed"]

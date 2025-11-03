@@ -13,111 +13,106 @@ extends Control
 @onready var blackPlayerConfirmImage: TextureRect = %BlackConfirmImage
 @onready var textureProgressBar: TextureProgressBar = %TextureProgressBar
 
-var serverUrl := "ws://localhost:8080"
-
-func _connect_to_matchmaking_server():
-	var error = client.ConnectToURL(serverUrl) # Assuming this is a method on your WSClient
-
-	if error != OK:
-		print("Error connecting to server: %s" % [serverUrl])
-		set_process(false)
+var serverUrl := "ws://localhost:3000/game"
 
 
 func _ready():
-	print("Attempting to connect to server")
-	client.connection_closed.connect(_on_web_socket_connection_closed)
-	client.message_received.connect(_on_web_socket_message_received)
-	_connect_to_matchmaking_server()
-	var username = Session.playerDictionary.get("info", {}).get("username", "")
-	yourNameInput.text = username
+	if (client.lastState == WebSocketPeer.STATE_OPEN):
+		print("Connected to server: %s" % [serverUrl])
+		client.connection_closed.connect(_on_web_socket_connection_closed)
+		client.message_received.connect(_on_web_socket_message_received)
+		var username = Session.playerDictionary.get("info").get("displayName", "")
+		yourNameInput.text = username
+		return
 
 func _on_web_socket_connection_closed():
 	var ws = client.GetSocket() # Assuming this is a method on your WSClient
 	print("Disconnected from server with code %s and reason %s" % [ws.get_close_code(), ws.get_close_reason()])
 
 func _on_web_socket_message_received(message):
-	var parse_result = JSON.parse_string(message)
-	if not parse_result:
+	print("Received message from server: %s" % [message])
+	var wsr = WSResponse.new(message)
+	if wsr.error:
 		printerr("Error parsing JSON message from server: ", message)
 		return
-
-	var operation = parse_result.get("operation")
-	if not operation:
-		printerr("Invalid message format, 'operation' key missing.")
-		return
-	
-	var data = operation.get("data")
-	print("Received message data: %s" % [data])
-
-	# Using a match statement is cleaner for dispatching.
-	# If you are on Godot 3, you can use an if/elif/else chain.
-	match operation.get("service"):
-		"connection":
-			_handle_connection_message(data)
+		
+	match wsr.service:
 		"matchmaking":
-			_handle_matchmaking_message(operation)
+			_handle_matchmaking_message(wsr)
 
 func _handle_connection_message(data):
 	print("Received connection data: %s" % [data])
 	Session.playerDictionary = data
 
-func _handle_matchmaking_message(operation):
-	var state = operation.get("state")
-	var data = operation.get("data")
+func _handle_matchmaking_message(wsr: WSResponse):
+	var operation = wsr.operation
+	var data = wsr.data
 	
-	match state:
-		"finding":
-			Session.playerDictionary = data
-		"waiting":
-			_handle_match_waiting(data)
+	match operation:
+		"peerfounded":
+			if data:
+				_handle_peer_founded(data)
+
 		"waitingtoconfirm":
-			print(data)
-			textureProgressBar.value = data.get("timer", 0)
+			if data:
+				_handle_match_waiting(data)
+				
 		"peerconfirmed":
-			_handle_peer_confirmed(data)
+			if data:
+				_handle_peer_confirmed(data)
 		"matchconfirmed":
-			print(data)
-			get_node("/root/SceneManager").switch_scene()
+			if data:
+				print("Match confirmed")
+				print(data)
+				get_node("/root/SceneManager").switch_scene()
+
+func _handle_peer_founded(data):
+	print("Peer founded")
+	print(JSON.stringify(data))
+	Session.matchId = data.get("matchId")
+	Session.playerDictionary["username"] = data["mainPlayer"]["username"]
+	Session.playerDictionary.role = data["mainPlayer"]["role"]
+
+	Session.opponentDictionary["username"] = data["opponentPlayer"]["username"]
+	Session.opponentDictionary.role = data["opponentPlayer"]["role"]
+
+	confirmPanel.visible = true
+
+
+	if Session.playerDictionary["role"] == "black":
+		blackPlayerLabel.text = Session.playerDictionary.username
+		whitePlayerLabel.text = Session.opponentDictionary.username
+		
+	else:
+		whitePlayerLabel.text = Session.playerDictionary.username
+		blackPlayerLabel.text = Session.opponentDictionary.username
+		
 
 func _handle_match_waiting(data):
 	print("Waiting for confirmation")
-	confirmPanel.visible = true
+	textureProgressBar.value = data.get("remaining", 0)
 	
-	var my_id = Session.playerDictionary["info"]["id"]
-	for p in data.get("players", []):
-		if p["info"]["id"] == my_id:
-			Session.playerDictionary = p
-		else:
-			Session.opponentDictionary = p
-	
-	Session.matchId = data.get("matchId")
 
-	if Session.playerDictionary["role"] == "black":
-		blackPlayerLabel.text = Session.playerDictionary["info"]["name"]
-		whitePlayerLabel.text = Session.opponentDictionary["info"]["name"]
-		Constants.blackPlayer.SetIsMainSession()
-	else:
-		whitePlayerLabel.text = Session.playerDictionary["info"]["name"]
-		blackPlayerLabel.text = Session.opponentDictionary["info"]["name"]
-		Constants.whitePlayer.SetIsMainSession()
+	# var my_id = Session.playerDictionary["info"]["id"]
+	# for p in data.get("players", []):
+	# 	if p["info"]["id"] == my_id:
+	# 		Session.playerDictionary = p
+	# 	else:
+	# 		Session.opponentDictionary = p
 	
-	var payload = {
-		"operation": {
-			"service": "matchmaking",
-			"type": "waitingtoconfirm",
-			"data": {"matchId": Session.matchId}
-		}
-	}
-	client.Send(JSON.stringify(payload))
 
 func _handle_peer_confirmed(data):
-	var role = data.get("role")
+	Session.matchId = data.get("matchId")
+
+	var role = data["peer"]["role"]
 	if role == "black":
 		blackPlayerClockImage.visible = false
 		blackPlayerConfirmImage.visible = true
+		Constants.blackPlayer.SetIsMainSession()
 	elif role == "white":
 		whitePlayerClockImage.visible = false
 		whitePlayerConfirmImage.visible = true
+		Constants.whitePlayer.SetIsMainSession()
 
 
 func _on_web_socket_client_connected():
@@ -133,35 +128,33 @@ func _on_find_match_button_pressed():
 	if yourNameInput.text == "": return
 	findMatchButton.disabled = true
 	findMatchButton.text = "Finding..."
-	Session.playerDictionary["info"]["username"] = yourNameInput.text
-	var dic = {
-		operation = {
-		  service = "matchmaking",
-		  type = 'findmatch',
-		  data = Session.playerDictionary
-		},
-	}
+	Session.playerDictionary.username = yourNameInput.text
 
-	var jsonMessage = JSON.stringify(dic)
-	print("send message findmatch: %s" % [jsonMessage])
-	client.Send(jsonMessage) # Assuming Send is a method on your WSClient
+	var out = WSSendMessage.new("findmatch", Session.playerDictionary["username"]).stringify()
+	print("send message findmatch: %s" % [out])
+	client.Send(out) # Assuming Send is a method on your WSClient
 
 
 func _on_accept_matching_button_pressed():
 	acceptMatching.disabled = true
-	acceptMatching.text = "Waiting for opponent to accept..."
-	var dic = {
-		operation = {
-		  service = "matchmaking",
-		  type = 'peerconfirmed',
-		  data = {
-			id = Session.playerDictionary["info"]["id"],
-			role = Session.playerDictionary["role"],
-			matchId = Session.matchId,
-		  }
-		},
-	}
+	var role = Session.playerDictionary.role
+	if role == "black":
+		blackPlayerClockImage.visible = false
+		blackPlayerConfirmImage.visible = true
+	else:
+		whitePlayerClockImage.visible = false
+		whitePlayerConfirmImage.visible = true
 
-	var jsonMessage = JSON.stringify(dic)
-	print("send message peerconfirmed: %s" % [jsonMessage])
-	client.Send(jsonMessage) # Assuming Send is a method on your WSClient
+
+	acceptMatching.text = "Waiting for opponent to accept..."
+
+	var dic = {
+			matchId = Session.matchId,
+			role = role
+		  }
+
+	var out = WSSendMessage.new("peerconfirmed", dic).stringify()
+	print("send message peerconfirmed: %s" % [out])
+	
+
+	client.Send(out) # Assuming Send is a method on your WSClient

@@ -15,4 +15,5 @@ func _init(message: String):
 	if self.service == 'error':
 		self.error = json["error"]
 		return
-	self.data = json["data"]
+	if json.get("data"):
+		self.data = json["data"]

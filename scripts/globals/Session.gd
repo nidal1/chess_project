@@ -3,12 +3,14 @@ extends Node
 var matchId: String
 
 var playerDictionary: Dictionary = {
+	"username": "",
 	"info": null,
 	"role": null,
 	"score": null,
 }
 
 var opponentDictionary: Dictionary = {
+	"username": "",
 	"info": null,
 	"role": null,
 	"score": null,
@@ -16,5 +18,5 @@ var opponentDictionary: Dictionary = {
 
 func reset():
 	matchId = ""
-	playerDictionary = {"info": null, "role": null, "score": null}
-	opponentDictionary = {"info": null, "role": null, "score": null}
+	playerDictionary = {"username": "", "info": null, "role": null, "score": null}
+	opponentDictionary = {"username": "", "info": null, "role": null, "score": null}
